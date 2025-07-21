@@ -874,7 +874,7 @@ const fs = __importStar(__nccwpck_require__(57147));
 const path = __importStar(__nccwpck_require__(71017));
 const semver = __importStar(__nccwpck_require__(3771));
 const util = __importStar(__nccwpck_require__(73837));
-const uuid_1 = __nccwpck_require__(2155);
+const uuid_1 = __nccwpck_require__(63730);
 const constants_1 = __nccwpck_require__(88840);
 // From https://github.com/actions/toolkit/blob/main/packages/tool-cache/src/tool-cache.ts#L23
 function createTempDirectory() {
@@ -5120,7 +5120,11 @@ function coerce (version, options) {
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -5133,7 +5137,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -5195,13 +5199,13 @@ class Command {
     }
 }
 function escapeData(s) {
-    return utils_1.toCommandValue(s)
+    return (0, utils_1.toCommandValue)(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return utils_1.toCommandValue(s)
+    return (0, utils_1.toCommandValue)(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -5219,7 +5223,11 @@ function escapeProperty(s) {
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -5232,7 +5240,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -5246,7 +5254,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.platform = exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = exports.markdownSummary = exports.summary = exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(87351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
@@ -5266,7 +5274,7 @@ var ExitCode;
      * A code indicating that the action was a failure
      */
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
-})(ExitCode = exports.ExitCode || (exports.ExitCode = {}));
+})(ExitCode || (exports.ExitCode = ExitCode = {}));
 //-----------------------------------------------------------------------
 // Variables
 //-----------------------------------------------------------------------
@@ -5277,13 +5285,13 @@ var ExitCode;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    const convertedVal = utils_1.toCommandValue(val);
+    const convertedVal = (0, utils_1.toCommandValue)(val);
     process.env[name] = convertedVal;
     const filePath = process.env['GITHUB_ENV'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('ENV', file_command_1.prepareKeyValueMessage(name, val));
+        return (0, file_command_1.issueFileCommand)('ENV', (0, file_command_1.prepareKeyValueMessage)(name, val));
     }
-    command_1.issueCommand('set-env', { name }, convertedVal);
+    (0, command_1.issueCommand)('set-env', { name }, convertedVal);
 }
 exports.exportVariable = exportVariable;
 /**
@@ -5291,7 +5299,7 @@ exports.exportVariable = exportVariable;
  * @param secret value of the secret
  */
 function setSecret(secret) {
-    command_1.issueCommand('add-mask', {}, secret);
+    (0, command_1.issueCommand)('add-mask', {}, secret);
 }
 exports.setSecret = setSecret;
 /**
@@ -5301,10 +5309,10 @@ exports.setSecret = setSecret;
 function addPath(inputPath) {
     const filePath = process.env['GITHUB_PATH'] || '';
     if (filePath) {
-        file_command_1.issueFileCommand('PATH', inputPath);
+        (0, file_command_1.issueFileCommand)('PATH', inputPath);
     }
     else {
-        command_1.issueCommand('add-path', {}, inputPath);
+        (0, command_1.issueCommand)('add-path', {}, inputPath);
     }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
@@ -5379,10 +5387,10 @@ exports.getBooleanInput = getBooleanInput;
 function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('OUTPUT', file_command_1.prepareKeyValueMessage(name, value));
+        return (0, file_command_1.issueFileCommand)('OUTPUT', (0, file_command_1.prepareKeyValueMessage)(name, value));
     }
     process.stdout.write(os.EOL);
-    command_1.issueCommand('set-output', { name }, utils_1.toCommandValue(value));
+    (0, command_1.issueCommand)('set-output', { name }, (0, utils_1.toCommandValue)(value));
 }
 exports.setOutput = setOutput;
 /**
@@ -5391,7 +5399,7 @@ exports.setOutput = setOutput;
  *
  */
 function setCommandEcho(enabled) {
-    command_1.issue('echo', enabled ? 'on' : 'off');
+    (0, command_1.issue)('echo', enabled ? 'on' : 'off');
 }
 exports.setCommandEcho = setCommandEcho;
 //-----------------------------------------------------------------------
@@ -5422,7 +5430,7 @@ exports.isDebug = isDebug;
  * @param message debug message
  */
 function debug(message) {
-    command_1.issueCommand('debug', {}, message);
+    (0, command_1.issueCommand)('debug', {}, message);
 }
 exports.debug = debug;
 /**
@@ -5431,7 +5439,7 @@ exports.debug = debug;
  * @param properties optional properties to add to the annotation.
  */
 function error(message, properties = {}) {
-    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('error', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
@@ -5440,7 +5448,7 @@ exports.error = error;
  * @param properties optional properties to add to the annotation.
  */
 function warning(message, properties = {}) {
-    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('warning', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
 /**
@@ -5449,7 +5457,7 @@ exports.warning = warning;
  * @param properties optional properties to add to the annotation.
  */
 function notice(message, properties = {}) {
-    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('notice', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.notice = notice;
 /**
@@ -5468,14 +5476,14 @@ exports.info = info;
  * @param name The name of the output group
  */
 function startGroup(name) {
-    command_1.issue('group', name);
+    (0, command_1.issue)('group', name);
 }
 exports.startGroup = startGroup;
 /**
  * End an output group.
  */
 function endGroup() {
-    command_1.issue('endgroup');
+    (0, command_1.issue)('endgroup');
 }
 exports.endGroup = endGroup;
 /**
@@ -5513,9 +5521,9 @@ exports.group = group;
 function saveState(name, value) {
     const filePath = process.env['GITHUB_STATE'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('STATE', file_command_1.prepareKeyValueMessage(name, value));
+        return (0, file_command_1.issueFileCommand)('STATE', (0, file_command_1.prepareKeyValueMessage)(name, value));
     }
-    command_1.issueCommand('save-state', { name }, utils_1.toCommandValue(value));
+    (0, command_1.issueCommand)('save-state', { name }, (0, utils_1.toCommandValue)(value));
 }
 exports.saveState = saveState;
 /**
@@ -5551,6 +5559,10 @@ var path_utils_1 = __nccwpck_require__(2981);
 Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
 Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
 Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
+/**
+ * Platform utilities exports
+ */
+exports.platform = __importStar(__nccwpck_require__(85243));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -5563,7 +5575,11 @@ Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: funct
 // For internal use, subject to change.
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -5576,7 +5592,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -5584,9 +5600,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const crypto = __importStar(__nccwpck_require__(6113));
 const fs = __importStar(__nccwpck_require__(57147));
 const os = __importStar(__nccwpck_require__(22037));
-const uuid_1 = __nccwpck_require__(78974);
 const utils_1 = __nccwpck_require__(5278);
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -5596,14 +5612,14 @@ function issueFileCommand(command, message) {
     if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
     }
-    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
         encoding: 'utf8'
     });
 }
 exports.issueFileCommand = issueFileCommand;
 function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${uuid_1.v4()}`;
-    const convertedValue = utils_1.toCommandValue(value);
+    const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
+    const convertedValue = (0, utils_1.toCommandValue)(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
     // the delimiter.
@@ -5688,9 +5704,9 @@ class OidcClient {
                     const encodedAudience = encodeURIComponent(audience);
                     id_token_url = `${id_token_url}&audience=${encodedAudience}`;
                 }
-                core_1.debug(`ID token url is ${id_token_url}`);
+                (0, core_1.debug)(`ID token url is ${id_token_url}`);
                 const id_token = yield OidcClient.getCall(id_token_url);
-                core_1.setSecret(id_token);
+                (0, core_1.setSecret)(id_token);
                 return id_token;
             }
             catch (error) {
@@ -5711,7 +5727,11 @@ exports.OidcClient = OidcClient;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -5724,7 +5744,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -5766,6 +5786,107 @@ function toPlatformPath(pth) {
 }
 exports.toPlatformPath = toPlatformPath;
 //# sourceMappingURL=path-utils.js.map
+
+/***/ }),
+
+/***/ 85243:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
+const os_1 = __importDefault(__nccwpck_require__(22037));
+const exec = __importStar(__nccwpck_require__(71514));
+const getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
+        silent: true
+    });
+    const { stdout: name } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', undefined, {
+        silent: true
+    });
+    return {
+        name: name.trim(),
+        version: version.trim()
+    };
+});
+const getMacOsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    const { stdout } = yield exec.getExecOutput('sw_vers', undefined, {
+        silent: true
+    });
+    const version = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : '';
+    const name = (_d = (_c = stdout.match(/ProductName:\s*(.+)/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : '';
+    return {
+        name,
+        version
+    };
+});
+const getLinuxInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    const { stdout } = yield exec.getExecOutput('lsb_release', ['-i', '-r', '-s'], {
+        silent: true
+    });
+    const [name, version] = stdout.trim().split('\n');
+    return {
+        name,
+        version
+    };
+});
+exports.platform = os_1.default.platform();
+exports.arch = os_1.default.arch();
+exports.isWindows = exports.platform === 'win32';
+exports.isMacOS = exports.platform === 'darwin';
+exports.isLinux = exports.platform === 'linux';
+function getDetails() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return Object.assign(Object.assign({}, (yield (exports.isWindows
+            ? getWindowsInfo()
+            : exports.isMacOS
+                ? getMacOsInfo()
+                : getLinuxInfo()))), { platform: exports.platform,
+            arch: exports.arch,
+            isWindows: exports.isWindows,
+            isMacOS: exports.isMacOS,
+            isLinux: exports.isLinux });
+    });
+}
+exports.getDetails = getDetails;
+//# sourceMappingURL=platform.js.map
 
 /***/ }),
 
@@ -6103,652 +6224,6 @@ function toCommandProperties(annotationProperties) {
 }
 exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
-
-/***/ }),
-
-/***/ 78974:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "v1", ({
-  enumerable: true,
-  get: function () {
-    return _v.default;
-  }
-}));
-Object.defineProperty(exports, "v3", ({
-  enumerable: true,
-  get: function () {
-    return _v2.default;
-  }
-}));
-Object.defineProperty(exports, "v4", ({
-  enumerable: true,
-  get: function () {
-    return _v3.default;
-  }
-}));
-Object.defineProperty(exports, "v5", ({
-  enumerable: true,
-  get: function () {
-    return _v4.default;
-  }
-}));
-Object.defineProperty(exports, "NIL", ({
-  enumerable: true,
-  get: function () {
-    return _nil.default;
-  }
-}));
-Object.defineProperty(exports, "version", ({
-  enumerable: true,
-  get: function () {
-    return _version.default;
-  }
-}));
-Object.defineProperty(exports, "validate", ({
-  enumerable: true,
-  get: function () {
-    return _validate.default;
-  }
-}));
-Object.defineProperty(exports, "stringify", ({
-  enumerable: true,
-  get: function () {
-    return _stringify.default;
-  }
-}));
-Object.defineProperty(exports, "parse", ({
-  enumerable: true,
-  get: function () {
-    return _parse.default;
-  }
-}));
-
-var _v = _interopRequireDefault(__nccwpck_require__(81595));
-
-var _v2 = _interopRequireDefault(__nccwpck_require__(26993));
-
-var _v3 = _interopRequireDefault(__nccwpck_require__(51472));
-
-var _v4 = _interopRequireDefault(__nccwpck_require__(16217));
-
-var _nil = _interopRequireDefault(__nccwpck_require__(32381));
-
-var _version = _interopRequireDefault(__nccwpck_require__(40427));
-
-var _validate = _interopRequireDefault(__nccwpck_require__(92609));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(61458));
-
-var _parse = _interopRequireDefault(__nccwpck_require__(26385));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-
-/***/ 5842:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function md5(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
-
-  return _crypto.default.createHash('md5').update(bytes).digest();
-}
-
-var _default = md5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 32381:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = '00000000-0000-0000-0000-000000000000';
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 26385:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(92609));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function parse(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  let v;
-  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
-
-  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-  arr[1] = v >>> 16 & 0xff;
-  arr[2] = v >>> 8 & 0xff;
-  arr[3] = v & 0xff; // Parse ........-####-....-....-............
-
-  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-  arr[5] = v & 0xff; // Parse ........-....-####-....-............
-
-  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-  arr[7] = v & 0xff; // Parse ........-....-....-####-............
-
-  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-  arr[9] = v & 0xff; // Parse ........-....-....-....-############
-  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
-
-  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
-  arr[11] = v / 0x100000000 & 0xff;
-  arr[12] = v >>> 24 & 0xff;
-  arr[13] = v >>> 16 & 0xff;
-  arr[14] = v >>> 8 & 0xff;
-  arr[15] = v & 0xff;
-  return arr;
-}
-
-var _default = parse;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 86230:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 9784:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = rng;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
-
-let poolPtr = rnds8Pool.length;
-
-function rng() {
-  if (poolPtr > rnds8Pool.length - 16) {
-    _crypto.default.randomFillSync(rnds8Pool);
-
-    poolPtr = 0;
-  }
-
-  return rnds8Pool.slice(poolPtr, poolPtr += 16);
-}
-
-/***/ }),
-
-/***/ 38844:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _crypto = _interopRequireDefault(__nccwpck_require__(6113));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function sha1(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === 'string') {
-    bytes = Buffer.from(bytes, 'utf8');
-  }
-
-  return _crypto.default.createHash('sha1').update(bytes).digest();
-}
-
-var _default = sha1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 61458:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(92609));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).substr(1));
-}
-
-function stringify(arr, offset = 0) {
-  // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
-  // of the following:
-  // - One or more input array values don't map to a hex octet (leading to
-  // "undefined" in the uuid)
-  // - Invalid input values for the RFC `version` or `variant` fields
-
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Stringified UUID is invalid');
-  }
-
-  return uuid;
-}
-
-var _default = stringify;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 81595:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__nccwpck_require__(9784));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(61458));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-let _nodeId;
-
-let _clockseq; // Previous uuid creation time
-
-
-let _lastMSecs = 0;
-let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
-
-function v1(options, buf, offset) {
-  let i = buf && offset || 0;
-  const b = buf || new Array(16);
-  options = options || {};
-  let node = options.node || _nodeId;
-  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-
-  if (node == null || clockseq == null) {
-    const seedBytes = options.random || (options.rng || _rng.default)();
-
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-
-
-  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-
-  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
-
-  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
-
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-
-
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  } // Per 4.2.1.2 Throw error if too many uuids are requested
-
-
-  if (nsecs >= 10000) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-
-  msecs += 12219292800000; // `time_low`
-
-  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff; // `time_mid`
-
-  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff; // `time_high_and_version`
-
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-
-  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-
-  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
-
-  b[i++] = clockseq & 0xff; // `node`
-
-  for (let n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf || (0, _stringify.default)(b);
-}
-
-var _default = v1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 26993:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__nccwpck_require__(65920));
-
-var _md = _interopRequireDefault(__nccwpck_require__(5842));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v3 = (0, _v.default)('v3', 0x30, _md.default);
-var _default = v3;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 65920:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = _default;
-exports.URL = exports.DNS = void 0;
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(61458));
-
-var _parse = _interopRequireDefault(__nccwpck_require__(26385));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str)); // UTF8 escape
-
-  const bytes = [];
-
-  for (let i = 0; i < str.length; ++i) {
-    bytes.push(str.charCodeAt(i));
-  }
-
-  return bytes;
-}
-
-const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-exports.DNS = DNS;
-const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-exports.URL = URL;
-
-function _default(name, version, hashfunc) {
-  function generateUUID(value, namespace, buf, offset) {
-    if (typeof value === 'string') {
-      value = stringToBytes(value);
-    }
-
-    if (typeof namespace === 'string') {
-      namespace = (0, _parse.default)(namespace);
-    }
-
-    if (namespace.length !== 16) {
-      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
-    } // Compute hash of namespace and value, Per 4.3
-    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
-    // hashfunc([...namespace, ... value])`
-
-
-    let bytes = new Uint8Array(16 + value.length);
-    bytes.set(namespace);
-    bytes.set(value, namespace.length);
-    bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 0x0f | version;
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-
-    if (buf) {
-      offset = offset || 0;
-
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = bytes[i];
-      }
-
-      return buf;
-    }
-
-    return (0, _stringify.default)(bytes);
-  } // Function#name is not settable on some platforms (#270)
-
-
-  try {
-    generateUUID.name = name; // eslint-disable-next-line no-empty
-  } catch (err) {} // For CommonJS default export support
-
-
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL;
-  return generateUUID;
-}
-
-/***/ }),
-
-/***/ 51472:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__nccwpck_require__(9784));
-
-var _stringify = _interopRequireDefault(__nccwpck_require__(61458));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function v4(options, buf, offset) {
-  options = options || {};
-
-  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-
-  rnds[6] = rnds[6] & 0x0f | 0x40;
-  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
-
-  return (0, _stringify.default)(rnds);
-}
-
-var _default = v4;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 16217:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__nccwpck_require__(65920));
-
-var _sha = _interopRequireDefault(__nccwpck_require__(38844));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v5 = (0, _v.default)('v5', 0x50, _sha.default);
-var _default = v5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 92609:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _regex = _interopRequireDefault(__nccwpck_require__(86230));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex.default.test(uuid);
-}
-
-var _default = validate;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ 40427:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__nccwpck_require__(92609));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function version(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  return parseInt(uuid.substr(14, 1), 16);
-}
-
-var _default = version;
-exports["default"] = _default;
 
 /***/ }),
 
@@ -35704,7 +35179,7 @@ module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(45030);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.2";
+var VERSION = "9.0.6";
 
 // pkg/dist-src/defaults.js
 var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
@@ -35731,12 +35206,24 @@ function lowercaseKeys(object) {
   }, {});
 }
 
+// pkg/dist-src/util/is-plain-object.js
+function isPlainObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  if (Object.prototype.toString.call(value) !== "[object Object]")
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto === null)
+    return true;
+  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+}
+
 // pkg/dist-src/util/merge-deep.js
-var import_is_plain_object = __nccwpck_require__(63287);
 function mergeDeep(defaults, options) {
   const result = Object.assign({}, defaults);
   Object.keys(options).forEach((key) => {
-    if ((0, import_is_plain_object.isPlainObject)(options[key])) {
+    if (isPlainObject(options[key])) {
       if (!(key in defaults))
         Object.assign(result, { [key]: options[key] });
       else
@@ -35797,9 +35284,9 @@ function addQueryParameters(url, parameters) {
 }
 
 // pkg/dist-src/util/extract-url-variable-names.js
-var urlVariableRegex = /\{[^}]+\}/g;
+var urlVariableRegex = /\{[^{}}]+\}/g;
 function removeNonChars(variableName) {
-  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+  return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
 function extractUrlVariableNames(url) {
   const matches = url.match(urlVariableRegex);
@@ -35811,10 +35298,13 @@ function extractUrlVariableNames(url) {
 
 // pkg/dist-src/util/omit.js
 function omit(object, keysToOmit) {
-  return Object.keys(object).filter((option) => !keysToOmit.includes(option)).reduce((obj, key) => {
-    obj[key] = object[key];
-    return obj;
-  }, {});
+  const result = { __proto__: null };
+  for (const key of Object.keys(object)) {
+    if (keysToOmit.indexOf(key) === -1) {
+      result[key] = object[key];
+    }
+  }
+  return result;
 }
 
 // pkg/dist-src/util/url-template.js
@@ -35982,7 +35472,7 @@ function parse(options) {
     }
     if (url.endsWith("/graphql")) {
       if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+        const previewsFromAcceptHeader = headers.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
         headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
           const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
           return `application/vnd.github.${preview}-preview${format}`;
@@ -36231,7 +35721,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "9.1.4";
+var VERSION = "9.2.2";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
@@ -36279,7 +35769,7 @@ function iterator(octokit, route, parameters) {
           const response = await requestMethod({ method, url, headers });
           const normalizedResponse = normalizePaginatedListResponse(response);
           url = ((normalizedResponse.headers.link || "").match(
-            /<([^>]+)>;\s*rel="next"/
+            /<([^<>]+)>;\s*rel="next"/
           ) || [])[1];
           return { value: normalizedResponse };
         } catch (error) {
@@ -36392,6 +35882,8 @@ var paginatingEndpoints = [
   "GET /orgs/{org}/members/{username}/codespaces",
   "GET /orgs/{org}/migrations",
   "GET /orgs/{org}/migrations/{migration_id}/repositories",
+  "GET /orgs/{org}/organization-roles/{role_id}/teams",
+  "GET /orgs/{org}/organization-roles/{role_id}/users",
   "GET /orgs/{org}/outside_collaborators",
   "GET /orgs/{org}/packages",
   "GET /orgs/{org}/packages/{package_type}/{package_name}/versions",
@@ -38770,7 +38262,7 @@ var RequestError = class extends Error {
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
         authorization: options.request.headers.authorization.replace(
-          / .*$/,
+          /(?<! ) .*$/,
           " [REDACTED]"
         )
       });
@@ -38838,10 +38330,22 @@ var import_endpoint = __nccwpck_require__(59440);
 var import_universal_user_agent = __nccwpck_require__(45030);
 
 // pkg/dist-src/version.js
-var VERSION = "8.1.5";
+var VERSION = "8.4.1";
+
+// pkg/dist-src/is-plain-object.js
+function isPlainObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  if (Object.prototype.toString.call(value) !== "[object Object]")
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto === null)
+    return true;
+  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+}
 
 // pkg/dist-src/fetch-wrapper.js
-var import_is_plain_object = __nccwpck_require__(63287);
 var import_request_error = __nccwpck_require__(10537);
 
 // pkg/dist-src/get-buffer-response.js
@@ -38851,10 +38355,10 @@ function getBufferResponse(response) {
 
 // pkg/dist-src/fetch-wrapper.js
 function fetchWrapper(requestOptions) {
-  var _a, _b, _c;
+  var _a, _b, _c, _d;
   const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
   const parseSuccessResponseBody = ((_a = requestOptions.request) == null ? void 0 : _a.parseSuccessResponseBody) !== false;
-  if ((0, import_is_plain_object.isPlainObject)(requestOptions.body) || Array.isArray(requestOptions.body)) {
+  if (isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
     requestOptions.body = JSON.stringify(requestOptions.body);
   }
   let headers = {};
@@ -38872,8 +38376,9 @@ function fetchWrapper(requestOptions) {
   return fetch(requestOptions.url, {
     method: requestOptions.method,
     body: requestOptions.body,
+    redirect: (_c = requestOptions.request) == null ? void 0 : _c.redirect,
     headers: requestOptions.headers,
-    signal: (_c = requestOptions.request) == null ? void 0 : _c.signal,
+    signal: (_d = requestOptions.request) == null ? void 0 : _d.signal,
     // duplex must be set if request.body is ReadableStream or Async Iterables.
     // See https://fetch.spec.whatwg.org/#dom-requestinit-duplex.
     ...requestOptions.body && { duplex: "half" }
@@ -38884,7 +38389,7 @@ function fetchWrapper(requestOptions) {
       headers[keyAndValue[0]] = keyAndValue[1];
     }
     if ("deprecation" in headers) {
-      const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+      const matches = headers.link && headers.link.match(/<([^<>]+)>; rel="deprecation"/);
       const deprecationLink = matches && matches.pop();
       log.warn(
         `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
@@ -38970,11 +38475,17 @@ async function getResponseData(response) {
 function toErrorMessage(data) {
   if (typeof data === "string")
     return data;
+  let suffix;
+  if ("documentation_url" in data) {
+    suffix = ` - ${data.documentation_url}`;
+  } else {
+    suffix = "";
+  }
   if ("message" in data) {
     if (Array.isArray(data.errors)) {
-      return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}`;
+      return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}${suffix}`;
     }
-    return data.message;
+    return `${data.message}${suffix}`;
   }
   return `Unknown error: ${JSON.stringify(data)}`;
 }
@@ -39980,6 +39491,9 @@ function descending(a, b)
 /***/ 91403:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+"use strict";
+
+
 var CombinedStream = __nccwpck_require__(85443);
 var util = __nccwpck_require__(73837);
 var path = __nccwpck_require__(71017);
@@ -39988,15 +39502,12 @@ var https = __nccwpck_require__(95687);
 var parseUrl = (__nccwpck_require__(57310).parse);
 var fs = __nccwpck_require__(57147);
 var Stream = (__nccwpck_require__(12781).Stream);
+var crypto = __nccwpck_require__(6113);
 var mime = __nccwpck_require__(43583);
 var asynckit = __nccwpck_require__(14812);
+var setToStringTag = __nccwpck_require__(11770);
+var hasOwn = __nccwpck_require__(62157);
 var populate = __nccwpck_require__(47027);
-
-// Public API
-module.exports = FormData;
-
-// make it a Stream
-util.inherits(FormData, CombinedStream);
 
 /**
  * Create readable "multipart/form-data" streams.
@@ -40004,7 +39515,7 @@ util.inherits(FormData, CombinedStream);
  * and file uploads to other web applications.
  *
  * @constructor
- * @param {Object} options - Properties to be added/overriden for FormData and CombinedStream
+ * @param {object} options - Properties to be added/overriden for FormData and CombinedStream
  */
 function FormData(options) {
   if (!(this instanceof FormData)) {
@@ -40017,35 +39528,39 @@ function FormData(options) {
 
   CombinedStream.call(this);
 
-  options = options || {};
-  for (var option in options) {
+  options = options || {}; // eslint-disable-line no-param-reassign
+  for (var option in options) { // eslint-disable-line no-restricted-syntax
     this[option] = options[option];
   }
 }
 
+// make it a Stream
+util.inherits(FormData, CombinedStream);
+
 FormData.LINE_BREAK = '\r\n';
 FormData.DEFAULT_CONTENT_TYPE = 'application/octet-stream';
 
-FormData.prototype.append = function(field, value, options) {
-
-  options = options || {};
+FormData.prototype.append = function (field, value, options) {
+  options = options || {}; // eslint-disable-line no-param-reassign
 
   // allow filename as single option
-  if (typeof options == 'string') {
-    options = {filename: options};
+  if (typeof options === 'string') {
+    options = { filename: options }; // eslint-disable-line no-param-reassign
   }
 
   var append = CombinedStream.prototype.append.bind(this);
 
   // all that streamy business can't handle numbers
-  if (typeof value == 'number') {
-    value = '' + value;
+  if (typeof value === 'number' || value == null) {
+    value = String(value); // eslint-disable-line no-param-reassign
   }
 
   // https://github.com/felixge/node-form-data/issues/38
-  if (util.isArray(value)) {
-    // Please convert your array into string
-    // the way web server expects it
+  if (Array.isArray(value)) {
+    /*
+     * Please convert your array into string
+     * the way web server expects it
+     */
     this._error(new Error('Arrays are not supported.'));
     return;
   }
@@ -40061,15 +39576,17 @@ FormData.prototype.append = function(field, value, options) {
   this._trackLength(header, value, options);
 };
 
-FormData.prototype._trackLength = function(header, value, options) {
+FormData.prototype._trackLength = function (header, value, options) {
   var valueLength = 0;
 
-  // used w/ getLengthSync(), when length is known.
-  // e.g. for streaming directly from a remote server,
-  // w/ a known file a size, and not wanting to wait for
-  // incoming file to finish to get its size.
+  /*
+   * used w/ getLengthSync(), when length is known.
+   * e.g. for streaming directly from a remote server,
+   * w/ a known file a size, and not wanting to wait for
+   * incoming file to finish to get its size.
+   */
   if (options.knownLength != null) {
-    valueLength += +options.knownLength;
+    valueLength += Number(options.knownLength);
   } else if (Buffer.isBuffer(value)) {
     valueLength = value.length;
   } else if (typeof value === 'string') {
@@ -40079,12 +39596,10 @@ FormData.prototype._trackLength = function(header, value, options) {
   this._valueLength += valueLength;
 
   // @check why add CRLF? does this account for custom/multiple CRLFs?
-  this._overheadLength +=
-    Buffer.byteLength(header) +
-    FormData.LINE_BREAK.length;
+  this._overheadLength += Buffer.byteLength(header) + FormData.LINE_BREAK.length;
 
   // empty or either doesn't have path or not an http response or not a stream
-  if (!value || ( !value.path && !(value.readable && value.hasOwnProperty('httpVersion')) && !(value instanceof Stream))) {
+  if (!value || (!value.path && !(value.readable && hasOwn(value, 'httpVersion')) && !(value instanceof Stream))) {
     return;
   }
 
@@ -40094,10 +39609,8 @@ FormData.prototype._trackLength = function(header, value, options) {
   }
 };
 
-FormData.prototype._lengthRetriever = function(value, callback) {
-
-  if (value.hasOwnProperty('fd')) {
-
+FormData.prototype._lengthRetriever = function (value, callback) {
+  if (hasOwn(value, 'fd')) {
     // take read range into a account
     // `end` = Infinity –> read file till the end
     //
@@ -40106,54 +39619,52 @@ FormData.prototype._lengthRetriever = function(value, callback) {
     // Fix it when node fixes it.
     // https://github.com/joyent/node/issues/7819
     if (value.end != undefined && value.end != Infinity && value.start != undefined) {
-
       // when end specified
       // no need to calculate range
       // inclusive, starts with 0
-      callback(null, value.end + 1 - (value.start ? value.start : 0));
+      callback(null, value.end + 1 - (value.start ? value.start : 0)); // eslint-disable-line callback-return
 
-    // not that fast snoopy
+      // not that fast snoopy
     } else {
       // still need to fetch file size from fs
-      fs.stat(value.path, function(err, stat) {
-
-        var fileSize;
-
+      fs.stat(value.path, function (err, stat) {
         if (err) {
           callback(err);
           return;
         }
 
         // update final size based on the range options
-        fileSize = stat.size - (value.start ? value.start : 0);
+        var fileSize = stat.size - (value.start ? value.start : 0);
         callback(null, fileSize);
       });
     }
 
-  // or http response
-  } else if (value.hasOwnProperty('httpVersion')) {
-    callback(null, +value.headers['content-length']);
+    // or http response
+  } else if (hasOwn(value, 'httpVersion')) {
+    callback(null, Number(value.headers['content-length'])); // eslint-disable-line callback-return
 
-  // or request stream http://github.com/mikeal/request
-  } else if (value.hasOwnProperty('httpModule')) {
+    // or request stream http://github.com/mikeal/request
+  } else if (hasOwn(value, 'httpModule')) {
     // wait till response come back
-    value.on('response', function(response) {
+    value.on('response', function (response) {
       value.pause();
-      callback(null, +response.headers['content-length']);
+      callback(null, Number(response.headers['content-length']));
     });
     value.resume();
 
-  // something else
+    // something else
   } else {
-    callback('Unknown stream');
+    callback('Unknown stream'); // eslint-disable-line callback-return
   }
 };
 
-FormData.prototype._multiPartHeader = function(field, value, options) {
-  // custom header specified (as string)?
-  // it becomes responsible for boundary
-  // (e.g. to handle extra CRLFs on .NET servers)
-  if (typeof options.header == 'string') {
+FormData.prototype._multiPartHeader = function (field, value, options) {
+  /*
+   * custom header specified (as string)?
+   * it becomes responsible for boundary
+   * (e.g. to handle extra CRLFs on .NET servers)
+   */
+  if (typeof options.header === 'string') {
     return options.header;
   }
 
@@ -40161,7 +39672,7 @@ FormData.prototype._multiPartHeader = function(field, value, options) {
   var contentType = this._getContentType(value, options);
 
   var contents = '';
-  var headers  = {
+  var headers = {
     // add custom disposition as third element or keep it two elements if not
     'Content-Disposition': ['form-data', 'name="' + field + '"'].concat(contentDisposition || []),
     // if no content type. allow it to be empty array
@@ -40169,77 +39680,74 @@ FormData.prototype._multiPartHeader = function(field, value, options) {
   };
 
   // allow custom headers.
-  if (typeof options.header == 'object') {
+  if (typeof options.header === 'object') {
     populate(headers, options.header);
   }
 
   var header;
-  for (var prop in headers) {
-    if (!headers.hasOwnProperty(prop)) continue;
-    header = headers[prop];
+  for (var prop in headers) { // eslint-disable-line no-restricted-syntax
+    if (hasOwn(headers, prop)) {
+      header = headers[prop];
 
-    // skip nullish headers.
-    if (header == null) {
-      continue;
-    }
+      // skip nullish headers.
+      if (header == null) {
+        continue; // eslint-disable-line no-restricted-syntax, no-continue
+      }
 
-    // convert all headers to arrays.
-    if (!Array.isArray(header)) {
-      header = [header];
-    }
+      // convert all headers to arrays.
+      if (!Array.isArray(header)) {
+        header = [header];
+      }
 
-    // add non-empty headers.
-    if (header.length) {
-      contents += prop + ': ' + header.join('; ') + FormData.LINE_BREAK;
+      // add non-empty headers.
+      if (header.length) {
+        contents += prop + ': ' + header.join('; ') + FormData.LINE_BREAK;
+      }
     }
   }
 
   return '--' + this.getBoundary() + FormData.LINE_BREAK + contents + FormData.LINE_BREAK;
 };
 
-FormData.prototype._getContentDisposition = function(value, options) {
-
-  var filename
-    , contentDisposition
-    ;
+FormData.prototype._getContentDisposition = function (value, options) { // eslint-disable-line consistent-return
+  var filename;
 
   if (typeof options.filepath === 'string') {
     // custom filepath for relative paths
     filename = path.normalize(options.filepath).replace(/\\/g, '/');
-  } else if (options.filename || value.name || value.path) {
-    // custom filename take precedence
-    // formidable and the browser add a name property
-    // fs- and request- streams have path property
-    filename = path.basename(options.filename || value.name || value.path);
-  } else if (value.readable && value.hasOwnProperty('httpVersion')) {
+  } else if (options.filename || (value && (value.name || value.path))) {
+    /*
+     * custom filename take precedence
+     * formidable and the browser add a name property
+     * fs- and request- streams have path property
+     */
+    filename = path.basename(options.filename || (value && (value.name || value.path)));
+  } else if (value && value.readable && hasOwn(value, 'httpVersion')) {
     // or try http response
     filename = path.basename(value.client._httpMessage.path || '');
   }
 
   if (filename) {
-    contentDisposition = 'filename="' + filename + '"';
+    return 'filename="' + filename + '"';
   }
-
-  return contentDisposition;
 };
 
-FormData.prototype._getContentType = function(value, options) {
-
+FormData.prototype._getContentType = function (value, options) {
   // use custom content-type above all
   var contentType = options.contentType;
 
   // or try `name` from formidable, browser
-  if (!contentType && value.name) {
+  if (!contentType && value && value.name) {
     contentType = mime.lookup(value.name);
   }
 
   // or try `path` from fs-, request- streams
-  if (!contentType && value.path) {
+  if (!contentType && value && value.path) {
     contentType = mime.lookup(value.path);
   }
 
   // or if it's http-reponse
-  if (!contentType && value.readable && value.hasOwnProperty('httpVersion')) {
+  if (!contentType && value && value.readable && hasOwn(value, 'httpVersion')) {
     contentType = value.headers['content-type'];
   }
 
@@ -40249,18 +39757,18 @@ FormData.prototype._getContentType = function(value, options) {
   }
 
   // fallback to the default content type if `value` is not simple value
-  if (!contentType && typeof value == 'object') {
+  if (!contentType && value && typeof value === 'object') {
     contentType = FormData.DEFAULT_CONTENT_TYPE;
   }
 
   return contentType;
 };
 
-FormData.prototype._multiPartFooter = function() {
-  return function(next) {
+FormData.prototype._multiPartFooter = function () {
+  return function (next) {
     var footer = FormData.LINE_BREAK;
 
-    var lastPart = (this._streams.length === 0);
+    var lastPart = this._streams.length === 0;
     if (lastPart) {
       footer += this._lastBoundary();
     }
@@ -40269,18 +39777,18 @@ FormData.prototype._multiPartFooter = function() {
   }.bind(this);
 };
 
-FormData.prototype._lastBoundary = function() {
+FormData.prototype._lastBoundary = function () {
   return '--' + this.getBoundary() + '--' + FormData.LINE_BREAK;
 };
 
-FormData.prototype.getHeaders = function(userHeaders) {
+FormData.prototype.getHeaders = function (userHeaders) {
   var header;
   var formHeaders = {
     'content-type': 'multipart/form-data; boundary=' + this.getBoundary()
   };
 
-  for (header in userHeaders) {
-    if (userHeaders.hasOwnProperty(header)) {
+  for (header in userHeaders) { // eslint-disable-line no-restricted-syntax
+    if (hasOwn(userHeaders, header)) {
       formHeaders[header.toLowerCase()] = userHeaders[header];
     }
   }
@@ -40288,11 +39796,14 @@ FormData.prototype.getHeaders = function(userHeaders) {
   return formHeaders;
 };
 
-FormData.prototype.setBoundary = function(boundary) {
+FormData.prototype.setBoundary = function (boundary) {
+  if (typeof boundary !== 'string') {
+    throw new TypeError('FormData boundary must be a string');
+  }
   this._boundary = boundary;
 };
 
-FormData.prototype.getBoundary = function() {
+FormData.prototype.getBoundary = function () {
   if (!this._boundary) {
     this._generateBoundary();
   }
@@ -40300,60 +39811,55 @@ FormData.prototype.getBoundary = function() {
   return this._boundary;
 };
 
-FormData.prototype.getBuffer = function() {
-  var dataBuffer = new Buffer.alloc( 0 );
+FormData.prototype.getBuffer = function () {
+  var dataBuffer = new Buffer.alloc(0); // eslint-disable-line new-cap
   var boundary = this.getBoundary();
 
   // Create the form content. Add Line breaks to the end of data.
   for (var i = 0, len = this._streams.length; i < len; i++) {
     if (typeof this._streams[i] !== 'function') {
-
       // Add content to the buffer.
-      if(Buffer.isBuffer(this._streams[i])) {
-        dataBuffer = Buffer.concat( [dataBuffer, this._streams[i]]);
-      }else {
-        dataBuffer = Buffer.concat( [dataBuffer, Buffer.from(this._streams[i])]);
+      if (Buffer.isBuffer(this._streams[i])) {
+        dataBuffer = Buffer.concat([dataBuffer, this._streams[i]]);
+      } else {
+        dataBuffer = Buffer.concat([dataBuffer, Buffer.from(this._streams[i])]);
       }
 
       // Add break after content.
-      if (typeof this._streams[i] !== 'string' || this._streams[i].substring( 2, boundary.length + 2 ) !== boundary) {
-        dataBuffer = Buffer.concat( [dataBuffer, Buffer.from(FormData.LINE_BREAK)] );
+      if (typeof this._streams[i] !== 'string' || this._streams[i].substring(2, boundary.length + 2) !== boundary) {
+        dataBuffer = Buffer.concat([dataBuffer, Buffer.from(FormData.LINE_BREAK)]);
       }
     }
   }
 
   // Add the footer and return the Buffer object.
-  return Buffer.concat( [dataBuffer, Buffer.from(this._lastBoundary())] );
+  return Buffer.concat([dataBuffer, Buffer.from(this._lastBoundary())]);
 };
 
-FormData.prototype._generateBoundary = function() {
+FormData.prototype._generateBoundary = function () {
   // This generates a 50 character boundary similar to those used by Firefox.
-  // They are optimized for boyer-moore parsing.
-  var boundary = '--------------------------';
-  for (var i = 0; i < 24; i++) {
-    boundary += Math.floor(Math.random() * 10).toString(16);
-  }
 
-  this._boundary = boundary;
+  // They are optimized for boyer-moore parsing.
+  this._boundary = '--------------------------' + crypto.randomBytes(12).toString('hex');
 };
 
 // Note: getLengthSync DOESN'T calculate streams length
-// As workaround one can calculate file size manually
-// and add it as knownLength option
-FormData.prototype.getLengthSync = function() {
+// As workaround one can calculate file size manually and add it as knownLength option
+FormData.prototype.getLengthSync = function () {
   var knownLength = this._overheadLength + this._valueLength;
 
-  // Don't get confused, there are 3 "internal" streams for each keyval pair
-  // so it basically checks if there is any value added to the form
+  // Don't get confused, there are 3 "internal" streams for each keyval pair so it basically checks if there is any value added to the form
   if (this._streams.length) {
     knownLength += this._lastBoundary().length;
   }
 
   // https://github.com/form-data/form-data/issues/40
   if (!this.hasKnownLength()) {
-    // Some async length retrievers are present
-    // therefore synchronous length calculation is false.
-    // Please use getLength(callback) to get proper length
+    /*
+     * Some async length retrievers are present
+     * therefore synchronous length calculation is false.
+     * Please use getLength(callback) to get proper length
+     */
     this._error(new Error('Cannot calculate proper length in synchronous way.'));
   }
 
@@ -40363,7 +39869,7 @@ FormData.prototype.getLengthSync = function() {
 // Public API to check if length of added values is known
 // https://github.com/form-data/form-data/issues/196
 // https://github.com/form-data/form-data/issues/262
-FormData.prototype.hasKnownLength = function() {
+FormData.prototype.hasKnownLength = function () {
   var hasKnownLength = true;
 
   if (this._valuesToMeasure.length) {
@@ -40373,7 +39879,7 @@ FormData.prototype.hasKnownLength = function() {
   return hasKnownLength;
 };
 
-FormData.prototype.getLength = function(cb) {
+FormData.prototype.getLength = function (cb) {
   var knownLength = this._overheadLength + this._valueLength;
 
   if (this._streams.length) {
@@ -40385,13 +39891,13 @@ FormData.prototype.getLength = function(cb) {
     return;
   }
 
-  asynckit.parallel(this._valuesToMeasure, this._lengthRetriever, function(err, values) {
+  asynckit.parallel(this._valuesToMeasure, this._lengthRetriever, function (err, values) {
     if (err) {
       cb(err);
       return;
     }
 
-    values.forEach(function(length) {
+    values.forEach(function (length) {
       knownLength += length;
     });
 
@@ -40399,31 +39905,26 @@ FormData.prototype.getLength = function(cb) {
   });
 };
 
-FormData.prototype.submit = function(params, cb) {
-  var request
-    , options
-    , defaults = {method: 'post'}
-    ;
+FormData.prototype.submit = function (params, cb) {
+  var request;
+  var options;
+  var defaults = { method: 'post' };
 
-  // parse provided url if it's string
-  // or treat it as options object
-  if (typeof params == 'string') {
-
-    params = parseUrl(params);
+  // parse provided url if it's string or treat it as options object
+  if (typeof params === 'string') {
+    params = parseUrl(params); // eslint-disable-line no-param-reassign
+    /* eslint sort-keys: 0 */
     options = populate({
       port: params.port,
       path: params.pathname,
       host: params.hostname,
       protocol: params.protocol
     }, defaults);
-
-  // use custom params
-  } else {
-
+  } else { // use custom params
     options = populate(params, defaults);
     // if no port provided use default one
     if (!options.port) {
-      options.port = options.protocol == 'https:' ? 443 : 80;
+      options.port = options.protocol === 'https:' ? 443 : 80;
     }
   }
 
@@ -40431,14 +39932,14 @@ FormData.prototype.submit = function(params, cb) {
   options.headers = this.getHeaders(params.headers);
 
   // https if specified, fallback to http in any other case
-  if (options.protocol == 'https:') {
+  if (options.protocol === 'https:') {
     request = https.request(options);
   } else {
     request = http.request(options);
   }
 
   // get content length and fire away
-  this.getLength(function(err, length) {
+  this.getLength(function (err, length) {
     if (err && err !== 'Unknown stream') {
       this._error(err);
       return;
@@ -40457,7 +39958,7 @@ FormData.prototype.submit = function(params, cb) {
         request.removeListener('error', callback);
         request.removeListener('response', onResponse);
 
-        return cb.call(this, error, responce);
+        return cb.call(this, error, responce); // eslint-disable-line no-invalid-this
       };
 
       onResponse = callback.bind(this, null);
@@ -40470,7 +39971,7 @@ FormData.prototype.submit = function(params, cb) {
   return request;
 };
 
-FormData.prototype._error = function(err) {
+FormData.prototype._error = function (err) {
   if (!this.error) {
     this.error = err;
     this.pause();
@@ -40481,6 +39982,10 @@ FormData.prototype._error = function(err) {
 FormData.prototype.toString = function () {
   return '[object FormData]';
 };
+setToStringTag(FormData, 'FormData');
+
+// Public API
+module.exports = FormData;
 
 
 /***/ }),
@@ -40488,12 +39993,13 @@ FormData.prototype.toString = function () {
 /***/ 47027:
 /***/ ((module) => {
 
-// populates missing values
-module.exports = function(dst, src) {
+"use strict";
 
-  Object.keys(src).forEach(function(prop)
-  {
-    dst[prop] = dst[prop] || src[prop];
+
+// populates missing values
+module.exports = function (dst, src) {
+  Object.keys(src).forEach(function (prop) {
+    dst[prop] = dst[prop] || src[prop]; // eslint-disable-line no-param-reassign
   });
 
   return dst;
@@ -40918,10 +40424,10 @@ function removeHook(state, name, method) {
   'use strict';
 
 /*
- *      bignumber.js v9.1.2
+ *      bignumber.js v9.3.1
  *      A JavaScript library for arbitrary-precision arithmetic.
  *      https://github.com/MikeMcl/bignumber.js
- *      Copyright (c) 2022 Michael Mclaughlin <M8ch88l@gmail.com>
+ *      Copyright (c) 2025 Michael Mclaughlin <M8ch88l@gmail.com>
  *      MIT Licensed.
  *
  *      BigNumber.prototype methods     |  BigNumber methods
@@ -41822,7 +41328,7 @@ function removeHook(state, name, method) {
 
         // xc now represents str converted to baseOut.
 
-        // THe index of the rounding digit.
+        // The index of the rounding digit.
         d = e + dp + 1;
 
         // The rounding digit: the digit to the right of the digit that may be rounded up.
@@ -42186,7 +41692,7 @@ function removeHook(state, name, method) {
 
         // Fixed-point notation.
         } else {
-          i -= ne;
+          i -= ne + (id === 2 && e > ne);
           str = toFixedPoint(str, e, '0');
 
           // Append zeros?
@@ -44097,6 +43603,83 @@ bufferEq.restore = function() {
 
 /***/ }),
 
+/***/ 19227:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var bind = __nccwpck_require__(88334);
+
+var $apply = __nccwpck_require__(54177);
+var $call = __nccwpck_require__(2808);
+var $reflectApply = __nccwpck_require__(48309);
+
+/** @type {import('./actualApply')} */
+module.exports = $reflectApply || bind.call($call, $apply);
+
+
+/***/ }),
+
+/***/ 54177:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./functionApply')} */
+module.exports = Function.prototype.apply;
+
+
+/***/ }),
+
+/***/ 2808:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./functionCall')} */
+module.exports = Function.prototype.call;
+
+
+/***/ }),
+
+/***/ 86815:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var bind = __nccwpck_require__(88334);
+var $TypeError = __nccwpck_require__(6361);
+
+var $call = __nccwpck_require__(2808);
+var $actualApply = __nccwpck_require__(19227);
+
+/** @type {(args: [Function, thisArg?: unknown, ...args: unknown[]]) => Function} TODO FIXME, find a way to use import('.') */
+module.exports = function callBindBasic(args) {
+	if (args.length < 1 || typeof args[0] !== 'function') {
+		throw new $TypeError('a function is required');
+	}
+	return $actualApply(bind, $call, args);
+};
+
+
+/***/ }),
+
+/***/ 48309:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./reflectApply')} */
+module.exports = typeof Reflect !== 'undefined' && Reflect && Reflect.apply;
+
+
+/***/ }),
+
 /***/ 85443:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -45318,6 +44901,44 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
+/***/ 62693:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var callBind = __nccwpck_require__(86815);
+var gOPD = __nccwpck_require__(18501);
+
+var hasProtoAccessor;
+try {
+	// eslint-disable-next-line no-extra-parens, no-proto
+	hasProtoAccessor = /** @type {{ __proto__?: typeof Array.prototype }} */ ([]).__proto__ === Array.prototype;
+} catch (e) {
+	if (!e || typeof e !== 'object' || !('code' in e) || e.code !== 'ERR_PROTO_ACCESS') {
+		throw e;
+	}
+}
+
+// eslint-disable-next-line no-extra-parens
+var desc = !!hasProtoAccessor && gOPD && gOPD(Object.prototype, /** @type {keyof typeof Object.prototype} */ ('__proto__'));
+
+var $Object = Object;
+var $getPrototypeOf = $Object.getPrototypeOf;
+
+/** @type {import('./get')} */
+module.exports = desc && typeof desc.get === 'function'
+	? callBind([desc.get])
+	: typeof $getPrototypeOf === 'function'
+		? /** @type {import('./get')} */ function getDunder(value) {
+			// eslint-disable-next-line eqeqeq
+			return $getPrototypeOf(value == null ? value : $Object(value));
+		}
+		: false;
+
+
+/***/ }),
+
 /***/ 76599:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -45796,6 +45417,8 @@ var once = __nccwpck_require__(1223);
 
 var noop = function() {};
 
+var qnt = global.Bare ? queueMicrotask : process.nextTick.bind(process);
+
 var isRequest = function(stream) {
 	return stream.setHeader && typeof stream.abort === 'function';
 };
@@ -45839,7 +45462,7 @@ var eos = function(stream, opts, callback) {
 	};
 
 	var onclose = function() {
-		process.nextTick(onclosenexttick);
+		qnt(onclosenexttick);
 	};
 
 	var onclosenexttick = function() {
@@ -45886,6 +45509,167 @@ var eos = function(stream, opts, callback) {
 };
 
 module.exports = eos;
+
+
+/***/ }),
+
+/***/ 6123:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('.')} */
+var $defineProperty = Object.defineProperty || false;
+if ($defineProperty) {
+	try {
+		$defineProperty({}, 'a', { value: 1 });
+	} catch (e) {
+		// IE 8 has a broken defineProperty
+		$defineProperty = false;
+	}
+}
+
+module.exports = $defineProperty;
+
+
+/***/ }),
+
+/***/ 91933:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./eval')} */
+module.exports = EvalError;
+
+
+/***/ }),
+
+/***/ 28015:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('.')} */
+module.exports = Error;
+
+
+/***/ }),
+
+/***/ 54415:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./range')} */
+module.exports = RangeError;
+
+
+/***/ }),
+
+/***/ 46279:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./ref')} */
+module.exports = ReferenceError;
+
+
+/***/ }),
+
+/***/ 75474:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./syntax')} */
+module.exports = SyntaxError;
+
+
+/***/ }),
+
+/***/ 6361:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./type')} */
+module.exports = TypeError;
+
+
+/***/ }),
+
+/***/ 5065:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./uri')} */
+module.exports = URIError;
+
+
+/***/ }),
+
+/***/ 78308:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('.')} */
+module.exports = Object;
+
+
+/***/ }),
+
+/***/ 11770:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var GetIntrinsic = __nccwpck_require__(74538);
+
+var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
+
+var hasToStringTag = __nccwpck_require__(99038)();
+var hasOwn = __nccwpck_require__(62157);
+var $TypeError = __nccwpck_require__(6361);
+
+var toStringTag = hasToStringTag ? Symbol.toStringTag : null;
+
+/** @type {import('.')} */
+module.exports = function setToStringTag(object, value) {
+	var overrideIfSet = arguments.length > 2 && !!arguments[2] && arguments[2].force;
+	var nonConfigurable = arguments.length > 2 && !!arguments[2] && arguments[2].nonConfigurable;
+	if (
+		(typeof overrideIfSet !== 'undefined' && typeof overrideIfSet !== 'boolean')
+		|| (typeof nonConfigurable !== 'undefined' && typeof nonConfigurable !== 'boolean')
+	) {
+		throw new $TypeError('if provided, the `overrideIfSet` and `nonConfigurable` options must be booleans');
+	}
+	if (toStringTag && (overrideIfSet || !hasOwn(object, toStringTag))) {
+		if ($defineProperty) {
+			$defineProperty(object, toStringTag, {
+				configurable: !nonConfigurable,
+				enumerable: false,
+				value: value,
+				writable: false
+			});
+		} else {
+			object[toStringTag] = value; // eslint-disable-line no-param-reassign
+		}
+	}
+};
 
 
 /***/ }),
@@ -47101,6 +46885,8 @@ exports.validate = function (xmlData, options) {
             return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' doesn't have proper closing.", getLineNumberForPosition(xmlData, i));
           } else if (attrStr.trim().length > 0) {
             return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' can't have attributes or invalid starting.", getLineNumberForPosition(xmlData, tagStartPos));
+          } else if (tags.length === 0) {
+            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' has not been opened.", getLineNumberForPosition(xmlData, tagStartPos));
           } else {
             const otg = tags.pop();
             if (tagName !== otg.tagName) {
@@ -47544,6 +47330,7 @@ Builder.prototype.j2x = function(jObj, level) {
       //repeated nodes
       const arrLen = jObj[key].length;
       let listTagVal = "";
+      let listTagAttr = "";
       for (let j = 0; j < arrLen; j++) {
         const item = jObj[key][j];
         if (typeof item === 'undefined') {
@@ -47553,17 +47340,27 @@ Builder.prototype.j2x = function(jObj, level) {
           else val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
           // val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
         } else if (typeof item === 'object') {
-          if(this.options.oneListGroup ){
-            listTagVal += this.j2x(item, level + 1).val;
+          if(this.options.oneListGroup){
+            const result = this.j2x(item, level + 1);
+            listTagVal += result.val;
+            if (this.options.attributesGroupName && item.hasOwnProperty(this.options.attributesGroupName)) {
+              listTagAttr += result.attrStr
+            }
           }else{
             listTagVal += this.processTextOrObjNode(item, key, level)
           }
         } else {
-          listTagVal += this.buildTextValNode(item, key, '', level);
+          if (this.options.oneListGroup) {
+            let textValue = this.options.tagValueProcessor(key, item);
+            textValue = this.replaceEntitiesValue(textValue);
+            listTagVal += textValue;
+          } else {
+            listTagVal += this.buildTextValNode(item, key, '', level);
+          }
         }
       }
       if(this.options.oneListGroup){
-        listTagVal = this.buildObjectNode(listTagVal, key, '', level);
+        listTagVal = this.buildObjectNode(listTagVal, key, listTagAttr, level);
       }
       val += listTagVal;
     } else {
@@ -48373,10 +48170,18 @@ const parseXml = function(xmlData) {
           let tagContent = "";
           //self-closing tag
           if(tagExp.length > 0 && tagExp.lastIndexOf("/") === tagExp.length - 1){
+            if(tagName[tagName.length - 1] === "/"){ //remove trailing '/'
+              tagName = tagName.substr(0, tagName.length - 1);
+              jPath = jPath.substr(0, jPath.length - 1);
+              tagExp = tagName;
+            }else{
+              tagExp = tagExp.substr(0, tagExp.length - 1);
+            }
             i = result.closeIndex;
           }
           //unpaired tag
           else if(this.options.unpairedTags.indexOf(tagName) !== -1){
+            
             i = result.closeIndex;
           }
           //normal tag
@@ -48907,10 +48712,21 @@ var Writable = (__nccwpck_require__(12781).Writable);
 var assert = __nccwpck_require__(39491);
 var debug = __nccwpck_require__(31133);
 
+// Preventive platform detection
+// istanbul ignore next
+(function detectUnsupportedEnvironment() {
+  var looksLikeNode = typeof process !== "undefined";
+  var looksLikeBrowser = typeof window !== "undefined" && typeof document !== "undefined";
+  var looksLikeV8 = isFunction(Error.captureStackTrace);
+  if (!looksLikeNode && (looksLikeBrowser || !looksLikeV8)) {
+    console.warn("The follow-redirects package should be excluded from browser builds.");
+  }
+}());
+
 // Whether to use the native URL object or the legacy url module
 var useNativeURL = false;
 try {
-  assert(new URL());
+  assert(new URL(""));
 }
 catch (error) {
   useNativeURL = error.code === "ERR_INVALID_URL";
@@ -49247,17 +49063,17 @@ RedirectableRequest.prototype._performRequest = function () {
     var buffers = this._requestBodyBuffers;
     (function writeNext(error) {
       // Only write if this request has not been redirected yet
-      /* istanbul ignore else */
+      // istanbul ignore else
       if (request === self._currentRequest) {
         // Report any write errors
-        /* istanbul ignore if */
+        // istanbul ignore if
         if (error) {
           self.emit("error", error);
         }
         // Write the next buffer if there are still left
         else if (i < buffers.length) {
           var buffer = buffers[i++];
-          /* istanbul ignore else */
+          // istanbul ignore else
           if (!request.finished) {
             request.write(buffer.data, buffer.encoding, writeNext);
           }
@@ -49453,7 +49269,7 @@ function noop() { /* empty */ }
 
 function parseUrl(input) {
   var parsed;
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (useNativeURL) {
     parsed = new URL(input);
   }
@@ -49468,7 +49284,7 @@ function parseUrl(input) {
 }
 
 function resolveUrl(relative, base) {
-  /* istanbul ignore next */
+  // istanbul ignore next
   return useNativeURL ? new URL(relative, base) : parseUrl(url.resolve(base, relative));
 }
 
@@ -49517,7 +49333,10 @@ function removeMatchingHeaders(regex, headers) {
 function createErrorType(code, message, baseClass) {
   // Create constructor
   function CustomError(properties) {
-    Error.captureStackTrace(this, this.constructor);
+    // istanbul ignore else
+    if (isFunction(Error.captureStackTrace)) {
+      Error.captureStackTrace(this, this.constructor);
+    }
     Object.assign(this, properties || {});
     this.code = code;
     this.message = this.cause ? message + ": " + this.cause.message : message;
@@ -49575,6 +49394,111 @@ module.exports.wrap = wrap;
 
 /***/ }),
 
+/***/ 19320:
+/***/ ((module) => {
+
+"use strict";
+
+
+/* eslint no-invalid-this: 1 */
+
+var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
+var toStr = Object.prototype.toString;
+var max = Math.max;
+var funcType = '[object Function]';
+
+var concatty = function concatty(a, b) {
+    var arr = [];
+
+    for (var i = 0; i < a.length; i += 1) {
+        arr[i] = a[i];
+    }
+    for (var j = 0; j < b.length; j += 1) {
+        arr[j + a.length] = b[j];
+    }
+
+    return arr;
+};
+
+var slicy = function slicy(arrLike, offset) {
+    var arr = [];
+    for (var i = offset || 0, j = 0; i < arrLike.length; i += 1, j += 1) {
+        arr[j] = arrLike[i];
+    }
+    return arr;
+};
+
+var joiny = function (arr, joiner) {
+    var str = '';
+    for (var i = 0; i < arr.length; i += 1) {
+        str += arr[i];
+        if (i + 1 < arr.length) {
+            str += joiner;
+        }
+    }
+    return str;
+};
+
+module.exports = function bind(that) {
+    var target = this;
+    if (typeof target !== 'function' || toStr.apply(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+    }
+    var args = slicy(arguments, 1);
+
+    var bound;
+    var binder = function () {
+        if (this instanceof bound) {
+            var result = target.apply(
+                this,
+                concatty(args, arguments)
+            );
+            if (Object(result) === result) {
+                return result;
+            }
+            return this;
+        }
+        return target.apply(
+            that,
+            concatty(args, arguments)
+        );
+
+    };
+
+    var boundLength = max(0, target.length - args.length);
+    var boundArgs = [];
+    for (var i = 0; i < boundLength; i++) {
+        boundArgs[i] = '$' + i;
+    }
+
+    bound = Function('binder', 'return function (' + joiny(boundArgs, ',') + '){ return binder.apply(this,arguments); }')(binder);
+
+    if (target.prototype) {
+        var Empty = function Empty() {};
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+    }
+
+    return bound;
+};
+
+
+/***/ }),
+
+/***/ 88334:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var implementation = __nccwpck_require__(19320);
+
+module.exports = Function.prototype.bind || implementation;
+
+
+/***/ }),
+
 /***/ 66129:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -49597,7 +49521,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.defaultErrorRedactor = exports.GaxiosError = exports.GAXIOS_ERROR_SYMBOL = void 0;
+exports.GaxiosError = exports.GAXIOS_ERROR_SYMBOL = void 0;
+exports.defaultErrorRedactor = defaultErrorRedactor;
 const url_1 = __nccwpck_require__(57310);
 const util_1 = __nccwpck_require__(21980);
 const extend_1 = __importDefault(__nccwpck_require__(38171));
@@ -49765,7 +49690,6 @@ function defaultErrorRedactor(data) {
     }
     return data;
 }
-exports.defaultErrorRedactor = defaultErrorRedactor;
 //# sourceMappingURL=common.js.map
 
 /***/ }),
@@ -50289,7 +50213,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.request = exports.instance = exports.Gaxios = exports.GaxiosError = void 0;
+exports.instance = exports.Gaxios = exports.GaxiosError = void 0;
+exports.request = request;
 const gaxios_1 = __nccwpck_require__(28133);
 Object.defineProperty(exports, "Gaxios", ({ enumerable: true, get: function () { return gaxios_1.Gaxios; } }));
 var common_1 = __nccwpck_require__(66129);
@@ -50307,7 +50232,6 @@ exports.instance = new gaxios_1.Gaxios();
 async function request(opts) {
     return exports.instance.request(opts);
 }
-exports.request = request;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -50359,9 +50283,8 @@ exports.GaxiosInterceptorManager = GaxiosInterceptorManager;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getRetryConfig = void 0;
+exports.getRetryConfig = getRetryConfig;
 async function getRetryConfig(err) {
-    var _a;
     let config = getConfig(err);
     if (!err || !err.config || (!config && !err.config.retry)) {
         return { shouldRetry: false };
@@ -50381,6 +50304,18 @@ async function getRetryConfig(err) {
         config.noResponseRetries === undefined || config.noResponseRetries === null
             ? 2
             : config.noResponseRetries;
+    config.retryDelayMultiplier = config.retryDelayMultiplier
+        ? config.retryDelayMultiplier
+        : 2;
+    config.timeOfFirstRequest = config.timeOfFirstRequest
+        ? config.timeOfFirstRequest
+        : Date.now();
+    config.totalTimeout = config.totalTimeout
+        ? config.totalTimeout
+        : Number.MAX_SAFE_INTEGER;
+    config.maxRetryDelay = config.maxRetryDelay
+        ? config.maxRetryDelay
+        : Number.MAX_SAFE_INTEGER;
     // If this wasn't in the list of status codes where we want
     // to automatically retry, return.
     const retryRanges = [
@@ -50405,11 +50340,7 @@ async function getRetryConfig(err) {
     if (!(await shouldRetryFn(err))) {
         return { shouldRetry: false, config: err.config };
     }
-    // Calculate time to wait with exponential backoff.
-    // If this is the first retry, look for a configured retryDelay.
-    const retryDelay = config.currentRetryAttempt ? 0 : (_a = config.retryDelay) !== null && _a !== void 0 ? _a : 100;
-    // Formula: retryDelay + ((2^c - 1 / 2) * 1000)
-    const delay = retryDelay + ((Math.pow(2, config.currentRetryAttempt) - 1) / 2) * 1000;
+    const delay = getNextRetryDelay(config);
     // We're going to retry!  Incremenent the counter.
     err.config.retryConfig.currentRetryAttempt += 1;
     // Create a promise that invokes the retry after the backOffDelay
@@ -50426,7 +50357,6 @@ async function getRetryConfig(err) {
     await backoff;
     return { shouldRetry: true, config: err.config };
 }
-exports.getRetryConfig = getRetryConfig;
 /**
  * Determine based on config if we should retry the request.
  * @param err The GaxiosError passed to the interceptor.
@@ -50484,6 +50414,25 @@ function getConfig(err) {
         return err.config.retryConfig;
     }
     return;
+}
+/**
+ * Gets the delay to wait before the next retry.
+ *
+ * @param {RetryConfig} config The current set of retry options
+ * @returns {number} the amount of ms to wait before the next retry attempt.
+ */
+function getNextRetryDelay(config) {
+    var _a;
+    // Calculate time to wait with exponential backoff.
+    // If this is the first retry, look for a configured retryDelay.
+    const retryDelay = config.currentRetryAttempt ? 0 : (_a = config.retryDelay) !== null && _a !== void 0 ? _a : 100;
+    // Formula: retryDelay + ((retryDelayMultiplier^currentRetryAttempt - 1 / 2) * 1000)
+    const calculatedDelay = retryDelay +
+        ((Math.pow(config.retryDelayMultiplier, config.currentRetryAttempt) - 1) /
+            2) *
+            1000;
+    const maxAllowableDelay = config.totalTimeout - (Date.now() - config.timeOfFirstRequest);
+    return Math.min(calculatedDelay, maxAllowableDelay, config.maxRetryDelay);
 }
 //# sourceMappingURL=retry.js.map
 
@@ -51215,7 +51164,12 @@ exports["default"] = _default;
  * limitations under the License.
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.detectGCPResidency = exports.isGoogleComputeEngine = exports.isGoogleComputeEngineMACAddress = exports.isGoogleComputeEngineLinux = exports.isGoogleCloudServerless = exports.GCE_LINUX_BIOS_PATHS = void 0;
+exports.GCE_LINUX_BIOS_PATHS = void 0;
+exports.isGoogleCloudServerless = isGoogleCloudServerless;
+exports.isGoogleComputeEngineLinux = isGoogleComputeEngineLinux;
+exports.isGoogleComputeEngineMACAddress = isGoogleComputeEngineMACAddress;
+exports.isGoogleComputeEngine = isGoogleComputeEngine;
+exports.detectGCPResidency = detectGCPResidency;
 const fs_1 = __nccwpck_require__(57147);
 const os_1 = __nccwpck_require__(22037);
 /**
@@ -51252,7 +51206,6 @@ function isGoogleCloudServerless() {
         process.env.K_SERVICE;
     return !!isGFEnvironment;
 }
-exports.isGoogleCloudServerless = isGoogleCloudServerless;
 /**
  * Determines if the process is running on a Linux Google Compute Engine instance.
  *
@@ -51272,7 +51225,6 @@ function isGoogleComputeEngineLinux() {
         return false;
     }
 }
-exports.isGoogleComputeEngineLinux = isGoogleComputeEngineLinux;
 /**
  * Determines if the process is running on a Google Compute Engine instance with a known
  * MAC address.
@@ -51292,7 +51244,6 @@ function isGoogleComputeEngineMACAddress() {
     }
     return false;
 }
-exports.isGoogleComputeEngineMACAddress = isGoogleComputeEngineMACAddress;
 /**
  * Determines if the process is running on a Google Compute Engine instance.
  *
@@ -51301,7 +51252,6 @@ exports.isGoogleComputeEngineMACAddress = isGoogleComputeEngineMACAddress;
 function isGoogleComputeEngine() {
     return isGoogleComputeEngineLinux() || isGoogleComputeEngineMACAddress();
 }
-exports.isGoogleComputeEngine = isGoogleComputeEngine;
 /**
  * Determines if the process is running on Google Cloud Platform.
  *
@@ -51310,7 +51260,6 @@ exports.isGoogleComputeEngine = isGoogleComputeEngine;
 function detectGCPResidency() {
     return isGoogleCloudServerless() || isGoogleComputeEngine();
 }
-exports.detectGCPResidency = detectGCPResidency;
 //# sourceMappingURL=gcp-residency.js.map
 
 /***/ }),
@@ -51323,8 +51272,17 @@ exports.detectGCPResidency = detectGCPResidency;
 /**
  * Copyright 2018 Google LLC
  *
- * Distributed under MIT license.
- * See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -51341,16 +51299,27 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.requestTimeout = exports.setGCPResidency = exports.getGCPResidency = exports.gcpResidencyCache = exports.resetIsAvailableCache = exports.isAvailable = exports.bulk = exports.universe = exports.project = exports.instance = exports.METADATA_SERVER_DETECTION = exports.HEADERS = exports.HEADER_VALUE = exports.HEADER_NAME = exports.SECONDARY_HOST_ADDRESS = exports.HOST_ADDRESS = exports.BASE_PATH = void 0;
+exports.gcpResidencyCache = exports.METADATA_SERVER_DETECTION = exports.HEADERS = exports.HEADER_VALUE = exports.HEADER_NAME = exports.SECONDARY_HOST_ADDRESS = exports.HOST_ADDRESS = exports.BASE_PATH = void 0;
+exports.instance = instance;
+exports.project = project;
+exports.universe = universe;
+exports.bulk = bulk;
+exports.isAvailable = isAvailable;
+exports.resetIsAvailableCache = resetIsAvailableCache;
+exports.getGCPResidency = getGCPResidency;
+exports.setGCPResidency = setGCPResidency;
+exports.requestTimeout = requestTimeout;
 const gaxios_1 = __nccwpck_require__(59555);
 const jsonBigint = __nccwpck_require__(55031);
 const gcp_residency_1 = __nccwpck_require__(51904);
+const logger = __nccwpck_require__(97306);
 exports.BASE_PATH = '/computeMetadata/v1';
 exports.HOST_ADDRESS = 'http://169.254.169.254';
 exports.SECONDARY_HOST_ADDRESS = 'http://metadata.google.internal.';
 exports.HEADER_NAME = 'Metadata-Flavor';
 exports.HEADER_VALUE = 'Google';
 exports.HEADERS = Object.freeze({ [exports.HEADER_NAME]: exports.HEADER_VALUE });
+const log = logger.log('gcp metadata');
 /**
  * Metadata server detection override options.
  *
@@ -51426,45 +51395,37 @@ async function metadataAccessor(type, options = {}, noResponseRetries = 3, fastF
         headers = options.headers || headers;
         params = options.params || params;
     }
-    try {
-        const requestMethod = fastFail ? fastFailMetadataRequest : gaxios_1.request;
-        const res = await requestMethod({
-            url: `${getBaseUrl()}/${metadataKey}`,
-            headers: { ...exports.HEADERS, ...headers },
-            retryConfig: { noResponseRetries },
-            params,
-            responseType: 'text',
-            timeout: requestTimeout(),
-        });
-        // NOTE: node.js converts all incoming headers to lower case.
-        if (res.headers[exports.HEADER_NAME.toLowerCase()] !== exports.HEADER_VALUE) {
-            throw new Error(`Invalid response from metadata service: incorrect ${exports.HEADER_NAME} header.`);
-        }
-        else if (!res.data) {
-            throw new Error('Invalid response from the metadata service');
-        }
-        if (typeof res.data === 'string') {
-            try {
-                return jsonBigint.parse(res.data);
-            }
-            catch (_a) {
-                /* ignore */
-            }
-        }
-        return res.data;
+    const requestMethod = fastFail ? fastFailMetadataRequest : gaxios_1.request;
+    const req = {
+        url: `${getBaseUrl()}/${metadataKey}`,
+        headers: { ...exports.HEADERS, ...headers },
+        retryConfig: { noResponseRetries },
+        params,
+        responseType: 'text',
+        timeout: requestTimeout(),
+    };
+    log.info('instance request %j', req);
+    const res = await requestMethod(req);
+    log.info('instance metadata is %s', res.data);
+    // NOTE: node.js converts all incoming headers to lower case.
+    if (res.headers[exports.HEADER_NAME.toLowerCase()] !== exports.HEADER_VALUE) {
+        throw new Error(`Invalid response from metadata service: incorrect ${exports.HEADER_NAME} header. Expected '${exports.HEADER_VALUE}', got ${res.headers[exports.HEADER_NAME.toLowerCase()] ? `'${res.headers[exports.HEADER_NAME.toLowerCase()]}'` : 'no header'}`);
     }
-    catch (e) {
-        const err = e;
-        if (err.response && err.response.status !== 200) {
-            err.message = `Unsuccessful response status code. ${err.message}`;
+    if (typeof res.data === 'string') {
+        try {
+            return jsonBigint.parse(res.data);
         }
-        throw e;
+        catch (_a) {
+            /* ignore */
+        }
     }
+    return res.data;
 }
 async function fastFailMetadataRequest(options) {
+    var _a;
     const secondaryOptions = {
         ...options,
-        url: options.url.replace(getBaseUrl(), getBaseUrl(exports.SECONDARY_HOST_ADDRESS)),
+        url: (_a = options.url) === null || _a === void 0 ? void 0 : _a.toString().replace(getBaseUrl(), getBaseUrl(exports.SECONDARY_HOST_ADDRESS)),
     };
     // We race a connection between DNS/IP to metadata server. There are a couple
     // reasons for this:
@@ -51527,7 +51488,6 @@ async function fastFailMetadataRequest(options) {
 function instance(options) {
     return metadataAccessor('instance', options);
 }
-exports.instance = instance;
 /**
  * Obtain metadata for the current GCP project.
  *
@@ -51543,7 +51503,6 @@ exports.instance = instance;
 function project(options) {
     return metadataAccessor('project', options);
 }
-exports.project = project;
 /**
  * Obtain metadata for the current universe.
  *
@@ -51551,13 +51510,12 @@ exports.project = project;
  *
  * @example
  * ```
- * const universeDomain: string = await universe('universe_domain');
+ * const universeDomain: string = await universe('universe-domain');
  * ```
  */
 function universe(options) {
     return metadataAccessor('universe', options);
 }
-exports.universe = universe;
 /**
  * Retrieve metadata items in parallel.
  *
@@ -51592,7 +51550,6 @@ async function bulk(properties) {
     }));
     return r;
 }
-exports.bulk = bulk;
 /*
  * How many times should we retry detecting GCP environment.
  */
@@ -51673,14 +51630,12 @@ async function isAvailable() {
         }
     }
 }
-exports.isAvailable = isAvailable;
 /**
  * reset the memoized isAvailable() lookup.
  */
 function resetIsAvailableCache() {
     cachedIsAvailableResponse = undefined;
 }
-exports.resetIsAvailableCache = resetIsAvailableCache;
 /**
  * A cache for the detected GCP Residency.
  */
@@ -51697,7 +51652,6 @@ function getGCPResidency() {
     }
     return exports.gcpResidencyCache;
 }
-exports.getGCPResidency = getGCPResidency;
 /**
  * Sets the detected GCP Residency.
  * Useful for forcing metadata server detection behavior.
@@ -51708,7 +51662,6 @@ exports.getGCPResidency = getGCPResidency;
 function setGCPResidency(value = null) {
     exports.gcpResidencyCache = value !== null ? value : (0, gcp_residency_1.detectGCPResidency)();
 }
-exports.setGCPResidency = setGCPResidency;
 /**
  * Obtain the timeout for requests to the metadata server.
  *
@@ -51721,9 +51674,455 @@ exports.setGCPResidency = setGCPResidency;
 function requestTimeout() {
     return getGCPResidency() ? 0 : 3000;
 }
-exports.requestTimeout = requestTimeout;
 __exportStar(__nccwpck_require__(51904), exports);
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 74538:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var undefined;
+
+var $Object = __nccwpck_require__(78308);
+
+var $Error = __nccwpck_require__(28015);
+var $EvalError = __nccwpck_require__(91933);
+var $RangeError = __nccwpck_require__(54415);
+var $ReferenceError = __nccwpck_require__(46279);
+var $SyntaxError = __nccwpck_require__(75474);
+var $TypeError = __nccwpck_require__(6361);
+var $URIError = __nccwpck_require__(5065);
+
+var abs = __nccwpck_require__(19775);
+var floor = __nccwpck_require__(60924);
+var max = __nccwpck_require__(52419);
+var min = __nccwpck_require__(73373);
+var pow = __nccwpck_require__(78029);
+var round = __nccwpck_require__(59396);
+var sign = __nccwpck_require__(39091);
+
+var $Function = Function;
+
+// eslint-disable-next-line consistent-return
+var getEvalledConstructor = function (expressionSyntax) {
+	try {
+		return $Function('"use strict"; return (' + expressionSyntax + ').constructor;')();
+	} catch (e) {}
+};
+
+var $gOPD = __nccwpck_require__(18501);
+var $defineProperty = __nccwpck_require__(6123);
+
+var throwTypeError = function () {
+	throw new $TypeError();
+};
+var ThrowTypeError = $gOPD
+	? (function () {
+		try {
+			// eslint-disable-next-line no-unused-expressions, no-caller, no-restricted-properties
+			arguments.callee; // IE 8 does not throw here
+			return throwTypeError;
+		} catch (calleeThrows) {
+			try {
+				// IE 8 throws on Object.getOwnPropertyDescriptor(arguments, '')
+				return $gOPD(arguments, 'callee').get;
+			} catch (gOPDthrows) {
+				return throwTypeError;
+			}
+		}
+	}())
+	: throwTypeError;
+
+var hasSymbols = __nccwpck_require__(40587)();
+
+var getProto = __nccwpck_require__(13592);
+var $ObjectGPO = __nccwpck_require__(5045);
+var $ReflectGPO = __nccwpck_require__(78859);
+
+var $apply = __nccwpck_require__(54177);
+var $call = __nccwpck_require__(2808);
+
+var needsEval = {};
+
+var TypedArray = typeof Uint8Array === 'undefined' || !getProto ? undefined : getProto(Uint8Array);
+
+var INTRINSICS = {
+	__proto__: null,
+	'%AggregateError%': typeof AggregateError === 'undefined' ? undefined : AggregateError,
+	'%Array%': Array,
+	'%ArrayBuffer%': typeof ArrayBuffer === 'undefined' ? undefined : ArrayBuffer,
+	'%ArrayIteratorPrototype%': hasSymbols && getProto ? getProto([][Symbol.iterator]()) : undefined,
+	'%AsyncFromSyncIteratorPrototype%': undefined,
+	'%AsyncFunction%': needsEval,
+	'%AsyncGenerator%': needsEval,
+	'%AsyncGeneratorFunction%': needsEval,
+	'%AsyncIteratorPrototype%': needsEval,
+	'%Atomics%': typeof Atomics === 'undefined' ? undefined : Atomics,
+	'%BigInt%': typeof BigInt === 'undefined' ? undefined : BigInt,
+	'%BigInt64Array%': typeof BigInt64Array === 'undefined' ? undefined : BigInt64Array,
+	'%BigUint64Array%': typeof BigUint64Array === 'undefined' ? undefined : BigUint64Array,
+	'%Boolean%': Boolean,
+	'%DataView%': typeof DataView === 'undefined' ? undefined : DataView,
+	'%Date%': Date,
+	'%decodeURI%': decodeURI,
+	'%decodeURIComponent%': decodeURIComponent,
+	'%encodeURI%': encodeURI,
+	'%encodeURIComponent%': encodeURIComponent,
+	'%Error%': $Error,
+	'%eval%': eval, // eslint-disable-line no-eval
+	'%EvalError%': $EvalError,
+	'%Float16Array%': typeof Float16Array === 'undefined' ? undefined : Float16Array,
+	'%Float32Array%': typeof Float32Array === 'undefined' ? undefined : Float32Array,
+	'%Float64Array%': typeof Float64Array === 'undefined' ? undefined : Float64Array,
+	'%FinalizationRegistry%': typeof FinalizationRegistry === 'undefined' ? undefined : FinalizationRegistry,
+	'%Function%': $Function,
+	'%GeneratorFunction%': needsEval,
+	'%Int8Array%': typeof Int8Array === 'undefined' ? undefined : Int8Array,
+	'%Int16Array%': typeof Int16Array === 'undefined' ? undefined : Int16Array,
+	'%Int32Array%': typeof Int32Array === 'undefined' ? undefined : Int32Array,
+	'%isFinite%': isFinite,
+	'%isNaN%': isNaN,
+	'%IteratorPrototype%': hasSymbols && getProto ? getProto(getProto([][Symbol.iterator]())) : undefined,
+	'%JSON%': typeof JSON === 'object' ? JSON : undefined,
+	'%Map%': typeof Map === 'undefined' ? undefined : Map,
+	'%MapIteratorPrototype%': typeof Map === 'undefined' || !hasSymbols || !getProto ? undefined : getProto(new Map()[Symbol.iterator]()),
+	'%Math%': Math,
+	'%Number%': Number,
+	'%Object%': $Object,
+	'%Object.getOwnPropertyDescriptor%': $gOPD,
+	'%parseFloat%': parseFloat,
+	'%parseInt%': parseInt,
+	'%Promise%': typeof Promise === 'undefined' ? undefined : Promise,
+	'%Proxy%': typeof Proxy === 'undefined' ? undefined : Proxy,
+	'%RangeError%': $RangeError,
+	'%ReferenceError%': $ReferenceError,
+	'%Reflect%': typeof Reflect === 'undefined' ? undefined : Reflect,
+	'%RegExp%': RegExp,
+	'%Set%': typeof Set === 'undefined' ? undefined : Set,
+	'%SetIteratorPrototype%': typeof Set === 'undefined' || !hasSymbols || !getProto ? undefined : getProto(new Set()[Symbol.iterator]()),
+	'%SharedArrayBuffer%': typeof SharedArrayBuffer === 'undefined' ? undefined : SharedArrayBuffer,
+	'%String%': String,
+	'%StringIteratorPrototype%': hasSymbols && getProto ? getProto(''[Symbol.iterator]()) : undefined,
+	'%Symbol%': hasSymbols ? Symbol : undefined,
+	'%SyntaxError%': $SyntaxError,
+	'%ThrowTypeError%': ThrowTypeError,
+	'%TypedArray%': TypedArray,
+	'%TypeError%': $TypeError,
+	'%Uint8Array%': typeof Uint8Array === 'undefined' ? undefined : Uint8Array,
+	'%Uint8ClampedArray%': typeof Uint8ClampedArray === 'undefined' ? undefined : Uint8ClampedArray,
+	'%Uint16Array%': typeof Uint16Array === 'undefined' ? undefined : Uint16Array,
+	'%Uint32Array%': typeof Uint32Array === 'undefined' ? undefined : Uint32Array,
+	'%URIError%': $URIError,
+	'%WeakMap%': typeof WeakMap === 'undefined' ? undefined : WeakMap,
+	'%WeakRef%': typeof WeakRef === 'undefined' ? undefined : WeakRef,
+	'%WeakSet%': typeof WeakSet === 'undefined' ? undefined : WeakSet,
+
+	'%Function.prototype.call%': $call,
+	'%Function.prototype.apply%': $apply,
+	'%Object.defineProperty%': $defineProperty,
+	'%Object.getPrototypeOf%': $ObjectGPO,
+	'%Math.abs%': abs,
+	'%Math.floor%': floor,
+	'%Math.max%': max,
+	'%Math.min%': min,
+	'%Math.pow%': pow,
+	'%Math.round%': round,
+	'%Math.sign%': sign,
+	'%Reflect.getPrototypeOf%': $ReflectGPO
+};
+
+if (getProto) {
+	try {
+		null.error; // eslint-disable-line no-unused-expressions
+	} catch (e) {
+		// https://github.com/tc39/proposal-shadowrealm/pull/384#issuecomment-1364264229
+		var errorProto = getProto(getProto(e));
+		INTRINSICS['%Error.prototype%'] = errorProto;
+	}
+}
+
+var doEval = function doEval(name) {
+	var value;
+	if (name === '%AsyncFunction%') {
+		value = getEvalledConstructor('async function () {}');
+	} else if (name === '%GeneratorFunction%') {
+		value = getEvalledConstructor('function* () {}');
+	} else if (name === '%AsyncGeneratorFunction%') {
+		value = getEvalledConstructor('async function* () {}');
+	} else if (name === '%AsyncGenerator%') {
+		var fn = doEval('%AsyncGeneratorFunction%');
+		if (fn) {
+			value = fn.prototype;
+		}
+	} else if (name === '%AsyncIteratorPrototype%') {
+		var gen = doEval('%AsyncGenerator%');
+		if (gen && getProto) {
+			value = getProto(gen.prototype);
+		}
+	}
+
+	INTRINSICS[name] = value;
+
+	return value;
+};
+
+var LEGACY_ALIASES = {
+	__proto__: null,
+	'%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
+	'%ArrayPrototype%': ['Array', 'prototype'],
+	'%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
+	'%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
+	'%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
+	'%ArrayProto_values%': ['Array', 'prototype', 'values'],
+	'%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
+	'%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
+	'%AsyncGeneratorPrototype%': ['AsyncGeneratorFunction', 'prototype', 'prototype'],
+	'%BooleanPrototype%': ['Boolean', 'prototype'],
+	'%DataViewPrototype%': ['DataView', 'prototype'],
+	'%DatePrototype%': ['Date', 'prototype'],
+	'%ErrorPrototype%': ['Error', 'prototype'],
+	'%EvalErrorPrototype%': ['EvalError', 'prototype'],
+	'%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
+	'%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
+	'%FunctionPrototype%': ['Function', 'prototype'],
+	'%Generator%': ['GeneratorFunction', 'prototype'],
+	'%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
+	'%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
+	'%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
+	'%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
+	'%JSONParse%': ['JSON', 'parse'],
+	'%JSONStringify%': ['JSON', 'stringify'],
+	'%MapPrototype%': ['Map', 'prototype'],
+	'%NumberPrototype%': ['Number', 'prototype'],
+	'%ObjectPrototype%': ['Object', 'prototype'],
+	'%ObjProto_toString%': ['Object', 'prototype', 'toString'],
+	'%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
+	'%PromisePrototype%': ['Promise', 'prototype'],
+	'%PromiseProto_then%': ['Promise', 'prototype', 'then'],
+	'%Promise_all%': ['Promise', 'all'],
+	'%Promise_reject%': ['Promise', 'reject'],
+	'%Promise_resolve%': ['Promise', 'resolve'],
+	'%RangeErrorPrototype%': ['RangeError', 'prototype'],
+	'%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
+	'%RegExpPrototype%': ['RegExp', 'prototype'],
+	'%SetPrototype%': ['Set', 'prototype'],
+	'%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
+	'%StringPrototype%': ['String', 'prototype'],
+	'%SymbolPrototype%': ['Symbol', 'prototype'],
+	'%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
+	'%TypedArrayPrototype%': ['TypedArray', 'prototype'],
+	'%TypeErrorPrototype%': ['TypeError', 'prototype'],
+	'%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
+	'%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
+	'%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
+	'%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
+	'%URIErrorPrototype%': ['URIError', 'prototype'],
+	'%WeakMapPrototype%': ['WeakMap', 'prototype'],
+	'%WeakSetPrototype%': ['WeakSet', 'prototype']
+};
+
+var bind = __nccwpck_require__(88334);
+var hasOwn = __nccwpck_require__(62157);
+var $concat = bind.call($call, Array.prototype.concat);
+var $spliceApply = bind.call($apply, Array.prototype.splice);
+var $replace = bind.call($call, String.prototype.replace);
+var $strSlice = bind.call($call, String.prototype.slice);
+var $exec = bind.call($call, RegExp.prototype.exec);
+
+/* adapted from https://github.com/lodash/lodash/blob/4.17.15/dist/lodash.js#L6735-L6744 */
+var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+var reEscapeChar = /\\(\\)?/g; /** Used to match backslashes in property paths. */
+var stringToPath = function stringToPath(string) {
+	var first = $strSlice(string, 0, 1);
+	var last = $strSlice(string, -1);
+	if (first === '%' && last !== '%') {
+		throw new $SyntaxError('invalid intrinsic syntax, expected closing `%`');
+	} else if (last === '%' && first !== '%') {
+		throw new $SyntaxError('invalid intrinsic syntax, expected opening `%`');
+	}
+	var result = [];
+	$replace(string, rePropName, function (match, number, quote, subString) {
+		result[result.length] = quote ? $replace(subString, reEscapeChar, '$1') : number || match;
+	});
+	return result;
+};
+/* end adaptation */
+
+var getBaseIntrinsic = function getBaseIntrinsic(name, allowMissing) {
+	var intrinsicName = name;
+	var alias;
+	if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+		alias = LEGACY_ALIASES[intrinsicName];
+		intrinsicName = '%' + alias[0] + '%';
+	}
+
+	if (hasOwn(INTRINSICS, intrinsicName)) {
+		var value = INTRINSICS[intrinsicName];
+		if (value === needsEval) {
+			value = doEval(intrinsicName);
+		}
+		if (typeof value === 'undefined' && !allowMissing) {
+			throw new $TypeError('intrinsic ' + name + ' exists, but is not available. Please file an issue!');
+		}
+
+		return {
+			alias: alias,
+			name: intrinsicName,
+			value: value
+		};
+	}
+
+	throw new $SyntaxError('intrinsic ' + name + ' does not exist!');
+};
+
+module.exports = function GetIntrinsic(name, allowMissing) {
+	if (typeof name !== 'string' || name.length === 0) {
+		throw new $TypeError('intrinsic name must be a non-empty string');
+	}
+	if (arguments.length > 1 && typeof allowMissing !== 'boolean') {
+		throw new $TypeError('"allowMissing" argument must be a boolean');
+	}
+
+	if ($exec(/^%?[^%]*%?$/, name) === null) {
+		throw new $SyntaxError('`%` may not be present anywhere but at the beginning and end of the intrinsic name');
+	}
+	var parts = stringToPath(name);
+	var intrinsicBaseName = parts.length > 0 ? parts[0] : '';
+
+	var intrinsic = getBaseIntrinsic('%' + intrinsicBaseName + '%', allowMissing);
+	var intrinsicRealName = intrinsic.name;
+	var value = intrinsic.value;
+	var skipFurtherCaching = false;
+
+	var alias = intrinsic.alias;
+	if (alias) {
+		intrinsicBaseName = alias[0];
+		$spliceApply(parts, $concat([0, 1], alias));
+	}
+
+	for (var i = 1, isOwn = true; i < parts.length; i += 1) {
+		var part = parts[i];
+		var first = $strSlice(part, 0, 1);
+		var last = $strSlice(part, -1);
+		if (
+			(
+				(first === '"' || first === "'" || first === '`')
+				|| (last === '"' || last === "'" || last === '`')
+			)
+			&& first !== last
+		) {
+			throw new $SyntaxError('property names with quotes must have matching quotes');
+		}
+		if (part === 'constructor' || !isOwn) {
+			skipFurtherCaching = true;
+		}
+
+		intrinsicBaseName += '.' + part;
+		intrinsicRealName = '%' + intrinsicBaseName + '%';
+
+		if (hasOwn(INTRINSICS, intrinsicRealName)) {
+			value = INTRINSICS[intrinsicRealName];
+		} else if (value != null) {
+			if (!(part in value)) {
+				if (!allowMissing) {
+					throw new $TypeError('base intrinsic for ' + name + ' exists, but the property is not available.');
+				}
+				return void undefined;
+			}
+			if ($gOPD && (i + 1) >= parts.length) {
+				var desc = $gOPD(value, part);
+				isOwn = !!desc;
+
+				// By convention, when a data property is converted to an accessor
+				// property to emulate a data property that does not suffer from
+				// the override mistake, that accessor's getter is marked with
+				// an `originalValue` property. Here, when we detect this, we
+				// uphold the illusion by pretending to see that original data
+				// property, i.e., returning the value rather than the getter
+				// itself.
+				if (isOwn && 'get' in desc && !('originalValue' in desc.get)) {
+					value = desc.get;
+				} else {
+					value = value[part];
+				}
+			} else {
+				isOwn = hasOwn(value, part);
+				value = value[part];
+			}
+
+			if (isOwn && !skipFurtherCaching) {
+				INTRINSICS[intrinsicRealName] = value;
+			}
+		}
+	}
+	return value;
+};
+
+
+/***/ }),
+
+/***/ 5045:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var $Object = __nccwpck_require__(78308);
+
+/** @type {import('./Object.getPrototypeOf')} */
+module.exports = $Object.getPrototypeOf || null;
+
+
+/***/ }),
+
+/***/ 78859:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./Reflect.getPrototypeOf')} */
+module.exports = (typeof Reflect !== 'undefined' && Reflect.getPrototypeOf) || null;
+
+
+/***/ }),
+
+/***/ 13592:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var reflectGetProto = __nccwpck_require__(78859);
+var originalGetProto = __nccwpck_require__(5045);
+
+var getDunderProto = __nccwpck_require__(62693);
+
+/** @type {import('.')} */
+module.exports = reflectGetProto
+	? function getProto(O) {
+		// @ts-expect-error TS can't narrow inside a closure, for some reason
+		return reflectGetProto(O);
+	}
+	: originalGetProto
+		? function getProto(O) {
+			if (!O || (typeof O !== 'object' && typeof O !== 'function')) {
+				throw new TypeError('getProto: not an object');
+			}
+			// @ts-expect-error TS can't narrow inside a closure, for some reason
+			return originalGetProto(O);
+		}
+		: getDunderProto
+			? function getProto(O) {
+				// @ts-expect-error TS can't narrow inside a closure, for some reason
+				return getDunderProto(O);
+			}
+			: null;
+
 
 /***/ }),
 
@@ -51771,6 +52170,7 @@ class AuthClient extends events_1.EventEmitter {
         this.universeDomain = exports.DEFAULT_UNIVERSE;
         const options = (0, util_1.originalOrCamelOptions)(opts);
         // Shared auth options
+        this.apiKey = opts.apiKey;
         this.projectId = (_a = options.get('project_id')) !== null && _a !== void 0 ? _a : null;
         this.quotaProjectId = options.get('quota_project_id');
         this.credentials = (_b = options.get('credentials')) !== null && _b !== void 0 ? _b : {};
@@ -52240,7 +52640,7 @@ async function generateAuthenticationHeaderMap(options) {
 /***/ }),
 
 /***/ 40810:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -52257,6 +52657,18 @@ async function generateAuthenticationHeaderMap(options) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _BaseExternalAccountClient_instances, _BaseExternalAccountClient_pendingAccessToken, _BaseExternalAccountClient_internalRefreshAccessTokenAsync;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BaseExternalAccountClient = exports.DEFAULT_UNIVERSE = exports.CLOUD_RESOURCE_MANAGER = exports.EXTERNAL_ACCOUNT_TYPE = exports.EXPIRATION_TIME_OFFSET = void 0;
 const stream = __nccwpck_require__(12781);
@@ -52327,6 +52739,11 @@ class BaseExternalAccountClient extends authclient_1.AuthClient {
     constructor(options, additionalOptions) {
         var _a;
         super({ ...options, ...additionalOptions });
+        _BaseExternalAccountClient_instances.add(this);
+        /**
+         * A pending access token request. Used for concurrent calls.
+         */
+        _BaseExternalAccountClient_pendingAccessToken.set(this, null);
         const opts = (0, util_1.originalOrCamelOptions)(options);
         const type = opts.get('type');
         if (type && type !== exports.EXTERNAL_ACCOUNT_TYPE) {
@@ -52538,67 +52955,15 @@ class BaseExternalAccountClient extends authclient_1.AuthClient {
      * @return A promise that resolves with the fresh GCP access tokens.
      */
     async refreshAccessTokenAsync() {
-        // Retrieve the external credential.
-        const subjectToken = await this.retrieveSubjectToken();
-        // Construct the STS credentials options.
-        const stsCredentialsOptions = {
-            grantType: STS_GRANT_TYPE,
-            audience: this.audience,
-            requestedTokenType: STS_REQUEST_TOKEN_TYPE,
-            subjectToken,
-            subjectTokenType: this.subjectTokenType,
-            // generateAccessToken requires the provided access token to have
-            // scopes:
-            // https://www.googleapis.com/auth/iam or
-            // https://www.googleapis.com/auth/cloud-platform
-            // The new service account access token scopes will match the user
-            // provided ones.
-            scope: this.serviceAccountImpersonationUrl
-                ? [DEFAULT_OAUTH_SCOPE]
-                : this.getScopesArray(),
-        };
-        // Exchange the external credentials for a GCP access token.
-        // Client auth is prioritized over passing the workforcePoolUserProject
-        // parameter for STS token exchange.
-        const additionalOptions = !this.clientAuth && this.workforcePoolUserProject
-            ? { userProject: this.workforcePoolUserProject }
-            : undefined;
-        const additionalHeaders = {
-            'x-goog-api-client': this.getMetricsHeaderValue(),
-        };
-        const stsResponse = await this.stsCredential.exchangeToken(stsCredentialsOptions, additionalHeaders, additionalOptions);
-        if (this.serviceAccountImpersonationUrl) {
-            this.cachedAccessToken = await this.getImpersonatedAccessToken(stsResponse.access_token);
+        // Use an existing access token request, or cache a new one
+        __classPrivateFieldSet(this, _BaseExternalAccountClient_pendingAccessToken, __classPrivateFieldGet(this, _BaseExternalAccountClient_pendingAccessToken, "f") || __classPrivateFieldGet(this, _BaseExternalAccountClient_instances, "m", _BaseExternalAccountClient_internalRefreshAccessTokenAsync).call(this), "f");
+        try {
+            return await __classPrivateFieldGet(this, _BaseExternalAccountClient_pendingAccessToken, "f");
         }
-        else if (stsResponse.expires_in) {
-            // Save response in cached access token.
-            this.cachedAccessToken = {
-                access_token: stsResponse.access_token,
-                expiry_date: new Date().getTime() + stsResponse.expires_in * 1000,
-                res: stsResponse.res,
-            };
+        finally {
+            // clear pending access token for future requests
+            __classPrivateFieldSet(this, _BaseExternalAccountClient_pendingAccessToken, null, "f");
         }
-        else {
-            // Save response in cached access token.
-            this.cachedAccessToken = {
-                access_token: stsResponse.access_token,
-                res: stsResponse.res,
-            };
-        }
-        // Save credentials.
-        this.credentials = {};
-        Object.assign(this.credentials, this.cachedAccessToken);
-        delete this.credentials.res;
-        // Trigger tokens event to notify external listeners.
-        this.emit('tokens', {
-            refresh_token: null,
-            expiry_date: this.cachedAccessToken.expiry_date,
-            access_token: this.cachedAccessToken.access_token,
-            token_type: 'Bearer',
-            id_token: null,
-        });
-        // Return the cached access token.
-        return this.cachedAccessToken;
     }
     /**
      * Returns the workload identity pool project number if it is determinable
@@ -52683,6 +53048,69 @@ class BaseExternalAccountClient extends authclient_1.AuthClient {
     }
 }
 exports.BaseExternalAccountClient = BaseExternalAccountClient;
+_BaseExternalAccountClient_pendingAccessToken = new WeakMap(), _BaseExternalAccountClient_instances = new WeakSet(), _BaseExternalAccountClient_internalRefreshAccessTokenAsync = async function _BaseExternalAccountClient_internalRefreshAccessTokenAsync() {
+    // Retrieve the external credential.
+    const subjectToken = await this.retrieveSubjectToken();
+    // Construct the STS credentials options.
+    const stsCredentialsOptions = {
+        grantType: STS_GRANT_TYPE,
+        audience: this.audience,
+        requestedTokenType: STS_REQUEST_TOKEN_TYPE,
+        subjectToken,
+        subjectTokenType: this.subjectTokenType,
+        // generateAccessToken requires the provided access token to have
+        // scopes:
+        // https://www.googleapis.com/auth/iam or
+        // https://www.googleapis.com/auth/cloud-platform
+        // The new service account access token scopes will match the user
+        // provided ones.
+        scope: this.serviceAccountImpersonationUrl
+            ? [DEFAULT_OAUTH_SCOPE]
+            : this.getScopesArray(),
+    };
+    // Exchange the external credentials for a GCP access token.
+    // Client auth is prioritized over passing the workforcePoolUserProject
+    // parameter for STS token exchange.
+    const additionalOptions = !this.clientAuth && this.workforcePoolUserProject
+        ? { userProject: this.workforcePoolUserProject }
+        : undefined;
+    const additionalHeaders = {
+        'x-goog-api-client': this.getMetricsHeaderValue(),
+    };
+    const stsResponse = await this.stsCredential.exchangeToken(stsCredentialsOptions, additionalHeaders, additionalOptions);
+    if (this.serviceAccountImpersonationUrl) {
+        this.cachedAccessToken = await this.getImpersonatedAccessToken(stsResponse.access_token);
+    }
+    else if (stsResponse.expires_in) {
+        // Save response in cached access token.
+        this.cachedAccessToken = {
+            access_token: stsResponse.access_token,
+            expiry_date: new Date().getTime() + stsResponse.expires_in * 1000,
+            res: stsResponse.res,
+        };
+    }
+    else {
+        // Save response in cached access token.
+        this.cachedAccessToken = {
+            access_token: stsResponse.access_token,
+            res: stsResponse.res,
+        };
+    }
+    // Save credentials.
+    this.credentials = {};
+    Object.assign(this.credentials, this.cachedAccessToken);
+    delete this.credentials.res;
+    // Trigger tokens event to notify external listeners.
+    this.emit('tokens', {
+        refresh_token: null,
+        expiry_date: this.cachedAccessToken.expiry_date,
+        access_token: this.cachedAccessToken.access_token,
+        token_type: 'Bearer',
+        id_token: null,
+    });
+    // Return the cached access token.
+    return this.cachedAccessToken;
+};
 
 
 /***/ }),
@@ -53305,7 +53733,9 @@ exports.DownscopedClient = DownscopedClient;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getEnv = exports.clear = exports.GCPEnv = void 0;
+exports.GCPEnv = void 0;
+exports.clear = clear;
+exports.getEnv = getEnv;
 const gcpMetadata = __nccwpck_require__(3563);
 var GCPEnv;
 (function (GCPEnv) {
@@ -53320,7 +53750,6 @@ let envPromise;
 function clear() {
     envPromise = undefined;
 }
-exports.clear = clear;
 async function getEnv() {
     if (envPromise) {
         return envPromise;
@@ -53328,7 +53757,6 @@ async function getEnv() {
     envPromise = getEnvMemoized();
     return envPromise;
 }
-exports.getEnv = getEnv;
 async function getEnvMemoized() {
     let env = GCPEnv.NONE;
     if (isAppEngine()) {
@@ -53946,7 +54374,7 @@ exports.FileSubjectTokenSupplier = FileSubjectTokenSupplier;
 /***/ }),
 
 /***/ 20695:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -53963,8 +54391,20 @@ exports.FileSubjectTokenSupplier = FileSubjectTokenSupplier;
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _GoogleAuth_instances, _GoogleAuth_pendingAuthClient, _GoogleAuth_prepareAndCacheClient, _GoogleAuth_determineClient;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GoogleAuth = exports.CLOUD_SDK_CLIENT_ID = void 0;
+exports.GoogleAuth = exports.GoogleAuthExceptionMessages = exports.CLOUD_SDK_CLIENT_ID = void 0;
 const child_process_1 = __nccwpck_require__(32081);
 const fs = __nccwpck_require__(57147);
 const gcpMetadata = __nccwpck_require__(3563);
@@ -53984,19 +54424,21 @@ const authclient_1 = __nccwpck_require__(44627);
 const externalAccountAuthorizedUserClient_1 = __nccwpck_require__(38765);
 const util_1 = __nccwpck_require__(68905);
 exports.CLOUD_SDK_CLIENT_ID = '764086051850-6qr4p6gpi6hn506pt8ejuq83di341hur.apps.googleusercontent.com';
-const GoogleAuthExceptionMessages = {
+exports.GoogleAuthExceptionMessages = {
+    API_KEY_WITH_CREDENTIALS: 'API Keys and Credentials are mutually exclusive authentication methods and cannot be used together.',
     NO_PROJECT_ID_FOUND: 'Unable to detect a Project Id in the current environment. \n' +
         'To learn more about authentication and Google APIs, visit: \n' +
         'https://cloud.google.com/docs/authentication/getting-started',
     NO_CREDENTIALS_FOUND: 'Unable to find credentials in current environment. \n' +
         'To learn more about authentication and Google APIs, visit: \n' +
         'https://cloud.google.com/docs/authentication/getting-started',
+    NO_ADC_FOUND: 'Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.',
     NO_UNIVERSE_DOMAIN_FOUND: 'Unable to detect a Universe Domain in the current environment.\n' +
         'To learn more about Universe Domain retrieval, visit: \n' +
         'https://cloud.google.com/compute/docs/metadata/predefined-metadata-keys',
 };
 class GoogleAuth {
-    // Note:  this properly is only public to satisify unit tests.
+    // Note:  this properly is only public to satisfy unit tests.
     // https://github.com/Microsoft/TypeScript/issues/5228
     get isGCE() {
         return this.checkIsGCE;
@@ -54012,7 +54454,8 @@ class GoogleAuth {
      *
      * @param opts
      */
-    constructor(opts) {
+    constructor(opts = {}) {
+        _GoogleAuth_instances.add(this);
         /**
          * Caches a value indicating whether the auth layer is running on Google
          * Compute Engine.
@@ -54022,14 +54465,22 @@ class GoogleAuth {
         // To save the contents of the JSON credential file
         this.jsonContent = null;
         this.cachedCredential = null;
+        /**
+         * A pending {@link AuthClient}. Used for concurrent {@link GoogleAuth.getClient} calls.
+         */
+        _GoogleAuth_pendingAuthClient.set(this, null);
         this.clientOptions = {};
-        opts = opts || {};
         this._cachedProjectId = opts.projectId || null;
         this.cachedCredential = opts.authClient || null;
         this.keyFilename = opts.keyFilename || opts.keyFile;
         this.scopes = opts.scopes;
-        this.jsonContent = opts.credentials || null;
         this.clientOptions = opts.clientOptions || {};
+        this.jsonContent = opts.credentials || null;
+        this.apiKey = opts.apiKey || this.clientOptions.apiKey || null;
+        // Cannot use both API Key + Credentials
+        if (this.apiKey && (this.jsonContent || this.clientOptions.credentials)) {
+            throw new RangeError(exports.GoogleAuthExceptionMessages.API_KEY_WITH_CREDENTIALS);
+        }
         if (opts.universeDomain) {
             this.clientOptions.universeDomain = opts.universeDomain;
         }
@@ -54064,7 +54515,7 @@ class GoogleAuth {
         }
         catch (e) {
             if (e instanceof Error &&
-                e.message === GoogleAuthExceptionMessages.NO_PROJECT_ID_FOUND) {
+                e.message === exports.GoogleAuthExceptionMessages.NO_PROJECT_ID_FOUND) {
                 return null;
             }
             else {
@@ -54072,7 +54523,7 @@ class GoogleAuth {
             }
         }
     }
-    /*
+    /**
      * A private method for finding and caching a projectId.
      *
      * Supports environments in order of precedence:
@@ -54095,7 +54546,7 @@ class GoogleAuth {
             return projectId;
         }
         else {
-            throw new Error(GoogleAuthExceptionMessages.NO_PROJECT_ID_FOUND);
+            throw new Error(exports.GoogleAuthExceptionMessages.NO_PROJECT_ID_FOUND);
         }
     }
     async getProjectIdAsync() {
@@ -54177,11 +54628,9 @@ class GoogleAuth {
         // This will also preserve one's configured quota project, in case they
         // set one directly on the credential previously.
         if (this.cachedCredential) {
-            return await this.prepareAndCacheADC(this.cachedCredential);
+            // cache, while preserving existing quota project preferences
+            return await __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_prepareAndCacheClient).call(this, this.cachedCredential, null);
         }
-        // Since this is a 'new' ADC to cache we will use the environment variable
-        // if it's available. We prefer this value over the value from ADC.
-        const quotaProjectIdOverride = process.env['GOOGLE_CLOUD_QUOTA_PROJECT'];
         let credential;
         // Check for the existence of a local environment variable pointing to the
         // location of the credential file. This is typically used in local
@@ -54195,7 +54644,7 @@ class GoogleAuth {
             else if (credential instanceof baseexternalclient_1.BaseExternalAccountClient) {
                 credential.scopes = this.getAnyScopes();
             }
-            return await this.prepareAndCacheADC(credential, quotaProjectIdOverride);
+            return await __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_prepareAndCacheClient).call(this, credential);
         }
         // Look in the well-known credential file location.
         credential =
@@ -54207,27 +54656,14 @@ class GoogleAuth {
             else if (credential instanceof baseexternalclient_1.BaseExternalAccountClient) {
                 credential.scopes = this.getAnyScopes();
             }
-            return await this.prepareAndCacheADC(credential, quotaProjectIdOverride);
+            return await __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_prepareAndCacheClient).call(this, credential);
         }
         // Determine if we're running on GCE.
         if (await this._checkIsGCE()) {
-            // set universe domain for Compute client
-            if (!(0, util_1.originalOrCamelOptions)(options).get('universe_domain')) {
-                options.universeDomain =
-                    await this.getUniverseDomainFromMetadataServer();
-            }
             options.scopes = this.getAnyScopes();
-            return await this.prepareAndCacheADC(new computeclient_1.Compute(options), quotaProjectIdOverride);
+            return await __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_prepareAndCacheClient).call(this, new computeclient_1.Compute(options));
         }
-        throw new Error('Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.');
-    }
-    async prepareAndCacheADC(credential, quotaProjectIdOverride) {
-        const projectId = await this.getProjectIdOptional();
-        if (quotaProjectIdOverride) {
-            credential.quotaProjectId = quotaProjectIdOverride;
-        }
-        this.cachedCredential = credential;
-        return { credential, projectId };
+        throw new Error(exports.GoogleAuthExceptionMessages.NO_ADC_FOUND);
     }
     /**
      * Determines whether the auth layer is running on Google Compute Engine.
@@ -54336,7 +54772,7 @@ class GoogleAuth {
      * @returns JWT or UserRefresh Client with data
      */
     fromImpersonatedJSON(json) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d;
         if (!json) {
             throw new Error('Must pass in a JSON object containing an  impersonated refresh token');
         }
@@ -54349,9 +54785,7 @@ class GoogleAuth {
         if (!json.service_account_impersonation_url) {
             throw new Error('The incoming JSON object does not contain a service_account_impersonation_url field');
         }
-        // Create source client for impersonation
-        const sourceClient = new refreshclient_1.UserRefreshClient();
-        sourceClient.fromJSON(json.source_credentials);
+        const sourceClient = this.fromJSON(json.source_credentials);
         if (((_a = json.service_account_impersonation_url) === null || _a === void 0 ? void 0 : _a.length) > 256) {
             /**
              * Prevents DOS attacks.
@@ -54359,23 +54793,25 @@ class GoogleAuth {
              **/
             throw new RangeError(`Target principal is too long: ${json.service_account_impersonation_url}`);
         }
-        // Extreact service account from service_account_impersonation_url
-        const targetPrincipal = (_c = (_b = /(?<target>[^/]+):generateAccessToken$/.exec(json.service_account_impersonation_url)) === null || _b === void 0 ? void 0 : _b.groups) === null || _c === void 0 ? void 0 : _c.target;
+        // Extract service account from service_account_impersonation_url
+        const targetPrincipal = (_c = (_b = /(?<target>[^/]+):(generateAccessToken|generateIdToken)$/.exec(json.service_account_impersonation_url)) === null || _b === void 0 ? void 0 : _b.groups) === null || _c === void 0 ? void 0 : _c.target;
         if (!targetPrincipal) {
             throw new RangeError(`Cannot extract target principal from ${json.service_account_impersonation_url}`);
         }
         const targetScopes = (_d = this.getAnyScopes()) !== null && _d !== void 0 ? _d : [];
-        const client = new impersonated_1.Impersonated({
+        return new impersonated_1.Impersonated({
             ...json,
-            delegates: (_e = json.delegates) !== null && _e !== void 0 ? _e : [],
-            sourceClient: sourceClient,
-            targetPrincipal: targetPrincipal,
+            sourceClient,
+            targetPrincipal,
             targetScopes: Array.isArray(targetScopes) ? targetScopes : [targetScopes],
         });
-        return client;
     }
     /**
      * Create a credentials instance using the given input options.
+     * This client is not cached.
+     *
+     * **Important**: If you accept a credential configuration (credential JSON/File/Stream) from an external source for authentication to Google Cloud, you must validate it before providing it to any Google API or library. Providing an unvalidated credential configuration to Google APIs can compromise the security of your systems and data. For more information, refer to {@link https://cloud.google.com/docs/authentication/external/externally-sourced-credentials Validate credential configurations from external sources}.
+     *
      * @param json The input object.
      * @param options The JWT or UserRefresh options for the client
      * @returns JWT or UserRefresh Client with data
@@ -54443,15 +54879,15 @@ class GoogleAuth {
             if (!inputStream) {
                 throw new Error('Must pass in a stream containing the Google auth settings.');
             }
-            let s = '';
+            const chunks = [];
             inputStream
                 .setEncoding('utf8')
                 .on('error', reject)
-                .on('data', chunk => (s += chunk))
+                .on('data', chunk => chunks.push(chunk))
                 .on('end', () => {
                 try {
                     try {
-                        const data = JSON.parse(s);
+                        const data = JSON.parse(chunks.join(''));
                         const r = this._cacheClientFromJSON(data, options);
                         return resolve(r);
                     }
@@ -54477,15 +54913,14 @@ class GoogleAuth {
     }
     /**
      * Create a credentials instance using the given API key string.
+     * The created client is not cached. In order to create and cache it use the {@link GoogleAuth.getClient `getClient`} method after first providing an {@link GoogleAuth.apiKey `apiKey`}.
+     *
      * @param apiKey The API key string
      * @param options An optional options object.
      * @returns A JWT loaded from the key
      */
-    fromAPIKey(apiKey, options) {
-        options = options || {};
-        const client = new jwtclient_1.JWT(options);
-        client.fromAPIKey(apiKey);
-        return client;
+    fromAPIKey(apiKey, options = {}) {
+        return new jwtclient_1.JWT({ ...options, apiKey });
     }
     /**
      * Determines whether the current operating system is Windows.
@@ -54625,7 +55060,7 @@ class GoogleAuth {
             ]);
             return { client_email, universe_domain };
         }
-        throw new Error(GoogleAuthExceptionMessages.NO_CREDENTIALS_FOUND);
+        throw new Error(exports.GoogleAuthExceptionMessages.NO_CREDENTIALS_FOUND);
     }
     /**
      * Automatically obtain an {@link AuthClient `AuthClient`} based on the
@@ -54633,20 +55068,18 @@ class GoogleAuth {
      * Default Credentials.
      */
     async getClient() {
-        if (!this.cachedCredential) {
-            if (this.jsonContent) {
-                this._cacheClientFromJSON(this.jsonContent, this.clientOptions);
-            }
-            else if (this.keyFilename) {
-                const filePath = path.resolve(this.keyFilename);
-                const stream = fs.createReadStream(filePath);
-                await this.fromStreamAsync(stream, this.clientOptions);
-            }
-            else {
-                await this.getApplicationDefaultAsync(this.clientOptions);
-            }
+        if (this.cachedCredential) {
+            return this.cachedCredential;
         }
-        return this.cachedCredential;
+        // Use an existing auth client request, or cache a new one
+        __classPrivateFieldSet(this, _GoogleAuth_pendingAuthClient, __classPrivateFieldGet(this, _GoogleAuth_pendingAuthClient, "f") || __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_determineClient).call(this), "f");
+        try {
+            return await __classPrivateFieldGet(this, _GoogleAuth_pendingAuthClient, "f");
+        }
+        finally {
+            // reset the pending auth client in case it is changed later
+            __classPrivateFieldSet(this, _GoogleAuth_pendingAuthClient, null, "f");
+        }
     }
     /**
      * Creates a client which will fetch an ID token for authorization.
@@ -54754,6 +55187,33 @@ class GoogleAuth {
     }
 }
 exports.GoogleAuth = GoogleAuth;
+_GoogleAuth_pendingAuthClient = new WeakMap(), _GoogleAuth_instances = new WeakSet(), _GoogleAuth_prepareAndCacheClient = async function _GoogleAuth_prepareAndCacheClient(credential, quotaProjectIdOverride = process.env['GOOGLE_CLOUD_QUOTA_PROJECT'] || null) {
+    const projectId = await this.getProjectIdOptional();
+    if (quotaProjectIdOverride) {
+        credential.quotaProjectId = quotaProjectIdOverride;
+    }
+    this.cachedCredential = credential;
+    return { credential, projectId };
+}, _GoogleAuth_determineClient = async function _GoogleAuth_determineClient() {
+    if (this.jsonContent) {
+        return this._cacheClientFromJSON(this.jsonContent, this.clientOptions);
+    }
+    else if (this.keyFilename) {
+        const filePath = path.resolve(this.keyFilename);
+        const stream = fs.createReadStream(filePath);
+        return await this.fromStreamAsync(stream, this.clientOptions);
+    }
+    else if (this.apiKey) {
+        const client = await this.fromAPIKey(this.apiKey, this.clientOptions);
+        client.scopes = this.scopes;
+        const { credential } = await __classPrivateFieldGet(this, _GoogleAuth_instances, "m", _GoogleAuth_prepareAndCacheClient).call(this, client);
+        return credential;
+    }
+    else {
+        const { credential } = await this.getApplicationDefaultAsync(this.clientOptions);
+        return credential;
+    }
+};
 /**
  * Export DefaultTransporter as a static property of the class.
  */
@@ -55013,6 +55473,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Impersonated = exports.IMPERSONATED_ACCOUNT_TYPE = void 0;
 const oauth2client_1 = __nccwpck_require__(3936);
 const gaxios_1 = __nccwpck_require__(59555);
+const util_1 = __nccwpck_require__(68905);
 exports.IMPERSONATED_ACCOUNT_TYPE = 'impersonated_service_account';
 class Impersonated extends oauth2client_1.OAuth2Client {
     /**
@@ -55061,14 +55522,25 @@ class Impersonated extends oauth2client_1.OAuth2Client {
         this.delegates = (_c = options.delegates) !== null && _c !== void 0 ? _c : [];
         this.targetScopes = (_d = options.targetScopes) !== null && _d !== void 0 ? _d : [];
         this.lifetime = (_e = options.lifetime) !== null && _e !== void 0 ? _e : 3600;
-        this.endpoint = (_f = options.endpoint) !== null && _f !== void 0 ? _f : 'https://iamcredentials.googleapis.com';
+        const usingExplicitUniverseDomain = !!(0, util_1.originalOrCamelOptions)(options).get('universe_domain');
+        if (!usingExplicitUniverseDomain) {
+            // override the default universe with the source's universe
+            this.universeDomain = this.sourceClient.universeDomain;
+        }
+        else if (this.sourceClient.universeDomain !== this.universeDomain) {
+            // non-default universe and is not matching the source - this could be a credential leak
+            throw new RangeError(`Universe domain ${this.sourceClient.universeDomain} in source credentials does not match ${this.universeDomain} universe domain set for impersonated credentials.`);
+        }
+        this.endpoint =
+            (_f = options.endpoint) !== null && _f !== void 0 ? _f : `https://iamcredentials.${this.universeDomain}`;
     }
     /**
      * Signs some bytes.
      *
      * {@link https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/signBlob Reference Documentation}
      * @param blobToSign String to sign.
-     * @return <SignBlobResponse> denoting the keyyID and signedBlob in base64 string
+     *
+     * @returns A {@link SignBlobResponse} denoting the keyID and signedBlob in base64 string
      */
     async sign(blobToSign) {
         await this.sourceClient.getAccessToken();
@@ -55147,7 +55619,7 @@ class Impersonated extends oauth2client_1.OAuth2Client {
      * @return an OpenID Connect ID token
      */
     async fetchIdToken(targetAudience, options) {
-        var _a;
+        var _a, _b;
         await this.sourceClient.getAccessToken();
         const name = `projects/-/serviceAccounts/${this.targetPrincipal}`;
         const u = `${this.endpoint}/v1/${name}:generateIdToken`;
@@ -55155,6 +55627,7 @@ class Impersonated extends oauth2client_1.OAuth2Client {
             delegates: this.delegates,
             audience: targetAudience,
             includeEmail: (_a = options === null || options === void 0 ? void 0 : options.includeEmail) !== null && _a !== void 0 ? _a : true,
+            useEmailAzp: (_b = options === null || options === void 0 ? void 0 : options.includeEmail) !== null && _b !== void 0 ? _b : true,
         };
         const res = await this.sourceClient.request({
             ...Impersonated.RETRY_CONFIG,
@@ -55578,6 +56051,10 @@ class JWT extends oauth2client_1.OAuth2Client {
     /**
      * Create a JWT credentials instance using the given input options.
      * @param json The input object.
+     *
+     * @remarks
+     *
+     * **Important**: If you accept a credential configuration (credential JSON/File/Stream) from an external source for authentication to Google Cloud, you must validate it before providing it to any Google API or library. Providing an unvalidated credential configuration to Google APIs can compromise the security of your systems and data. For more information, refer to {@link https://cloud.google.com/docs/authentication/external/externally-sourced-credentials Validate credential configurations from external sources}.
      */
     fromJSON(json) {
         if (!json) {
@@ -55742,7 +56219,7 @@ exports.LoginTicket = LoginTicket;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OAuth2Client = exports.CertificateFormat = exports.CodeChallengeMethod = void 0;
+exports.OAuth2Client = exports.ClientAuthentication = exports.CertificateFormat = exports.CodeChallengeMethod = void 0;
 const gaxios_1 = __nccwpck_require__(59555);
 const querystring = __nccwpck_require__(63477);
 const stream = __nccwpck_require__(12781);
@@ -55760,6 +56237,16 @@ var CertificateFormat;
     CertificateFormat["PEM"] = "PEM";
     CertificateFormat["JWK"] = "JWK";
 })(CertificateFormat || (exports.CertificateFormat = CertificateFormat = {}));
+/**
+ * The client authentication type. Supported values are basic, post, and none.
+ * https://datatracker.ietf.org/doc/html/rfc7591#section-2
+ */
+var ClientAuthentication;
+(function (ClientAuthentication) {
+    ClientAuthentication["ClientSecretPost"] = "ClientSecretPost";
+    ClientAuthentication["ClientSecretBasic"] = "ClientSecretBasic";
+    ClientAuthentication["None"] = "None";
+})(ClientAuthentication || (exports.ClientAuthentication = ClientAuthentication = {}));
 class OAuth2Client extends authclient_1.AuthClient {
     constructor(optionsOrClientId, clientSecret, redirectUri) {
         const opts = optionsOrClientId && typeof optionsOrClientId === 'object'
@@ -55783,6 +56270,8 @@ class OAuth2Client extends authclient_1.AuthClient {
             oauth2IapPublicKeyUrl: 'https://www.gstatic.com/iap/verify/public_key',
             ...opts.endpoints,
         };
+        this.clientAuthentication =
+            opts.clientAuthentication || ClientAuthentication.ClientSecretPost;
         this.issuers = opts.issuers || [
             'accounts.google.com',
             'https://accounts.google.com',
@@ -55855,20 +56344,29 @@ class OAuth2Client extends authclient_1.AuthClient {
     }
     async getTokenAsync(options) {
         const url = this.endpoints.oauth2TokenUrl.toString();
-        const values = {
-            code: options.code,
-            client_id: options.client_id || this._clientId,
-            client_secret: this._clientSecret,
-            redirect_uri: options.redirect_uri || this.redirectUri,
-            grant_type: 'authorization_code',
-            code_verifier: options.codeVerifier,
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
         };
+        const values = {
+            client_id: options.client_id || this._clientId,
+            code_verifier: options.codeVerifier,
+            code: options.code,
+            grant_type: 'authorization_code',
+            redirect_uri: options.redirect_uri || this.redirectUri,
+        };
+        if (this.clientAuthentication === ClientAuthentication.ClientSecretBasic) {
+            const basic = Buffer.from(`${this._clientId}:${this._clientSecret}`);
+            headers['Authorization'] = `Basic ${basic.toString('base64')}`;
+        }
+        if (this.clientAuthentication === ClientAuthentication.ClientSecretPost) {
+            values.client_secret = this._clientSecret;
+        }
         const res = await this.transporter.request({
             ...OAuth2Client.RETRY_CONFIG,
             method: 'POST',
             url,
             data: querystring.stringify(values),
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers,
         });
         const tokens = res.data;
         if (res.data && res.data.expires_in) {
@@ -56523,7 +57021,8 @@ OAuth2Client.DEFAULT_MAX_TOKEN_LIFETIME_SECS_ = 86400;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getErrorFromOAuthErrorResponse = exports.OAuthClientAuthHandler = void 0;
+exports.OAuthClientAuthHandler = void 0;
+exports.getErrorFromOAuthErrorResponse = getErrorFromOAuthErrorResponse;
 const querystring = __nccwpck_require__(63477);
 const crypto_1 = __nccwpck_require__(78043);
 /** List of HTTP methods that accept request bodies. */
@@ -56699,7 +57198,6 @@ function getErrorFromOAuthErrorResponse(resp, err) {
     }
     return newError;
 }
-exports.getErrorFromOAuthErrorResponse = getErrorFromOAuthErrorResponse;
 
 
 /***/ }),
@@ -57284,6 +57782,16 @@ class UserRefreshClient extends oauth2client_1.OAuth2Client {
             });
         });
     }
+    /**
+     * Create a UserRefreshClient credentials instance using the given input
+     * options.
+     * @param json The input object.
+     */
+    static fromJSON(json) {
+        const client = new UserRefreshClient();
+        client.fromJSON(json);
+        return client;
+    }
 }
 exports.UserRefreshClient = UserRefreshClient;
 
@@ -57516,7 +58024,6 @@ class BrowserCrypto {
         // this method async as well.
         // To calculate SHA256 digest using SubtleCrypto, we first
         // need to convert an input string to an ArrayBuffer:
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const inputBuffer = new TextEncoder().encode(str);
         // Result is ArrayBuffer as well.
         const outputBuffer = await window.crypto.subtle.digest('SHA-256', inputBuffer);
@@ -57539,7 +58046,6 @@ class BrowserCrypto {
             name: 'RSASSA-PKCS1-v1_5',
             hash: { name: 'SHA-256' },
         };
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const dataArray = new TextEncoder().encode(data);
         const signatureArray = base64js.toByteArray(BrowserCrypto.padBase64(signature));
         const cryptoKey = await window.crypto.subtle.importKey('jwk', pubkey, algo, true, ['verify']);
@@ -57553,7 +58059,6 @@ class BrowserCrypto {
             name: 'RSASSA-PKCS1-v1_5',
             hash: { name: 'SHA-256' },
         };
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const dataArray = new TextEncoder().encode(data);
         const cryptoKey = await window.crypto.subtle.importKey('jwk', privateKey, algo, true, ['sign']);
         // SubtleCrypto's sign method is async so we must make
@@ -57563,12 +58068,10 @@ class BrowserCrypto {
     }
     decodeBase64StringUtf8(base64) {
         const uint8array = base64js.toByteArray(BrowserCrypto.padBase64(base64));
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const result = new TextDecoder().decode(uint8array);
         return result;
     }
     encodeBase64StringUtf8(text) {
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const uint8array = new TextEncoder().encode(text);
         const result = base64js.fromByteArray(uint8array);
         return result;
@@ -57584,7 +58087,6 @@ class BrowserCrypto {
         // this method async as well.
         // To calculate SHA256 digest using SubtleCrypto, we first
         // need to convert an input string to an ArrayBuffer:
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const inputBuffer = new TextEncoder().encode(str);
         // Result is ArrayBuffer as well.
         const outputBuffer = await window.crypto.subtle.digest('SHA-256', inputBuffer);
@@ -57603,7 +58105,6 @@ class BrowserCrypto {
         const rawKey = typeof key === 'string'
             ? key
             : String.fromCharCode(...new Uint16Array(key));
-        // eslint-disable-next-line node/no-unsupported-features/node-builtins
         const enc = new TextEncoder();
         const cryptoKey = await window.crypto.subtle.importKey('raw', enc.encode(rawKey), {
             name: 'HMAC',
@@ -57639,7 +58140,9 @@ exports.BrowserCrypto = BrowserCrypto;
 // limitations under the License.
 /* global window */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fromArrayBufferToHex = exports.hasBrowserCrypto = exports.createCrypto = void 0;
+exports.createCrypto = createCrypto;
+exports.hasBrowserCrypto = hasBrowserCrypto;
+exports.fromArrayBufferToHex = fromArrayBufferToHex;
 const crypto_1 = __nccwpck_require__(14693);
 const crypto_2 = __nccwpck_require__(30757);
 function createCrypto() {
@@ -57648,13 +58151,11 @@ function createCrypto() {
     }
     return new crypto_2.NodeCrypto();
 }
-exports.createCrypto = createCrypto;
 function hasBrowserCrypto() {
     return (typeof window !== 'undefined' &&
         typeof window.crypto !== 'undefined' &&
         typeof window.crypto.subtle !== 'undefined');
 }
-exports.hasBrowserCrypto = hasBrowserCrypto;
 /**
  * Converts an ArrayBuffer to a hexadecimal string.
  * @param arrayBuffer The ArrayBuffer to convert to hexadecimal string.
@@ -57670,7 +58171,6 @@ function fromArrayBufferToHex(arrayBuffer) {
     })
         .join('');
 }
-exports.fromArrayBufferToHex = fromArrayBufferToHex;
 
 
 /***/ }),
@@ -57771,7 +58271,7 @@ function toBuffer(arrayBuffer) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GoogleAuth = exports.auth = exports.DefaultTransporter = exports.PassThroughClient = exports.PluggableAuthClient = exports.DownscopedClient = exports.BaseExternalAccountClient = exports.ExternalAccountClient = exports.IdentityPoolClient = exports.AwsClient = exports.UserRefreshClient = exports.LoginTicket = exports.OAuth2Client = exports.CodeChallengeMethod = exports.Impersonated = exports.JWT = exports.JWTAccess = exports.IdTokenClient = exports.IAMAuth = exports.GCPEnv = exports.Compute = exports.DEFAULT_UNIVERSE = exports.AuthClient = exports.gaxios = exports.gcpMetadata = void 0;
+exports.GoogleAuth = exports.auth = exports.DefaultTransporter = exports.PassThroughClient = exports.ExecutableError = exports.PluggableAuthClient = exports.DownscopedClient = exports.BaseExternalAccountClient = exports.ExternalAccountClient = exports.IdentityPoolClient = exports.AwsRequestSigner = exports.AwsClient = exports.UserRefreshClient = exports.LoginTicket = exports.ClientAuthentication = exports.OAuth2Client = exports.CodeChallengeMethod = exports.Impersonated = exports.JWT = exports.JWTAccess = exports.IdTokenClient = exports.IAMAuth = exports.GCPEnv = exports.Compute = exports.DEFAULT_UNIVERSE = exports.AuthClient = exports.gaxios = exports.gcpMetadata = void 0;
 // Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -57811,12 +58311,15 @@ Object.defineProperty(exports, "Impersonated", ({ enumerable: true, get: functio
 var oauth2client_1 = __nccwpck_require__(3936);
 Object.defineProperty(exports, "CodeChallengeMethod", ({ enumerable: true, get: function () { return oauth2client_1.CodeChallengeMethod; } }));
 Object.defineProperty(exports, "OAuth2Client", ({ enumerable: true, get: function () { return oauth2client_1.OAuth2Client; } }));
+Object.defineProperty(exports, "ClientAuthentication", ({ enumerable: true, get: function () { return oauth2client_1.ClientAuthentication; } }));
 var loginticket_1 = __nccwpck_require__(74524);
 Object.defineProperty(exports, "LoginTicket", ({ enumerable: true, get: function () { return loginticket_1.LoginTicket; } }));
 var refreshclient_1 = __nccwpck_require__(98790);
 Object.defineProperty(exports, "UserRefreshClient", ({ enumerable: true, get: function () { return refreshclient_1.UserRefreshClient; } }));
 var awsclient_1 = __nccwpck_require__(71569);
 Object.defineProperty(exports, "AwsClient", ({ enumerable: true, get: function () { return awsclient_1.AwsClient; } }));
+var awsrequestsigner_1 = __nccwpck_require__(1754);
+Object.defineProperty(exports, "AwsRequestSigner", ({ enumerable: true, get: function () { return awsrequestsigner_1.AwsRequestSigner; } }));
 var identitypoolclient_1 = __nccwpck_require__(20117);
 Object.defineProperty(exports, "IdentityPoolClient", ({ enumerable: true, get: function () { return identitypoolclient_1.IdentityPoolClient; } }));
 var externalclient_1 = __nccwpck_require__(94381);
@@ -57827,6 +58330,7 @@ var downscopedclient_1 = __nccwpck_require__(6270);
 Object.defineProperty(exports, "DownscopedClient", ({ enumerable: true, get: function () { return downscopedclient_1.DownscopedClient; } }));
 var pluggable_auth_client_1 = __nccwpck_require__(44782);
 Object.defineProperty(exports, "PluggableAuthClient", ({ enumerable: true, get: function () { return pluggable_auth_client_1.PluggableAuthClient; } }));
+Object.defineProperty(exports, "ExecutableError", ({ enumerable: true, get: function () { return pluggable_auth_client_1.ExecutableError; } }));
 var passthrough_1 = __nccwpck_require__(32460);
 Object.defineProperty(exports, "PassThroughClient", ({ enumerable: true, get: function () { return passthrough_1.PassThroughClient; } }));
 var transporters_1 = __nccwpck_require__(72649);
@@ -57856,7 +58360,7 @@ exports.auth = auth;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validate = void 0;
+exports.validate = validate;
 // Accepts an options object passed from the user to the API.  In the
 // previous version of the API, it referred to a `Request` options object.
 // Now it refers to an Axiox Request Config object.  This is here to help
@@ -57875,7 +58379,6 @@ function validate(options) {
         }
     }
 }
-exports.validate = validate;
 
 
 /***/ }),
@@ -58023,7 +58526,9 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _LRUCache_instances, _LRUCache_cache, _LRUCache_moveToEnd, _LRUCache_evict;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LRUCache = exports.originalOrCamelOptions = exports.snakeToCamel = void 0;
+exports.LRUCache = void 0;
+exports.snakeToCamel = snakeToCamel;
+exports.originalOrCamelOptions = originalOrCamelOptions;
 /**
  * Returns the camel case of a provided string.
  *
@@ -58040,7 +58545,6 @@ exports.LRUCache = exports.originalOrCamelOptions = exports.snakeToCamel = void 
 function snakeToCamel(str) {
     return str.replace(/([_][^_])/g, match => match.slice(1).toUpperCase());
 }
-exports.snakeToCamel = snakeToCamel;
 /**
  * Get the value of `obj[key]` or `obj[camelCaseKey]`, with a preference
  * for original, non-camelCase key.
@@ -58061,7 +58565,6 @@ function originalOrCamelOptions(obj) {
     }
     return { get };
 }
-exports.originalOrCamelOptions = originalOrCamelOptions;
 /**
  * A simple LRU cache utility.
  * Not meant for external usage.
@@ -58127,6 +58630,579 @@ _LRUCache_cache = new WeakMap(), _LRUCache_instances = new WeakSet(), _LRUCache_
         oldestItem = __classPrivateFieldGet(this, _LRUCache_cache, "f").entries().next();
     }
 };
+
+
+/***/ }),
+
+/***/ 74118:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2024 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Colours = void 0;
+/**
+ * Handles figuring out if we can use ANSI colours and handing out the escape codes.
+ *
+ * This is for package-internal use only, and may change at any time.
+ *
+ * @private
+ * @internal
+ */
+class Colours {
+    /**
+     * @param stream The stream (e.g. process.stderr)
+     * @returns true if the stream should have colourization enabled
+     */
+    static isEnabled(stream) {
+        return (stream.isTTY &&
+            (typeof stream.getColorDepth === 'function'
+                ? stream.getColorDepth() > 2
+                : true));
+    }
+    static refresh() {
+        Colours.enabled = Colours.isEnabled(process.stderr);
+        if (!this.enabled) {
+            Colours.reset = '';
+            Colours.bright = '';
+            Colours.dim = '';
+            Colours.red = '';
+            Colours.green = '';
+            Colours.yellow = '';
+            Colours.blue = '';
+            Colours.magenta = '';
+            Colours.cyan = '';
+            Colours.white = '';
+            Colours.grey = '';
+        }
+        else {
+            Colours.reset = '\u001b[0m';
+            Colours.bright = '\u001b[1m';
+            Colours.dim = '\u001b[2m';
+            Colours.red = '\u001b[31m';
+            Colours.green = '\u001b[32m';
+            Colours.yellow = '\u001b[33m';
+            Colours.blue = '\u001b[34m';
+            Colours.magenta = '\u001b[35m';
+            Colours.cyan = '\u001b[36m';
+            Colours.white = '\u001b[37m';
+            Colours.grey = '\u001b[90m';
+        }
+    }
+}
+exports.Colours = Colours;
+Colours.enabled = false;
+Colours.reset = '';
+Colours.bright = '';
+Colours.dim = '';
+Colours.red = '';
+Colours.green = '';
+Colours.yellow = '';
+Colours.blue = '';
+Colours.magenta = '';
+Colours.cyan = '';
+Colours.white = '';
+Colours.grey = '';
+Colours.refresh();
+//# sourceMappingURL=colours.js.map
+
+/***/ }),
+
+/***/ 97306:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2024 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(13029), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 13029:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2021-2024 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.env = exports.DebugLogBackendBase = exports.placeholder = exports.AdhocDebugLogger = exports.LogSeverity = void 0;
+exports.getNodeBackend = getNodeBackend;
+exports.getDebugBackend = getDebugBackend;
+exports.getStructuredBackend = getStructuredBackend;
+exports.setBackend = setBackend;
+exports.log = log;
+const node_events_1 = __nccwpck_require__(15673);
+const process = __importStar(__nccwpck_require__(97742));
+const util = __importStar(__nccwpck_require__(47261));
+const colours_1 = __nccwpck_require__(74118);
+// Some functions (as noted) are based on the Node standard library, from
+// the following file:
+//
+// https://github.com/nodejs/node/blob/main/lib/internal/util/debuglog.js
+/**
+ * This module defines an ad-hoc debug logger for Google Cloud Platform
+ * client libraries in Node. An ad-hoc debug logger is a tool which lets
+ * users use an external, unified interface (in this case, environment
+ * variables) to determine what logging they want to see at runtime. This
+ * isn't necessarily fed into the console, but is meant to be under the
+ * control of the user. The kind of logging that will be produced by this
+ * is more like "call retry happened", not "event you'd want to record
+ * in Cloud Logger".
+ *
+ * More for Googlers implementing libraries with it:
+ * go/cloud-client-logging-design
+ */
+/**
+ * Possible log levels. These are a subset of Cloud Observability levels.
+ * https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogSeverity
+ */
+var LogSeverity;
+(function (LogSeverity) {
+    LogSeverity["DEFAULT"] = "DEFAULT";
+    LogSeverity["DEBUG"] = "DEBUG";
+    LogSeverity["INFO"] = "INFO";
+    LogSeverity["WARNING"] = "WARNING";
+    LogSeverity["ERROR"] = "ERROR";
+})(LogSeverity || (exports.LogSeverity = LogSeverity = {}));
+/**
+ * Our logger instance. This actually contains the meat of dealing
+ * with log lines, including EventEmitter. This contains the function
+ * that will be passed back to users of the package.
+ */
+class AdhocDebugLogger extends node_events_1.EventEmitter {
+    /**
+     * @param upstream The backend will pass a function that will be
+     *   called whenever our logger function is invoked.
+     */
+    constructor(namespace, upstream) {
+        super();
+        this.namespace = namespace;
+        this.upstream = upstream;
+        this.func = Object.assign(this.invoke.bind(this), {
+            // Also add an instance pointer back to us.
+            instance: this,
+            // And pull over the EventEmitter functionality.
+            on: (event, listener) => this.on(event, listener),
+        });
+        // Convenience methods for log levels.
+        this.func.debug = (...args) => this.invokeSeverity(LogSeverity.DEBUG, ...args);
+        this.func.info = (...args) => this.invokeSeverity(LogSeverity.INFO, ...args);
+        this.func.warn = (...args) => this.invokeSeverity(LogSeverity.WARNING, ...args);
+        this.func.error = (...args) => this.invokeSeverity(LogSeverity.ERROR, ...args);
+        this.func.sublog = (namespace) => log(namespace, this.func);
+    }
+    invoke(fields, ...args) {
+        // Push out any upstream logger first.
+        if (this.upstream) {
+            this.upstream(fields, ...args);
+        }
+        // Emit sink events.
+        this.emit('log', fields, args);
+    }
+    invokeSeverity(severity, ...args) {
+        this.invoke({ severity }, ...args);
+    }
+}
+exports.AdhocDebugLogger = AdhocDebugLogger;
+/**
+ * This can be used in place of a real logger while waiting for Promises or disabling logging.
+ */
+exports.placeholder = new AdhocDebugLogger('', () => { }).func;
+/**
+ * The base class for debug logging backends. It's possible to use this, but the
+ * same non-guarantees above still apply (unstable interface, etc).
+ *
+ * @private
+ * @internal
+ */
+class DebugLogBackendBase {
+    constructor() {
+        var _a;
+        this.cached = new Map();
+        this.filters = [];
+        this.filtersSet = false;
+        // Look for the Node config variable for what systems to enable. We'll store
+        // these for the log method below, which will call setFilters() once.
+        let nodeFlag = (_a = process.env[exports.env.nodeEnables]) !== null && _a !== void 0 ? _a : '*';
+        if (nodeFlag === 'all') {
+            nodeFlag = '*';
+        }
+        this.filters = nodeFlag.split(',');
+    }
+    log(namespace, fields, ...args) {
+        try {
+            if (!this.filtersSet) {
+                this.setFilters();
+                this.filtersSet = true;
+            }
+            let logger = this.cached.get(namespace);
+            if (!logger) {
+                logger = this.makeLogger(namespace);
+                this.cached.set(namespace, logger);
+            }
+            logger(fields, ...args);
+        }
+        catch (e) {
+            // Silently ignore all errors; we don't want them to interfere with
+            // the user's running app.
+            // e;
+            console.error(e);
+        }
+    }
+}
+exports.DebugLogBackendBase = DebugLogBackendBase;
+// The basic backend. This one definitely works, but it's less feature-filled.
+//
+// Rather than using util.debuglog, this implements the same basic logic directly.
+// The reason for this decision is that debuglog checks the value of the
+// NODE_DEBUG environment variable before any user code runs; we therefore
+// can't pipe our own enables into it (and util.debuglog will never print unless
+// the user duplicates it into NODE_DEBUG, which isn't reasonable).
+//
+class NodeBackend extends DebugLogBackendBase {
+    constructor() {
+        super(...arguments);
+        // Default to allowing all systems, since we gate earlier based on whether the
+        // variable is empty.
+        this.enabledRegexp = /.*/g;
+    }
+    isEnabled(namespace) {
+        return this.enabledRegexp.test(namespace);
+    }
+    makeLogger(namespace) {
+        if (!this.enabledRegexp.test(namespace)) {
+            return () => { };
+        }
+        return (fields, ...args) => {
+            var _a;
+            // TODO: `fields` needs to be turned into a string here, one way or another.
+            const nscolour = `${colours_1.Colours.green}${namespace}${colours_1.Colours.reset}`;
+            const pid = `${colours_1.Colours.yellow}${process.pid}${colours_1.Colours.reset}`;
+            let level;
+            switch (fields.severity) {
+                case LogSeverity.ERROR:
+                    level = `${colours_1.Colours.red}${fields.severity}${colours_1.Colours.reset}`;
+                    break;
+                case LogSeverity.INFO:
+                    level = `${colours_1.Colours.magenta}${fields.severity}${colours_1.Colours.reset}`;
+                    break;
+                case LogSeverity.WARNING:
+                    level = `${colours_1.Colours.yellow}${fields.severity}${colours_1.Colours.reset}`;
+                    break;
+                default:
+                    level = (_a = fields.severity) !== null && _a !== void 0 ? _a : LogSeverity.DEFAULT;
+                    break;
+            }
+            const msg = util.formatWithOptions({ colors: colours_1.Colours.enabled }, ...args);
+            const filteredFields = Object.assign({}, fields);
+            delete filteredFields.severity;
+            const fieldsJson = Object.getOwnPropertyNames(filteredFields).length
+                ? JSON.stringify(filteredFields)
+                : '';
+            const fieldsColour = fieldsJson
+                ? `${colours_1.Colours.grey}${fieldsJson}${colours_1.Colours.reset}`
+                : '';
+            console.error('%s [%s|%s] %s%s', pid, nscolour, level, msg, fieldsJson ? ` ${fieldsColour}` : '');
+        };
+    }
+    // Regexp patterns below are from here:
+    // https://github.com/nodejs/node/blob/c0aebed4b3395bd65d54b18d1fd00f071002ac20/lib/internal/util/debuglog.js#L36
+    setFilters() {
+        const totalFilters = this.filters.join(',');
+        const regexp = totalFilters
+            .replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
+            .replace(/\*/g, '.*')
+            .replace(/,/g, '$|^');
+        this.enabledRegexp = new RegExp(`^${regexp}$`, 'i');
+    }
+}
+/**
+ * @returns A backend based on Node util.debuglog; this is the default.
+ */
+function getNodeBackend() {
+    return new NodeBackend();
+}
+class DebugBackend extends DebugLogBackendBase {
+    constructor(pkg) {
+        super();
+        this.debugPkg = pkg;
+    }
+    makeLogger(namespace) {
+        const debugLogger = this.debugPkg(namespace);
+        return (fields, ...args) => {
+            // TODO: `fields` needs to be turned into a string here.
+            debugLogger(args[0], ...args.slice(1));
+        };
+    }
+    setFilters() {
+        var _a;
+        const existingFilters = (_a = process.env['NODE_DEBUG']) !== null && _a !== void 0 ? _a : '';
+        process.env['NODE_DEBUG'] = `${existingFilters}${existingFilters ? ',' : ''}${this.filters.join(',')}`;
+    }
+}
+/**
+ * Creates a "debug" package backend. The user must call require('debug') and pass
+ * the resulting object to this function.
+ *
+ * ```
+ *  setBackend(getDebugBackend(require('debug')))
+ * ```
+ *
+ * https://www.npmjs.com/package/debug
+ *
+ * Note: Google does not explicitly endorse or recommend this package; it's just
+ * being provided as an option.
+ *
+ * @returns A backend based on the npm "debug" package.
+ */
+function getDebugBackend(debugPkg) {
+    return new DebugBackend(debugPkg);
+}
+/**
+ * This pretty much works like the Node logger, but it outputs structured
+ * logging JSON matching Google Cloud's ingestion specs. Rather than handling
+ * its own output, it wraps another backend. The passed backend must be a subclass
+ * of `DebugLogBackendBase` (any of the backends exposed by this package will work).
+ */
+class StructuredBackend extends DebugLogBackendBase {
+    constructor(upstream) {
+        var _a;
+        super();
+        this.upstream = (_a = upstream) !== null && _a !== void 0 ? _a : new NodeBackend();
+    }
+    makeLogger(namespace) {
+        const debugLogger = this.upstream.makeLogger(namespace);
+        return (fields, ...args) => {
+            var _a;
+            const severity = (_a = fields.severity) !== null && _a !== void 0 ? _a : LogSeverity.INFO;
+            const json = Object.assign({
+                severity,
+                message: util.format(...args),
+            }, fields);
+            const jsonString = JSON.stringify(json);
+            debugLogger(fields, jsonString);
+        };
+    }
+    setFilters() {
+        this.upstream.setFilters();
+    }
+}
+/**
+ * Creates a "structured logging" backend. This pretty much works like the
+ * Node logger, but it outputs structured logging JSON matching Google
+ * Cloud's ingestion specs instead of plain text.
+ *
+ * ```
+ *  setBackend(getStructuredBackend())
+ * ```
+ *
+ * @param upstream If you want to use something besides the Node backend to
+ *   write the actual log lines into, pass that here.
+ * @returns A backend based on Google Cloud structured logging.
+ */
+function getStructuredBackend(upstream) {
+    return new StructuredBackend(upstream);
+}
+/**
+ * The environment variables that we standardized on, for all ad-hoc logging.
+ */
+exports.env = {
+    /**
+     * Filter wildcards specific to the Node syntax, and similar to the built-in
+     * utils.debuglog() environment variable. If missing, disables logging.
+     */
+    nodeEnables: 'GOOGLE_SDK_NODE_LOGGING',
+};
+// Keep a copy of all namespaced loggers so users can reliably .on() them.
+// Note that these cached functions will need to deal with changes in the backend.
+const loggerCache = new Map();
+// Our current global backend. This might be:
+let cachedBackend = undefined;
+/**
+ * Set the backend to use for our log output.
+ * - A backend object
+ * - null to disable logging
+ * - undefined for "nothing yet", defaults to the Node backend
+ *
+ * @param backend Results from one of the get*Backend() functions.
+ */
+function setBackend(backend) {
+    cachedBackend = backend;
+    loggerCache.clear();
+}
+/**
+ * Creates a logging function. Multiple calls to this with the same namespace
+ * will produce the same logger, with the same event emitter hooks.
+ *
+ * Namespaces can be a simple string ("system" name), or a qualified string
+ * (system:subsystem), which can be used for filtering, or for "system:*".
+ *
+ * @param namespace The namespace, a descriptive text string.
+ * @returns A function you can call that works similar to console.log().
+ */
+function log(namespace, parent) {
+    // If the enable flag isn't set, do nothing.
+    const enablesFlag = process.env[exports.env.nodeEnables];
+    if (!enablesFlag) {
+        return exports.placeholder;
+    }
+    // This might happen mostly if the typings are dropped in a user's code,
+    // or if they're calling from JavaScript.
+    if (!namespace) {
+        return exports.placeholder;
+    }
+    // Handle sub-loggers.
+    if (parent) {
+        namespace = `${parent.instance.namespace}:${namespace}`;
+    }
+    // Reuse loggers so things like event sinks are persistent.
+    const existing = loggerCache.get(namespace);
+    if (existing) {
+        return existing.func;
+    }
+    // Do we have a backend yet?
+    if (cachedBackend === null) {
+        // Explicitly disabled.
+        return exports.placeholder;
+    }
+    else if (cachedBackend === undefined) {
+        // One hasn't been made yet, so default to Node.
+        cachedBackend = getNodeBackend();
+    }
+    // The logger is further wrapped so we can handle the backend changing out.
+    const logger = (() => {
+        let previousBackend = undefined;
+        const newLogger = new AdhocDebugLogger(namespace, (fields, ...args) => {
+            if (previousBackend !== cachedBackend) {
+                // Did the user pass a custom backend?
+                if (cachedBackend === null) {
+                    // Explicitly disabled.
+                    return;
+                }
+                else if (cachedBackend === undefined) {
+                    // One hasn't been made yet, so default to Node.
+                    cachedBackend = getNodeBackend();
+                }
+                previousBackend = cachedBackend;
+            }
+            cachedBackend === null || cachedBackend === void 0 ? void 0 : cachedBackend.log(namespace, fields, ...args);
+        });
+        return newLogger;
+    })();
+    loggerCache.set(namespace, logger);
+    return logger.func;
+}
+//# sourceMappingURL=logging-utils.js.map
+
+/***/ }),
+
+/***/ 57087:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./gOPD')} */
+module.exports = Object.getOwnPropertyDescriptor;
+
+
+/***/ }),
+
+/***/ 18501:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+/** @type {import('.')} */
+var $gOPD = __nccwpck_require__(57087);
+
+if ($gOPD) {
+	try {
+		$gOPD([], 'length');
+	} catch (e) {
+		// IE 8 has a broken gOPD
+		$gOPD = null;
+	}
+}
+
+module.exports = $gOPD;
 
 
 /***/ }),
@@ -58430,39 +59506,110 @@ module.exports = (flag, argv = process.argv) => {
 
 /***/ }),
 
-/***/ 52589:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ 40587:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-var __assign=this&&this.__assign||function(){__assign=Object.assign||function(t){for(var s,i=1,n=arguments.length;i<n;i++){s=arguments[i];for(var p in s)if(Object.prototype.hasOwnProperty.call(s,p))t[p]=s[p]}return t};return __assign.apply(this,arguments)};Object.defineProperty(exports, "__esModule", ({value:true}));var named_references_1=__nccwpck_require__(6068);var numeric_unicode_map_1=__nccwpck_require__(45439);var surrogate_pairs_1=__nccwpck_require__(1454);var allNamedReferences=__assign(__assign({},named_references_1.namedReferences),{all:named_references_1.namedReferences.html5});function replaceUsingRegExp(macroText,macroRegExp,macroReplacer){macroRegExp.lastIndex=0;var replaceMatch=macroRegExp.exec(macroText);var replaceResult;if(replaceMatch){replaceResult="";var replaceLastIndex=0;do{if(replaceLastIndex!==replaceMatch.index){replaceResult+=macroText.substring(replaceLastIndex,replaceMatch.index)}var replaceInput=replaceMatch[0];replaceResult+=macroReplacer(replaceInput);replaceLastIndex=replaceMatch.index+replaceInput.length}while(replaceMatch=macroRegExp.exec(macroText));if(replaceLastIndex!==macroText.length){replaceResult+=macroText.substring(replaceLastIndex)}}else{replaceResult=macroText}return replaceResult}var encodeRegExps={specialChars:/[<>'"&]/g,nonAscii:/[<>'"&\u0080-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/g,nonAsciiPrintable:/[<>'"&\x01-\x08\x11-\x15\x17-\x1F\x7f-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/g,nonAsciiPrintableOnly:/[\x01-\x08\x11-\x15\x17-\x1F\x7f-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/g,extensive:/[\x01-\x0c\x0e-\x1f\x21-\x2c\x2e-\x2f\x3a-\x40\x5b-\x60\x7b-\x7d\x7f-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/g};var defaultEncodeOptions={mode:"specialChars",level:"all",numeric:"decimal"};function encode(text,_a){var _b=_a===void 0?defaultEncodeOptions:_a,_c=_b.mode,mode=_c===void 0?"specialChars":_c,_d=_b.numeric,numeric=_d===void 0?"decimal":_d,_e=_b.level,level=_e===void 0?"all":_e;if(!text){return""}var encodeRegExp=encodeRegExps[mode];var references=allNamedReferences[level].characters;var isHex=numeric==="hexadecimal";return replaceUsingRegExp(text,encodeRegExp,(function(input){var result=references[input];if(!result){var code=input.length>1?surrogate_pairs_1.getCodePoint(input,0):input.charCodeAt(0);result=(isHex?"&#x"+code.toString(16):"&#"+code)+";"}return result}))}exports.encode=encode;var defaultDecodeOptions={scope:"body",level:"all"};var strict=/&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);/g;var attribute=/&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+)[;=]?/g;var baseDecodeRegExps={xml:{strict:strict,attribute:attribute,body:named_references_1.bodyRegExps.xml},html4:{strict:strict,attribute:attribute,body:named_references_1.bodyRegExps.html4},html5:{strict:strict,attribute:attribute,body:named_references_1.bodyRegExps.html5}};var decodeRegExps=__assign(__assign({},baseDecodeRegExps),{all:baseDecodeRegExps.html5});var fromCharCode=String.fromCharCode;var outOfBoundsChar=fromCharCode(65533);var defaultDecodeEntityOptions={level:"all"};function getDecodedEntity(entity,references,isAttribute,isStrict){var decodeResult=entity;var decodeEntityLastChar=entity[entity.length-1];if(isAttribute&&decodeEntityLastChar==="="){decodeResult=entity}else if(isStrict&&decodeEntityLastChar!==";"){decodeResult=entity}else{var decodeResultByReference=references[entity];if(decodeResultByReference){decodeResult=decodeResultByReference}else if(entity[0]==="&"&&entity[1]==="#"){var decodeSecondChar=entity[2];var decodeCode=decodeSecondChar=="x"||decodeSecondChar=="X"?parseInt(entity.substr(3),16):parseInt(entity.substr(2));decodeResult=decodeCode>=1114111?outOfBoundsChar:decodeCode>65535?surrogate_pairs_1.fromCodePoint(decodeCode):fromCharCode(numeric_unicode_map_1.numericUnicodeMap[decodeCode]||decodeCode)}}return decodeResult}function decodeEntity(entity,_a){var _b=(_a===void 0?defaultDecodeEntityOptions:_a).level,level=_b===void 0?"all":_b;if(!entity){return""}return getDecodedEntity(entity,allNamedReferences[level].entities,false,false)}exports.decodeEntity=decodeEntity;function decode(text,_a){var _b=_a===void 0?defaultDecodeOptions:_a,_c=_b.level,level=_c===void 0?"all":_c,_d=_b.scope,scope=_d===void 0?level==="xml"?"strict":"body":_d;if(!text){return""}var decodeRegExp=decodeRegExps[level][scope];var references=allNamedReferences[level].entities;var isAttribute=scope==="attribute";var isStrict=scope==="strict";return replaceUsingRegExp(text,decodeRegExp,(function(entity){return getDecodedEntity(entity,references,isAttribute,isStrict)}))}exports.decode=decode;
-//# sourceMappingURL=./index.js.map
+
+
+var origSymbol = typeof Symbol !== 'undefined' && Symbol;
+var hasSymbolSham = __nccwpck_require__(57747);
+
+/** @type {import('.')} */
+module.exports = function hasNativeSymbols() {
+	if (typeof origSymbol !== 'function') { return false; }
+	if (typeof Symbol !== 'function') { return false; }
+	if (typeof origSymbol('foo') !== 'symbol') { return false; }
+	if (typeof Symbol('bar') !== 'symbol') { return false; }
+
+	return hasSymbolSham();
+};
+
 
 /***/ }),
 
-/***/ 6068:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 57747:
+/***/ ((module) => {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.bodyRegExps={xml:/&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,html4:/&notin;|&(?:nbsp|iexcl|cent|pound|curren|yen|brvbar|sect|uml|copy|ordf|laquo|not|shy|reg|macr|deg|plusmn|sup2|sup3|acute|micro|para|middot|cedil|sup1|ordm|raquo|frac14|frac12|frac34|iquest|Agrave|Aacute|Acirc|Atilde|Auml|Aring|AElig|Ccedil|Egrave|Eacute|Ecirc|Euml|Igrave|Iacute|Icirc|Iuml|ETH|Ntilde|Ograve|Oacute|Ocirc|Otilde|Ouml|times|Oslash|Ugrave|Uacute|Ucirc|Uuml|Yacute|THORN|szlig|agrave|aacute|acirc|atilde|auml|aring|aelig|ccedil|egrave|eacute|ecirc|euml|igrave|iacute|icirc|iuml|eth|ntilde|ograve|oacute|ocirc|otilde|ouml|divide|oslash|ugrave|uacute|ucirc|uuml|yacute|thorn|yuml|quot|amp|lt|gt|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,html5:/&centerdot;|&copysr;|&divideontimes;|&gtcc;|&gtcir;|&gtdot;|&gtlPar;|&gtquest;|&gtrapprox;|&gtrarr;|&gtrdot;|&gtreqless;|&gtreqqless;|&gtrless;|&gtrsim;|&ltcc;|&ltcir;|&ltdot;|&lthree;|&ltimes;|&ltlarr;|&ltquest;|&ltrPar;|&ltri;|&ltrie;|&ltrif;|&notin;|&notinE;|&notindot;|&notinva;|&notinvb;|&notinvc;|&notni;|&notniva;|&notnivb;|&notnivc;|&parallel;|&timesb;|&timesbar;|&timesd;|&(?:AElig|AMP|Aacute|Acirc|Agrave|Aring|Atilde|Auml|COPY|Ccedil|ETH|Eacute|Ecirc|Egrave|Euml|GT|Iacute|Icirc|Igrave|Iuml|LT|Ntilde|Oacute|Ocirc|Ograve|Oslash|Otilde|Ouml|QUOT|REG|THORN|Uacute|Ucirc|Ugrave|Uuml|Yacute|aacute|acirc|acute|aelig|agrave|amp|aring|atilde|auml|brvbar|ccedil|cedil|cent|copy|curren|deg|divide|eacute|ecirc|egrave|eth|euml|frac12|frac14|frac34|gt|iacute|icirc|iexcl|igrave|iquest|iuml|laquo|lt|macr|micro|middot|nbsp|not|ntilde|oacute|ocirc|ograve|ordf|ordm|oslash|otilde|ouml|para|plusmn|pound|quot|raquo|reg|sect|shy|sup1|sup2|sup3|szlig|thorn|times|uacute|ucirc|ugrave|uml|uuml|yacute|yen|yuml|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g};exports.namedReferences={xml:{entities:{"&lt;":"<","&gt;":">","&quot;":'"',"&apos;":"'","&amp;":"&"},characters:{"<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;","&":"&amp;"}},html4:{entities:{"&apos;":"'","&nbsp":" ","&nbsp;":" ","&iexcl":"¡","&iexcl;":"¡","&cent":"¢","&cent;":"¢","&pound":"£","&pound;":"£","&curren":"¤","&curren;":"¤","&yen":"¥","&yen;":"¥","&brvbar":"¦","&brvbar;":"¦","&sect":"§","&sect;":"§","&uml":"¨","&uml;":"¨","&copy":"©","&copy;":"©","&ordf":"ª","&ordf;":"ª","&laquo":"«","&laquo;":"«","&not":"¬","&not;":"¬","&shy":"­","&shy;":"­","&reg":"®","&reg;":"®","&macr":"¯","&macr;":"¯","&deg":"°","&deg;":"°","&plusmn":"±","&plusmn;":"±","&sup2":"²","&sup2;":"²","&sup3":"³","&sup3;":"³","&acute":"´","&acute;":"´","&micro":"µ","&micro;":"µ","&para":"¶","&para;":"¶","&middot":"·","&middot;":"·","&cedil":"¸","&cedil;":"¸","&sup1":"¹","&sup1;":"¹","&ordm":"º","&ordm;":"º","&raquo":"»","&raquo;":"»","&frac14":"¼","&frac14;":"¼","&frac12":"½","&frac12;":"½","&frac34":"¾","&frac34;":"¾","&iquest":"¿","&iquest;":"¿","&Agrave":"À","&Agrave;":"À","&Aacute":"Á","&Aacute;":"Á","&Acirc":"Â","&Acirc;":"Â","&Atilde":"Ã","&Atilde;":"Ã","&Auml":"Ä","&Auml;":"Ä","&Aring":"Å","&Aring;":"Å","&AElig":"Æ","&AElig;":"Æ","&Ccedil":"Ç","&Ccedil;":"Ç","&Egrave":"È","&Egrave;":"È","&Eacute":"É","&Eacute;":"É","&Ecirc":"Ê","&Ecirc;":"Ê","&Euml":"Ë","&Euml;":"Ë","&Igrave":"Ì","&Igrave;":"Ì","&Iacute":"Í","&Iacute;":"Í","&Icirc":"Î","&Icirc;":"Î","&Iuml":"Ï","&Iuml;":"Ï","&ETH":"Ð","&ETH;":"Ð","&Ntilde":"Ñ","&Ntilde;":"Ñ","&Ograve":"Ò","&Ograve;":"Ò","&Oacute":"Ó","&Oacute;":"Ó","&Ocirc":"Ô","&Ocirc;":"Ô","&Otilde":"Õ","&Otilde;":"Õ","&Ouml":"Ö","&Ouml;":"Ö","&times":"×","&times;":"×","&Oslash":"Ø","&Oslash;":"Ø","&Ugrave":"Ù","&Ugrave;":"Ù","&Uacute":"Ú","&Uacute;":"Ú","&Ucirc":"Û","&Ucirc;":"Û","&Uuml":"Ü","&Uuml;":"Ü","&Yacute":"Ý","&Yacute;":"Ý","&THORN":"Þ","&THORN;":"Þ","&szlig":"ß","&szlig;":"ß","&agrave":"à","&agrave;":"à","&aacute":"á","&aacute;":"á","&acirc":"â","&acirc;":"â","&atilde":"ã","&atilde;":"ã","&auml":"ä","&auml;":"ä","&aring":"å","&aring;":"å","&aelig":"æ","&aelig;":"æ","&ccedil":"ç","&ccedil;":"ç","&egrave":"è","&egrave;":"è","&eacute":"é","&eacute;":"é","&ecirc":"ê","&ecirc;":"ê","&euml":"ë","&euml;":"ë","&igrave":"ì","&igrave;":"ì","&iacute":"í","&iacute;":"í","&icirc":"î","&icirc;":"î","&iuml":"ï","&iuml;":"ï","&eth":"ð","&eth;":"ð","&ntilde":"ñ","&ntilde;":"ñ","&ograve":"ò","&ograve;":"ò","&oacute":"ó","&oacute;":"ó","&ocirc":"ô","&ocirc;":"ô","&otilde":"õ","&otilde;":"õ","&ouml":"ö","&ouml;":"ö","&divide":"÷","&divide;":"÷","&oslash":"ø","&oslash;":"ø","&ugrave":"ù","&ugrave;":"ù","&uacute":"ú","&uacute;":"ú","&ucirc":"û","&ucirc;":"û","&uuml":"ü","&uuml;":"ü","&yacute":"ý","&yacute;":"ý","&thorn":"þ","&thorn;":"þ","&yuml":"ÿ","&yuml;":"ÿ","&quot":'"',"&quot;":'"',"&amp":"&","&amp;":"&","&lt":"<","&lt;":"<","&gt":">","&gt;":">","&OElig;":"Œ","&oelig;":"œ","&Scaron;":"Š","&scaron;":"š","&Yuml;":"Ÿ","&circ;":"ˆ","&tilde;":"˜","&ensp;":" ","&emsp;":" ","&thinsp;":" ","&zwnj;":"‌","&zwj;":"‍","&lrm;":"‎","&rlm;":"‏","&ndash;":"–","&mdash;":"—","&lsquo;":"‘","&rsquo;":"’","&sbquo;":"‚","&ldquo;":"“","&rdquo;":"”","&bdquo;":"„","&dagger;":"†","&Dagger;":"‡","&permil;":"‰","&lsaquo;":"‹","&rsaquo;":"›","&euro;":"€","&fnof;":"ƒ","&Alpha;":"Α","&Beta;":"Β","&Gamma;":"Γ","&Delta;":"Δ","&Epsilon;":"Ε","&Zeta;":"Ζ","&Eta;":"Η","&Theta;":"Θ","&Iota;":"Ι","&Kappa;":"Κ","&Lambda;":"Λ","&Mu;":"Μ","&Nu;":"Ν","&Xi;":"Ξ","&Omicron;":"Ο","&Pi;":"Π","&Rho;":"Ρ","&Sigma;":"Σ","&Tau;":"Τ","&Upsilon;":"Υ","&Phi;":"Φ","&Chi;":"Χ","&Psi;":"Ψ","&Omega;":"Ω","&alpha;":"α","&beta;":"β","&gamma;":"γ","&delta;":"δ","&epsilon;":"ε","&zeta;":"ζ","&eta;":"η","&theta;":"θ","&iota;":"ι","&kappa;":"κ","&lambda;":"λ","&mu;":"μ","&nu;":"ν","&xi;":"ξ","&omicron;":"ο","&pi;":"π","&rho;":"ρ","&sigmaf;":"ς","&sigma;":"σ","&tau;":"τ","&upsilon;":"υ","&phi;":"φ","&chi;":"χ","&psi;":"ψ","&omega;":"ω","&thetasym;":"ϑ","&upsih;":"ϒ","&piv;":"ϖ","&bull;":"•","&hellip;":"…","&prime;":"′","&Prime;":"″","&oline;":"‾","&frasl;":"⁄","&weierp;":"℘","&image;":"ℑ","&real;":"ℜ","&trade;":"™","&alefsym;":"ℵ","&larr;":"←","&uarr;":"↑","&rarr;":"→","&darr;":"↓","&harr;":"↔","&crarr;":"↵","&lArr;":"⇐","&uArr;":"⇑","&rArr;":"⇒","&dArr;":"⇓","&hArr;":"⇔","&forall;":"∀","&part;":"∂","&exist;":"∃","&empty;":"∅","&nabla;":"∇","&isin;":"∈","&notin;":"∉","&ni;":"∋","&prod;":"∏","&sum;":"∑","&minus;":"−","&lowast;":"∗","&radic;":"√","&prop;":"∝","&infin;":"∞","&ang;":"∠","&and;":"∧","&or;":"∨","&cap;":"∩","&cup;":"∪","&int;":"∫","&there4;":"∴","&sim;":"∼","&cong;":"≅","&asymp;":"≈","&ne;":"≠","&equiv;":"≡","&le;":"≤","&ge;":"≥","&sub;":"⊂","&sup;":"⊃","&nsub;":"⊄","&sube;":"⊆","&supe;":"⊇","&oplus;":"⊕","&otimes;":"⊗","&perp;":"⊥","&sdot;":"⋅","&lceil;":"⌈","&rceil;":"⌉","&lfloor;":"⌊","&rfloor;":"⌋","&lang;":"〈","&rang;":"〉","&loz;":"◊","&spades;":"♠","&clubs;":"♣","&hearts;":"♥","&diams;":"♦"},characters:{"'":"&apos;"," ":"&nbsp;","¡":"&iexcl;","¢":"&cent;","£":"&pound;","¤":"&curren;","¥":"&yen;","¦":"&brvbar;","§":"&sect;","¨":"&uml;","©":"&copy;","ª":"&ordf;","«":"&laquo;","¬":"&not;","­":"&shy;","®":"&reg;","¯":"&macr;","°":"&deg;","±":"&plusmn;","²":"&sup2;","³":"&sup3;","´":"&acute;","µ":"&micro;","¶":"&para;","·":"&middot;","¸":"&cedil;","¹":"&sup1;","º":"&ordm;","»":"&raquo;","¼":"&frac14;","½":"&frac12;","¾":"&frac34;","¿":"&iquest;","À":"&Agrave;","Á":"&Aacute;","Â":"&Acirc;","Ã":"&Atilde;","Ä":"&Auml;","Å":"&Aring;","Æ":"&AElig;","Ç":"&Ccedil;","È":"&Egrave;","É":"&Eacute;","Ê":"&Ecirc;","Ë":"&Euml;","Ì":"&Igrave;","Í":"&Iacute;","Î":"&Icirc;","Ï":"&Iuml;","Ð":"&ETH;","Ñ":"&Ntilde;","Ò":"&Ograve;","Ó":"&Oacute;","Ô":"&Ocirc;","Õ":"&Otilde;","Ö":"&Ouml;","×":"&times;","Ø":"&Oslash;","Ù":"&Ugrave;","Ú":"&Uacute;","Û":"&Ucirc;","Ü":"&Uuml;","Ý":"&Yacute;","Þ":"&THORN;","ß":"&szlig;","à":"&agrave;","á":"&aacute;","â":"&acirc;","ã":"&atilde;","ä":"&auml;","å":"&aring;","æ":"&aelig;","ç":"&ccedil;","è":"&egrave;","é":"&eacute;","ê":"&ecirc;","ë":"&euml;","ì":"&igrave;","í":"&iacute;","î":"&icirc;","ï":"&iuml;","ð":"&eth;","ñ":"&ntilde;","ò":"&ograve;","ó":"&oacute;","ô":"&ocirc;","õ":"&otilde;","ö":"&ouml;","÷":"&divide;","ø":"&oslash;","ù":"&ugrave;","ú":"&uacute;","û":"&ucirc;","ü":"&uuml;","ý":"&yacute;","þ":"&thorn;","ÿ":"&yuml;",'"':"&quot;","&":"&amp;","<":"&lt;",">":"&gt;","Œ":"&OElig;","œ":"&oelig;","Š":"&Scaron;","š":"&scaron;","Ÿ":"&Yuml;","ˆ":"&circ;","˜":"&tilde;"," ":"&ensp;"," ":"&emsp;"," ":"&thinsp;","‌":"&zwnj;","‍":"&zwj;","‎":"&lrm;","‏":"&rlm;","–":"&ndash;","—":"&mdash;","‘":"&lsquo;","’":"&rsquo;","‚":"&sbquo;","“":"&ldquo;","”":"&rdquo;","„":"&bdquo;","†":"&dagger;","‡":"&Dagger;","‰":"&permil;","‹":"&lsaquo;","›":"&rsaquo;","€":"&euro;","ƒ":"&fnof;","Α":"&Alpha;","Β":"&Beta;","Γ":"&Gamma;","Δ":"&Delta;","Ε":"&Epsilon;","Ζ":"&Zeta;","Η":"&Eta;","Θ":"&Theta;","Ι":"&Iota;","Κ":"&Kappa;","Λ":"&Lambda;","Μ":"&Mu;","Ν":"&Nu;","Ξ":"&Xi;","Ο":"&Omicron;","Π":"&Pi;","Ρ":"&Rho;","Σ":"&Sigma;","Τ":"&Tau;","Υ":"&Upsilon;","Φ":"&Phi;","Χ":"&Chi;","Ψ":"&Psi;","Ω":"&Omega;","α":"&alpha;","β":"&beta;","γ":"&gamma;","δ":"&delta;","ε":"&epsilon;","ζ":"&zeta;","η":"&eta;","θ":"&theta;","ι":"&iota;","κ":"&kappa;","λ":"&lambda;","μ":"&mu;","ν":"&nu;","ξ":"&xi;","ο":"&omicron;","π":"&pi;","ρ":"&rho;","ς":"&sigmaf;","σ":"&sigma;","τ":"&tau;","υ":"&upsilon;","φ":"&phi;","χ":"&chi;","ψ":"&psi;","ω":"&omega;","ϑ":"&thetasym;","ϒ":"&upsih;","ϖ":"&piv;","•":"&bull;","…":"&hellip;","′":"&prime;","″":"&Prime;","‾":"&oline;","⁄":"&frasl;","℘":"&weierp;","ℑ":"&image;","ℜ":"&real;","™":"&trade;","ℵ":"&alefsym;","←":"&larr;","↑":"&uarr;","→":"&rarr;","↓":"&darr;","↔":"&harr;","↵":"&crarr;","⇐":"&lArr;","⇑":"&uArr;","⇒":"&rArr;","⇓":"&dArr;","⇔":"&hArr;","∀":"&forall;","∂":"&part;","∃":"&exist;","∅":"&empty;","∇":"&nabla;","∈":"&isin;","∉":"&notin;","∋":"&ni;","∏":"&prod;","∑":"&sum;","−":"&minus;","∗":"&lowast;","√":"&radic;","∝":"&prop;","∞":"&infin;","∠":"&ang;","∧":"&and;","∨":"&or;","∩":"&cap;","∪":"&cup;","∫":"&int;","∴":"&there4;","∼":"&sim;","≅":"&cong;","≈":"&asymp;","≠":"&ne;","≡":"&equiv;","≤":"&le;","≥":"&ge;","⊂":"&sub;","⊃":"&sup;","⊄":"&nsub;","⊆":"&sube;","⊇":"&supe;","⊕":"&oplus;","⊗":"&otimes;","⊥":"&perp;","⋅":"&sdot;","⌈":"&lceil;","⌉":"&rceil;","⌊":"&lfloor;","⌋":"&rfloor;","〈":"&lang;","〉":"&rang;","◊":"&loz;","♠":"&spades;","♣":"&clubs;","♥":"&hearts;","♦":"&diams;"}},html5:{entities:{"&AElig":"Æ","&AElig;":"Æ","&AMP":"&","&AMP;":"&","&Aacute":"Á","&Aacute;":"Á","&Abreve;":"Ă","&Acirc":"Â","&Acirc;":"Â","&Acy;":"А","&Afr;":"𝔄","&Agrave":"À","&Agrave;":"À","&Alpha;":"Α","&Amacr;":"Ā","&And;":"⩓","&Aogon;":"Ą","&Aopf;":"𝔸","&ApplyFunction;":"⁡","&Aring":"Å","&Aring;":"Å","&Ascr;":"𝒜","&Assign;":"≔","&Atilde":"Ã","&Atilde;":"Ã","&Auml":"Ä","&Auml;":"Ä","&Backslash;":"∖","&Barv;":"⫧","&Barwed;":"⌆","&Bcy;":"Б","&Because;":"∵","&Bernoullis;":"ℬ","&Beta;":"Β","&Bfr;":"𝔅","&Bopf;":"𝔹","&Breve;":"˘","&Bscr;":"ℬ","&Bumpeq;":"≎","&CHcy;":"Ч","&COPY":"©","&COPY;":"©","&Cacute;":"Ć","&Cap;":"⋒","&CapitalDifferentialD;":"ⅅ","&Cayleys;":"ℭ","&Ccaron;":"Č","&Ccedil":"Ç","&Ccedil;":"Ç","&Ccirc;":"Ĉ","&Cconint;":"∰","&Cdot;":"Ċ","&Cedilla;":"¸","&CenterDot;":"·","&Cfr;":"ℭ","&Chi;":"Χ","&CircleDot;":"⊙","&CircleMinus;":"⊖","&CirclePlus;":"⊕","&CircleTimes;":"⊗","&ClockwiseContourIntegral;":"∲","&CloseCurlyDoubleQuote;":"”","&CloseCurlyQuote;":"’","&Colon;":"∷","&Colone;":"⩴","&Congruent;":"≡","&Conint;":"∯","&ContourIntegral;":"∮","&Copf;":"ℂ","&Coproduct;":"∐","&CounterClockwiseContourIntegral;":"∳","&Cross;":"⨯","&Cscr;":"𝒞","&Cup;":"⋓","&CupCap;":"≍","&DD;":"ⅅ","&DDotrahd;":"⤑","&DJcy;":"Ђ","&DScy;":"Ѕ","&DZcy;":"Џ","&Dagger;":"‡","&Darr;":"↡","&Dashv;":"⫤","&Dcaron;":"Ď","&Dcy;":"Д","&Del;":"∇","&Delta;":"Δ","&Dfr;":"𝔇","&DiacriticalAcute;":"´","&DiacriticalDot;":"˙","&DiacriticalDoubleAcute;":"˝","&DiacriticalGrave;":"`","&DiacriticalTilde;":"˜","&Diamond;":"⋄","&DifferentialD;":"ⅆ","&Dopf;":"𝔻","&Dot;":"¨","&DotDot;":"⃜","&DotEqual;":"≐","&DoubleContourIntegral;":"∯","&DoubleDot;":"¨","&DoubleDownArrow;":"⇓","&DoubleLeftArrow;":"⇐","&DoubleLeftRightArrow;":"⇔","&DoubleLeftTee;":"⫤","&DoubleLongLeftArrow;":"⟸","&DoubleLongLeftRightArrow;":"⟺","&DoubleLongRightArrow;":"⟹","&DoubleRightArrow;":"⇒","&DoubleRightTee;":"⊨","&DoubleUpArrow;":"⇑","&DoubleUpDownArrow;":"⇕","&DoubleVerticalBar;":"∥","&DownArrow;":"↓","&DownArrowBar;":"⤓","&DownArrowUpArrow;":"⇵","&DownBreve;":"̑","&DownLeftRightVector;":"⥐","&DownLeftTeeVector;":"⥞","&DownLeftVector;":"↽","&DownLeftVectorBar;":"⥖","&DownRightTeeVector;":"⥟","&DownRightVector;":"⇁","&DownRightVectorBar;":"⥗","&DownTee;":"⊤","&DownTeeArrow;":"↧","&Downarrow;":"⇓","&Dscr;":"𝒟","&Dstrok;":"Đ","&ENG;":"Ŋ","&ETH":"Ð","&ETH;":"Ð","&Eacute":"É","&Eacute;":"É","&Ecaron;":"Ě","&Ecirc":"Ê","&Ecirc;":"Ê","&Ecy;":"Э","&Edot;":"Ė","&Efr;":"𝔈","&Egrave":"È","&Egrave;":"È","&Element;":"∈","&Emacr;":"Ē","&EmptySmallSquare;":"◻","&EmptyVerySmallSquare;":"▫","&Eogon;":"Ę","&Eopf;":"𝔼","&Epsilon;":"Ε","&Equal;":"⩵","&EqualTilde;":"≂","&Equilibrium;":"⇌","&Escr;":"ℰ","&Esim;":"⩳","&Eta;":"Η","&Euml":"Ë","&Euml;":"Ë","&Exists;":"∃","&ExponentialE;":"ⅇ","&Fcy;":"Ф","&Ffr;":"𝔉","&FilledSmallSquare;":"◼","&FilledVerySmallSquare;":"▪","&Fopf;":"𝔽","&ForAll;":"∀","&Fouriertrf;":"ℱ","&Fscr;":"ℱ","&GJcy;":"Ѓ","&GT":">","&GT;":">","&Gamma;":"Γ","&Gammad;":"Ϝ","&Gbreve;":"Ğ","&Gcedil;":"Ģ","&Gcirc;":"Ĝ","&Gcy;":"Г","&Gdot;":"Ġ","&Gfr;":"𝔊","&Gg;":"⋙","&Gopf;":"𝔾","&GreaterEqual;":"≥","&GreaterEqualLess;":"⋛","&GreaterFullEqual;":"≧","&GreaterGreater;":"⪢","&GreaterLess;":"≷","&GreaterSlantEqual;":"⩾","&GreaterTilde;":"≳","&Gscr;":"𝒢","&Gt;":"≫","&HARDcy;":"Ъ","&Hacek;":"ˇ","&Hat;":"^","&Hcirc;":"Ĥ","&Hfr;":"ℌ","&HilbertSpace;":"ℋ","&Hopf;":"ℍ","&HorizontalLine;":"─","&Hscr;":"ℋ","&Hstrok;":"Ħ","&HumpDownHump;":"≎","&HumpEqual;":"≏","&IEcy;":"Е","&IJlig;":"Ĳ","&IOcy;":"Ё","&Iacute":"Í","&Iacute;":"Í","&Icirc":"Î","&Icirc;":"Î","&Icy;":"И","&Idot;":"İ","&Ifr;":"ℑ","&Igrave":"Ì","&Igrave;":"Ì","&Im;":"ℑ","&Imacr;":"Ī","&ImaginaryI;":"ⅈ","&Implies;":"⇒","&Int;":"∬","&Integral;":"∫","&Intersection;":"⋂","&InvisibleComma;":"⁣","&InvisibleTimes;":"⁢","&Iogon;":"Į","&Iopf;":"𝕀","&Iota;":"Ι","&Iscr;":"ℐ","&Itilde;":"Ĩ","&Iukcy;":"І","&Iuml":"Ï","&Iuml;":"Ï","&Jcirc;":"Ĵ","&Jcy;":"Й","&Jfr;":"𝔍","&Jopf;":"𝕁","&Jscr;":"𝒥","&Jsercy;":"Ј","&Jukcy;":"Є","&KHcy;":"Х","&KJcy;":"Ќ","&Kappa;":"Κ","&Kcedil;":"Ķ","&Kcy;":"К","&Kfr;":"𝔎","&Kopf;":"𝕂","&Kscr;":"𝒦","&LJcy;":"Љ","&LT":"<","&LT;":"<","&Lacute;":"Ĺ","&Lambda;":"Λ","&Lang;":"⟪","&Laplacetrf;":"ℒ","&Larr;":"↞","&Lcaron;":"Ľ","&Lcedil;":"Ļ","&Lcy;":"Л","&LeftAngleBracket;":"⟨","&LeftArrow;":"←","&LeftArrowBar;":"⇤","&LeftArrowRightArrow;":"⇆","&LeftCeiling;":"⌈","&LeftDoubleBracket;":"⟦","&LeftDownTeeVector;":"⥡","&LeftDownVector;":"⇃","&LeftDownVectorBar;":"⥙","&LeftFloor;":"⌊","&LeftRightArrow;":"↔","&LeftRightVector;":"⥎","&LeftTee;":"⊣","&LeftTeeArrow;":"↤","&LeftTeeVector;":"⥚","&LeftTriangle;":"⊲","&LeftTriangleBar;":"⧏","&LeftTriangleEqual;":"⊴","&LeftUpDownVector;":"⥑","&LeftUpTeeVector;":"⥠","&LeftUpVector;":"↿","&LeftUpVectorBar;":"⥘","&LeftVector;":"↼","&LeftVectorBar;":"⥒","&Leftarrow;":"⇐","&Leftrightarrow;":"⇔","&LessEqualGreater;":"⋚","&LessFullEqual;":"≦","&LessGreater;":"≶","&LessLess;":"⪡","&LessSlantEqual;":"⩽","&LessTilde;":"≲","&Lfr;":"𝔏","&Ll;":"⋘","&Lleftarrow;":"⇚","&Lmidot;":"Ŀ","&LongLeftArrow;":"⟵","&LongLeftRightArrow;":"⟷","&LongRightArrow;":"⟶","&Longleftarrow;":"⟸","&Longleftrightarrow;":"⟺","&Longrightarrow;":"⟹","&Lopf;":"𝕃","&LowerLeftArrow;":"↙","&LowerRightArrow;":"↘","&Lscr;":"ℒ","&Lsh;":"↰","&Lstrok;":"Ł","&Lt;":"≪","&Map;":"⤅","&Mcy;":"М","&MediumSpace;":" ","&Mellintrf;":"ℳ","&Mfr;":"𝔐","&MinusPlus;":"∓","&Mopf;":"𝕄","&Mscr;":"ℳ","&Mu;":"Μ","&NJcy;":"Њ","&Nacute;":"Ń","&Ncaron;":"Ň","&Ncedil;":"Ņ","&Ncy;":"Н","&NegativeMediumSpace;":"​","&NegativeThickSpace;":"​","&NegativeThinSpace;":"​","&NegativeVeryThinSpace;":"​","&NestedGreaterGreater;":"≫","&NestedLessLess;":"≪","&NewLine;":"\n","&Nfr;":"𝔑","&NoBreak;":"⁠","&NonBreakingSpace;":" ","&Nopf;":"ℕ","&Not;":"⫬","&NotCongruent;":"≢","&NotCupCap;":"≭","&NotDoubleVerticalBar;":"∦","&NotElement;":"∉","&NotEqual;":"≠","&NotEqualTilde;":"≂̸","&NotExists;":"∄","&NotGreater;":"≯","&NotGreaterEqual;":"≱","&NotGreaterFullEqual;":"≧̸","&NotGreaterGreater;":"≫̸","&NotGreaterLess;":"≹","&NotGreaterSlantEqual;":"⩾̸","&NotGreaterTilde;":"≵","&NotHumpDownHump;":"≎̸","&NotHumpEqual;":"≏̸","&NotLeftTriangle;":"⋪","&NotLeftTriangleBar;":"⧏̸","&NotLeftTriangleEqual;":"⋬","&NotLess;":"≮","&NotLessEqual;":"≰","&NotLessGreater;":"≸","&NotLessLess;":"≪̸","&NotLessSlantEqual;":"⩽̸","&NotLessTilde;":"≴","&NotNestedGreaterGreater;":"⪢̸","&NotNestedLessLess;":"⪡̸","&NotPrecedes;":"⊀","&NotPrecedesEqual;":"⪯̸","&NotPrecedesSlantEqual;":"⋠","&NotReverseElement;":"∌","&NotRightTriangle;":"⋫","&NotRightTriangleBar;":"⧐̸","&NotRightTriangleEqual;":"⋭","&NotSquareSubset;":"⊏̸","&NotSquareSubsetEqual;":"⋢","&NotSquareSuperset;":"⊐̸","&NotSquareSupersetEqual;":"⋣","&NotSubset;":"⊂⃒","&NotSubsetEqual;":"⊈","&NotSucceeds;":"⊁","&NotSucceedsEqual;":"⪰̸","&NotSucceedsSlantEqual;":"⋡","&NotSucceedsTilde;":"≿̸","&NotSuperset;":"⊃⃒","&NotSupersetEqual;":"⊉","&NotTilde;":"≁","&NotTildeEqual;":"≄","&NotTildeFullEqual;":"≇","&NotTildeTilde;":"≉","&NotVerticalBar;":"∤","&Nscr;":"𝒩","&Ntilde":"Ñ","&Ntilde;":"Ñ","&Nu;":"Ν","&OElig;":"Œ","&Oacute":"Ó","&Oacute;":"Ó","&Ocirc":"Ô","&Ocirc;":"Ô","&Ocy;":"О","&Odblac;":"Ő","&Ofr;":"𝔒","&Ograve":"Ò","&Ograve;":"Ò","&Omacr;":"Ō","&Omega;":"Ω","&Omicron;":"Ο","&Oopf;":"𝕆","&OpenCurlyDoubleQuote;":"“","&OpenCurlyQuote;":"‘","&Or;":"⩔","&Oscr;":"𝒪","&Oslash":"Ø","&Oslash;":"Ø","&Otilde":"Õ","&Otilde;":"Õ","&Otimes;":"⨷","&Ouml":"Ö","&Ouml;":"Ö","&OverBar;":"‾","&OverBrace;":"⏞","&OverBracket;":"⎴","&OverParenthesis;":"⏜","&PartialD;":"∂","&Pcy;":"П","&Pfr;":"𝔓","&Phi;":"Φ","&Pi;":"Π","&PlusMinus;":"±","&Poincareplane;":"ℌ","&Popf;":"ℙ","&Pr;":"⪻","&Precedes;":"≺","&PrecedesEqual;":"⪯","&PrecedesSlantEqual;":"≼","&PrecedesTilde;":"≾","&Prime;":"″","&Product;":"∏","&Proportion;":"∷","&Proportional;":"∝","&Pscr;":"𝒫","&Psi;":"Ψ","&QUOT":'"',"&QUOT;":'"',"&Qfr;":"𝔔","&Qopf;":"ℚ","&Qscr;":"𝒬","&RBarr;":"⤐","&REG":"®","&REG;":"®","&Racute;":"Ŕ","&Rang;":"⟫","&Rarr;":"↠","&Rarrtl;":"⤖","&Rcaron;":"Ř","&Rcedil;":"Ŗ","&Rcy;":"Р","&Re;":"ℜ","&ReverseElement;":"∋","&ReverseEquilibrium;":"⇋","&ReverseUpEquilibrium;":"⥯","&Rfr;":"ℜ","&Rho;":"Ρ","&RightAngleBracket;":"⟩","&RightArrow;":"→","&RightArrowBar;":"⇥","&RightArrowLeftArrow;":"⇄","&RightCeiling;":"⌉","&RightDoubleBracket;":"⟧","&RightDownTeeVector;":"⥝","&RightDownVector;":"⇂","&RightDownVectorBar;":"⥕","&RightFloor;":"⌋","&RightTee;":"⊢","&RightTeeArrow;":"↦","&RightTeeVector;":"⥛","&RightTriangle;":"⊳","&RightTriangleBar;":"⧐","&RightTriangleEqual;":"⊵","&RightUpDownVector;":"⥏","&RightUpTeeVector;":"⥜","&RightUpVector;":"↾","&RightUpVectorBar;":"⥔","&RightVector;":"⇀","&RightVectorBar;":"⥓","&Rightarrow;":"⇒","&Ropf;":"ℝ","&RoundImplies;":"⥰","&Rrightarrow;":"⇛","&Rscr;":"ℛ","&Rsh;":"↱","&RuleDelayed;":"⧴","&SHCHcy;":"Щ","&SHcy;":"Ш","&SOFTcy;":"Ь","&Sacute;":"Ś","&Sc;":"⪼","&Scaron;":"Š","&Scedil;":"Ş","&Scirc;":"Ŝ","&Scy;":"С","&Sfr;":"𝔖","&ShortDownArrow;":"↓","&ShortLeftArrow;":"←","&ShortRightArrow;":"→","&ShortUpArrow;":"↑","&Sigma;":"Σ","&SmallCircle;":"∘","&Sopf;":"𝕊","&Sqrt;":"√","&Square;":"□","&SquareIntersection;":"⊓","&SquareSubset;":"⊏","&SquareSubsetEqual;":"⊑","&SquareSuperset;":"⊐","&SquareSupersetEqual;":"⊒","&SquareUnion;":"⊔","&Sscr;":"𝒮","&Star;":"⋆","&Sub;":"⋐","&Subset;":"⋐","&SubsetEqual;":"⊆","&Succeeds;":"≻","&SucceedsEqual;":"⪰","&SucceedsSlantEqual;":"≽","&SucceedsTilde;":"≿","&SuchThat;":"∋","&Sum;":"∑","&Sup;":"⋑","&Superset;":"⊃","&SupersetEqual;":"⊇","&Supset;":"⋑","&THORN":"Þ","&THORN;":"Þ","&TRADE;":"™","&TSHcy;":"Ћ","&TScy;":"Ц","&Tab;":"\t","&Tau;":"Τ","&Tcaron;":"Ť","&Tcedil;":"Ţ","&Tcy;":"Т","&Tfr;":"𝔗","&Therefore;":"∴","&Theta;":"Θ","&ThickSpace;":"  ","&ThinSpace;":" ","&Tilde;":"∼","&TildeEqual;":"≃","&TildeFullEqual;":"≅","&TildeTilde;":"≈","&Topf;":"𝕋","&TripleDot;":"⃛","&Tscr;":"𝒯","&Tstrok;":"Ŧ","&Uacute":"Ú","&Uacute;":"Ú","&Uarr;":"↟","&Uarrocir;":"⥉","&Ubrcy;":"Ў","&Ubreve;":"Ŭ","&Ucirc":"Û","&Ucirc;":"Û","&Ucy;":"У","&Udblac;":"Ű","&Ufr;":"𝔘","&Ugrave":"Ù","&Ugrave;":"Ù","&Umacr;":"Ū","&UnderBar;":"_","&UnderBrace;":"⏟","&UnderBracket;":"⎵","&UnderParenthesis;":"⏝","&Union;":"⋃","&UnionPlus;":"⊎","&Uogon;":"Ų","&Uopf;":"𝕌","&UpArrow;":"↑","&UpArrowBar;":"⤒","&UpArrowDownArrow;":"⇅","&UpDownArrow;":"↕","&UpEquilibrium;":"⥮","&UpTee;":"⊥","&UpTeeArrow;":"↥","&Uparrow;":"⇑","&Updownarrow;":"⇕","&UpperLeftArrow;":"↖","&UpperRightArrow;":"↗","&Upsi;":"ϒ","&Upsilon;":"Υ","&Uring;":"Ů","&Uscr;":"𝒰","&Utilde;":"Ũ","&Uuml":"Ü","&Uuml;":"Ü","&VDash;":"⊫","&Vbar;":"⫫","&Vcy;":"В","&Vdash;":"⊩","&Vdashl;":"⫦","&Vee;":"⋁","&Verbar;":"‖","&Vert;":"‖","&VerticalBar;":"∣","&VerticalLine;":"|","&VerticalSeparator;":"❘","&VerticalTilde;":"≀","&VeryThinSpace;":" ","&Vfr;":"𝔙","&Vopf;":"𝕍","&Vscr;":"𝒱","&Vvdash;":"⊪","&Wcirc;":"Ŵ","&Wedge;":"⋀","&Wfr;":"𝔚","&Wopf;":"𝕎","&Wscr;":"𝒲","&Xfr;":"𝔛","&Xi;":"Ξ","&Xopf;":"𝕏","&Xscr;":"𝒳","&YAcy;":"Я","&YIcy;":"Ї","&YUcy;":"Ю","&Yacute":"Ý","&Yacute;":"Ý","&Ycirc;":"Ŷ","&Ycy;":"Ы","&Yfr;":"𝔜","&Yopf;":"𝕐","&Yscr;":"𝒴","&Yuml;":"Ÿ","&ZHcy;":"Ж","&Zacute;":"Ź","&Zcaron;":"Ž","&Zcy;":"З","&Zdot;":"Ż","&ZeroWidthSpace;":"​","&Zeta;":"Ζ","&Zfr;":"ℨ","&Zopf;":"ℤ","&Zscr;":"𝒵","&aacute":"á","&aacute;":"á","&abreve;":"ă","&ac;":"∾","&acE;":"∾̳","&acd;":"∿","&acirc":"â","&acirc;":"â","&acute":"´","&acute;":"´","&acy;":"а","&aelig":"æ","&aelig;":"æ","&af;":"⁡","&afr;":"𝔞","&agrave":"à","&agrave;":"à","&alefsym;":"ℵ","&aleph;":"ℵ","&alpha;":"α","&amacr;":"ā","&amalg;":"⨿","&amp":"&","&amp;":"&","&and;":"∧","&andand;":"⩕","&andd;":"⩜","&andslope;":"⩘","&andv;":"⩚","&ang;":"∠","&ange;":"⦤","&angle;":"∠","&angmsd;":"∡","&angmsdaa;":"⦨","&angmsdab;":"⦩","&angmsdac;":"⦪","&angmsdad;":"⦫","&angmsdae;":"⦬","&angmsdaf;":"⦭","&angmsdag;":"⦮","&angmsdah;":"⦯","&angrt;":"∟","&angrtvb;":"⊾","&angrtvbd;":"⦝","&angsph;":"∢","&angst;":"Å","&angzarr;":"⍼","&aogon;":"ą","&aopf;":"𝕒","&ap;":"≈","&apE;":"⩰","&apacir;":"⩯","&ape;":"≊","&apid;":"≋","&apos;":"'","&approx;":"≈","&approxeq;":"≊","&aring":"å","&aring;":"å","&ascr;":"𝒶","&ast;":"*","&asymp;":"≈","&asympeq;":"≍","&atilde":"ã","&atilde;":"ã","&auml":"ä","&auml;":"ä","&awconint;":"∳","&awint;":"⨑","&bNot;":"⫭","&backcong;":"≌","&backepsilon;":"϶","&backprime;":"‵","&backsim;":"∽","&backsimeq;":"⋍","&barvee;":"⊽","&barwed;":"⌅","&barwedge;":"⌅","&bbrk;":"⎵","&bbrktbrk;":"⎶","&bcong;":"≌","&bcy;":"б","&bdquo;":"„","&becaus;":"∵","&because;":"∵","&bemptyv;":"⦰","&bepsi;":"϶","&bernou;":"ℬ","&beta;":"β","&beth;":"ℶ","&between;":"≬","&bfr;":"𝔟","&bigcap;":"⋂","&bigcirc;":"◯","&bigcup;":"⋃","&bigodot;":"⨀","&bigoplus;":"⨁","&bigotimes;":"⨂","&bigsqcup;":"⨆","&bigstar;":"★","&bigtriangledown;":"▽","&bigtriangleup;":"△","&biguplus;":"⨄","&bigvee;":"⋁","&bigwedge;":"⋀","&bkarow;":"⤍","&blacklozenge;":"⧫","&blacksquare;":"▪","&blacktriangle;":"▴","&blacktriangledown;":"▾","&blacktriangleleft;":"◂","&blacktriangleright;":"▸","&blank;":"␣","&blk12;":"▒","&blk14;":"░","&blk34;":"▓","&block;":"█","&bne;":"=⃥","&bnequiv;":"≡⃥","&bnot;":"⌐","&bopf;":"𝕓","&bot;":"⊥","&bottom;":"⊥","&bowtie;":"⋈","&boxDL;":"╗","&boxDR;":"╔","&boxDl;":"╖","&boxDr;":"╓","&boxH;":"═","&boxHD;":"╦","&boxHU;":"╩","&boxHd;":"╤","&boxHu;":"╧","&boxUL;":"╝","&boxUR;":"╚","&boxUl;":"╜","&boxUr;":"╙","&boxV;":"║","&boxVH;":"╬","&boxVL;":"╣","&boxVR;":"╠","&boxVh;":"╫","&boxVl;":"╢","&boxVr;":"╟","&boxbox;":"⧉","&boxdL;":"╕","&boxdR;":"╒","&boxdl;":"┐","&boxdr;":"┌","&boxh;":"─","&boxhD;":"╥","&boxhU;":"╨","&boxhd;":"┬","&boxhu;":"┴","&boxminus;":"⊟","&boxplus;":"⊞","&boxtimes;":"⊠","&boxuL;":"╛","&boxuR;":"╘","&boxul;":"┘","&boxur;":"└","&boxv;":"│","&boxvH;":"╪","&boxvL;":"╡","&boxvR;":"╞","&boxvh;":"┼","&boxvl;":"┤","&boxvr;":"├","&bprime;":"‵","&breve;":"˘","&brvbar":"¦","&brvbar;":"¦","&bscr;":"𝒷","&bsemi;":"⁏","&bsim;":"∽","&bsime;":"⋍","&bsol;":"\\","&bsolb;":"⧅","&bsolhsub;":"⟈","&bull;":"•","&bullet;":"•","&bump;":"≎","&bumpE;":"⪮","&bumpe;":"≏","&bumpeq;":"≏","&cacute;":"ć","&cap;":"∩","&capand;":"⩄","&capbrcup;":"⩉","&capcap;":"⩋","&capcup;":"⩇","&capdot;":"⩀","&caps;":"∩︀","&caret;":"⁁","&caron;":"ˇ","&ccaps;":"⩍","&ccaron;":"č","&ccedil":"ç","&ccedil;":"ç","&ccirc;":"ĉ","&ccups;":"⩌","&ccupssm;":"⩐","&cdot;":"ċ","&cedil":"¸","&cedil;":"¸","&cemptyv;":"⦲","&cent":"¢","&cent;":"¢","&centerdot;":"·","&cfr;":"𝔠","&chcy;":"ч","&check;":"✓","&checkmark;":"✓","&chi;":"χ","&cir;":"○","&cirE;":"⧃","&circ;":"ˆ","&circeq;":"≗","&circlearrowleft;":"↺","&circlearrowright;":"↻","&circledR;":"®","&circledS;":"Ⓢ","&circledast;":"⊛","&circledcirc;":"⊚","&circleddash;":"⊝","&cire;":"≗","&cirfnint;":"⨐","&cirmid;":"⫯","&cirscir;":"⧂","&clubs;":"♣","&clubsuit;":"♣","&colon;":":","&colone;":"≔","&coloneq;":"≔","&comma;":",","&commat;":"@","&comp;":"∁","&compfn;":"∘","&complement;":"∁","&complexes;":"ℂ","&cong;":"≅","&congdot;":"⩭","&conint;":"∮","&copf;":"𝕔","&coprod;":"∐","&copy":"©","&copy;":"©","&copysr;":"℗","&crarr;":"↵","&cross;":"✗","&cscr;":"𝒸","&csub;":"⫏","&csube;":"⫑","&csup;":"⫐","&csupe;":"⫒","&ctdot;":"⋯","&cudarrl;":"⤸","&cudarrr;":"⤵","&cuepr;":"⋞","&cuesc;":"⋟","&cularr;":"↶","&cularrp;":"⤽","&cup;":"∪","&cupbrcap;":"⩈","&cupcap;":"⩆","&cupcup;":"⩊","&cupdot;":"⊍","&cupor;":"⩅","&cups;":"∪︀","&curarr;":"↷","&curarrm;":"⤼","&curlyeqprec;":"⋞","&curlyeqsucc;":"⋟","&curlyvee;":"⋎","&curlywedge;":"⋏","&curren":"¤","&curren;":"¤","&curvearrowleft;":"↶","&curvearrowright;":"↷","&cuvee;":"⋎","&cuwed;":"⋏","&cwconint;":"∲","&cwint;":"∱","&cylcty;":"⌭","&dArr;":"⇓","&dHar;":"⥥","&dagger;":"†","&daleth;":"ℸ","&darr;":"↓","&dash;":"‐","&dashv;":"⊣","&dbkarow;":"⤏","&dblac;":"˝","&dcaron;":"ď","&dcy;":"д","&dd;":"ⅆ","&ddagger;":"‡","&ddarr;":"⇊","&ddotseq;":"⩷","&deg":"°","&deg;":"°","&delta;":"δ","&demptyv;":"⦱","&dfisht;":"⥿","&dfr;":"𝔡","&dharl;":"⇃","&dharr;":"⇂","&diam;":"⋄","&diamond;":"⋄","&diamondsuit;":"♦","&diams;":"♦","&die;":"¨","&digamma;":"ϝ","&disin;":"⋲","&div;":"÷","&divide":"÷","&divide;":"÷","&divideontimes;":"⋇","&divonx;":"⋇","&djcy;":"ђ","&dlcorn;":"⌞","&dlcrop;":"⌍","&dollar;":"$","&dopf;":"𝕕","&dot;":"˙","&doteq;":"≐","&doteqdot;":"≑","&dotminus;":"∸","&dotplus;":"∔","&dotsquare;":"⊡","&doublebarwedge;":"⌆","&downarrow;":"↓","&downdownarrows;":"⇊","&downharpoonleft;":"⇃","&downharpoonright;":"⇂","&drbkarow;":"⤐","&drcorn;":"⌟","&drcrop;":"⌌","&dscr;":"𝒹","&dscy;":"ѕ","&dsol;":"⧶","&dstrok;":"đ","&dtdot;":"⋱","&dtri;":"▿","&dtrif;":"▾","&duarr;":"⇵","&duhar;":"⥯","&dwangle;":"⦦","&dzcy;":"џ","&dzigrarr;":"⟿","&eDDot;":"⩷","&eDot;":"≑","&eacute":"é","&eacute;":"é","&easter;":"⩮","&ecaron;":"ě","&ecir;":"≖","&ecirc":"ê","&ecirc;":"ê","&ecolon;":"≕","&ecy;":"э","&edot;":"ė","&ee;":"ⅇ","&efDot;":"≒","&efr;":"𝔢","&eg;":"⪚","&egrave":"è","&egrave;":"è","&egs;":"⪖","&egsdot;":"⪘","&el;":"⪙","&elinters;":"⏧","&ell;":"ℓ","&els;":"⪕","&elsdot;":"⪗","&emacr;":"ē","&empty;":"∅","&emptyset;":"∅","&emptyv;":"∅","&emsp13;":" ","&emsp14;":" ","&emsp;":" ","&eng;":"ŋ","&ensp;":" ","&eogon;":"ę","&eopf;":"𝕖","&epar;":"⋕","&eparsl;":"⧣","&eplus;":"⩱","&epsi;":"ε","&epsilon;":"ε","&epsiv;":"ϵ","&eqcirc;":"≖","&eqcolon;":"≕","&eqsim;":"≂","&eqslantgtr;":"⪖","&eqslantless;":"⪕","&equals;":"=","&equest;":"≟","&equiv;":"≡","&equivDD;":"⩸","&eqvparsl;":"⧥","&erDot;":"≓","&erarr;":"⥱","&escr;":"ℯ","&esdot;":"≐","&esim;":"≂","&eta;":"η","&eth":"ð","&eth;":"ð","&euml":"ë","&euml;":"ë","&euro;":"€","&excl;":"!","&exist;":"∃","&expectation;":"ℰ","&exponentiale;":"ⅇ","&fallingdotseq;":"≒","&fcy;":"ф","&female;":"♀","&ffilig;":"ﬃ","&fflig;":"ﬀ","&ffllig;":"ﬄ","&ffr;":"𝔣","&filig;":"ﬁ","&fjlig;":"fj","&flat;":"♭","&fllig;":"ﬂ","&fltns;":"▱","&fnof;":"ƒ","&fopf;":"𝕗","&forall;":"∀","&fork;":"⋔","&forkv;":"⫙","&fpartint;":"⨍","&frac12":"½","&frac12;":"½","&frac13;":"⅓","&frac14":"¼","&frac14;":"¼","&frac15;":"⅕","&frac16;":"⅙","&frac18;":"⅛","&frac23;":"⅔","&frac25;":"⅖","&frac34":"¾","&frac34;":"¾","&frac35;":"⅗","&frac38;":"⅜","&frac45;":"⅘","&frac56;":"⅚","&frac58;":"⅝","&frac78;":"⅞","&frasl;":"⁄","&frown;":"⌢","&fscr;":"𝒻","&gE;":"≧","&gEl;":"⪌","&gacute;":"ǵ","&gamma;":"γ","&gammad;":"ϝ","&gap;":"⪆","&gbreve;":"ğ","&gcirc;":"ĝ","&gcy;":"г","&gdot;":"ġ","&ge;":"≥","&gel;":"⋛","&geq;":"≥","&geqq;":"≧","&geqslant;":"⩾","&ges;":"⩾","&gescc;":"⪩","&gesdot;":"⪀","&gesdoto;":"⪂","&gesdotol;":"⪄","&gesl;":"⋛︀","&gesles;":"⪔","&gfr;":"𝔤","&gg;":"≫","&ggg;":"⋙","&gimel;":"ℷ","&gjcy;":"ѓ","&gl;":"≷","&glE;":"⪒","&gla;":"⪥","&glj;":"⪤","&gnE;":"≩","&gnap;":"⪊","&gnapprox;":"⪊","&gne;":"⪈","&gneq;":"⪈","&gneqq;":"≩","&gnsim;":"⋧","&gopf;":"𝕘","&grave;":"`","&gscr;":"ℊ","&gsim;":"≳","&gsime;":"⪎","&gsiml;":"⪐","&gt":">","&gt;":">","&gtcc;":"⪧","&gtcir;":"⩺","&gtdot;":"⋗","&gtlPar;":"⦕","&gtquest;":"⩼","&gtrapprox;":"⪆","&gtrarr;":"⥸","&gtrdot;":"⋗","&gtreqless;":"⋛","&gtreqqless;":"⪌","&gtrless;":"≷","&gtrsim;":"≳","&gvertneqq;":"≩︀","&gvnE;":"≩︀","&hArr;":"⇔","&hairsp;":" ","&half;":"½","&hamilt;":"ℋ","&hardcy;":"ъ","&harr;":"↔","&harrcir;":"⥈","&harrw;":"↭","&hbar;":"ℏ","&hcirc;":"ĥ","&hearts;":"♥","&heartsuit;":"♥","&hellip;":"…","&hercon;":"⊹","&hfr;":"𝔥","&hksearow;":"⤥","&hkswarow;":"⤦","&hoarr;":"⇿","&homtht;":"∻","&hookleftarrow;":"↩","&hookrightarrow;":"↪","&hopf;":"𝕙","&horbar;":"―","&hscr;":"𝒽","&hslash;":"ℏ","&hstrok;":"ħ","&hybull;":"⁃","&hyphen;":"‐","&iacute":"í","&iacute;":"í","&ic;":"⁣","&icirc":"î","&icirc;":"î","&icy;":"и","&iecy;":"е","&iexcl":"¡","&iexcl;":"¡","&iff;":"⇔","&ifr;":"𝔦","&igrave":"ì","&igrave;":"ì","&ii;":"ⅈ","&iiiint;":"⨌","&iiint;":"∭","&iinfin;":"⧜","&iiota;":"℩","&ijlig;":"ĳ","&imacr;":"ī","&image;":"ℑ","&imagline;":"ℐ","&imagpart;":"ℑ","&imath;":"ı","&imof;":"⊷","&imped;":"Ƶ","&in;":"∈","&incare;":"℅","&infin;":"∞","&infintie;":"⧝","&inodot;":"ı","&int;":"∫","&intcal;":"⊺","&integers;":"ℤ","&intercal;":"⊺","&intlarhk;":"⨗","&intprod;":"⨼","&iocy;":"ё","&iogon;":"į","&iopf;":"𝕚","&iota;":"ι","&iprod;":"⨼","&iquest":"¿","&iquest;":"¿","&iscr;":"𝒾","&isin;":"∈","&isinE;":"⋹","&isindot;":"⋵","&isins;":"⋴","&isinsv;":"⋳","&isinv;":"∈","&it;":"⁢","&itilde;":"ĩ","&iukcy;":"і","&iuml":"ï","&iuml;":"ï","&jcirc;":"ĵ","&jcy;":"й","&jfr;":"𝔧","&jmath;":"ȷ","&jopf;":"𝕛","&jscr;":"𝒿","&jsercy;":"ј","&jukcy;":"є","&kappa;":"κ","&kappav;":"ϰ","&kcedil;":"ķ","&kcy;":"к","&kfr;":"𝔨","&kgreen;":"ĸ","&khcy;":"х","&kjcy;":"ќ","&kopf;":"𝕜","&kscr;":"𝓀","&lAarr;":"⇚","&lArr;":"⇐","&lAtail;":"⤛","&lBarr;":"⤎","&lE;":"≦","&lEg;":"⪋","&lHar;":"⥢","&lacute;":"ĺ","&laemptyv;":"⦴","&lagran;":"ℒ","&lambda;":"λ","&lang;":"⟨","&langd;":"⦑","&langle;":"⟨","&lap;":"⪅","&laquo":"«","&laquo;":"«","&larr;":"←","&larrb;":"⇤","&larrbfs;":"⤟","&larrfs;":"⤝","&larrhk;":"↩","&larrlp;":"↫","&larrpl;":"⤹","&larrsim;":"⥳","&larrtl;":"↢","&lat;":"⪫","&latail;":"⤙","&late;":"⪭","&lates;":"⪭︀","&lbarr;":"⤌","&lbbrk;":"❲","&lbrace;":"{","&lbrack;":"[","&lbrke;":"⦋","&lbrksld;":"⦏","&lbrkslu;":"⦍","&lcaron;":"ľ","&lcedil;":"ļ","&lceil;":"⌈","&lcub;":"{","&lcy;":"л","&ldca;":"⤶","&ldquo;":"“","&ldquor;":"„","&ldrdhar;":"⥧","&ldrushar;":"⥋","&ldsh;":"↲","&le;":"≤","&leftarrow;":"←","&leftarrowtail;":"↢","&leftharpoondown;":"↽","&leftharpoonup;":"↼","&leftleftarrows;":"⇇","&leftrightarrow;":"↔","&leftrightarrows;":"⇆","&leftrightharpoons;":"⇋","&leftrightsquigarrow;":"↭","&leftthreetimes;":"⋋","&leg;":"⋚","&leq;":"≤","&leqq;":"≦","&leqslant;":"⩽","&les;":"⩽","&lescc;":"⪨","&lesdot;":"⩿","&lesdoto;":"⪁","&lesdotor;":"⪃","&lesg;":"⋚︀","&lesges;":"⪓","&lessapprox;":"⪅","&lessdot;":"⋖","&lesseqgtr;":"⋚","&lesseqqgtr;":"⪋","&lessgtr;":"≶","&lesssim;":"≲","&lfisht;":"⥼","&lfloor;":"⌊","&lfr;":"𝔩","&lg;":"≶","&lgE;":"⪑","&lhard;":"↽","&lharu;":"↼","&lharul;":"⥪","&lhblk;":"▄","&ljcy;":"љ","&ll;":"≪","&llarr;":"⇇","&llcorner;":"⌞","&llhard;":"⥫","&lltri;":"◺","&lmidot;":"ŀ","&lmoust;":"⎰","&lmoustache;":"⎰","&lnE;":"≨","&lnap;":"⪉","&lnapprox;":"⪉","&lne;":"⪇","&lneq;":"⪇","&lneqq;":"≨","&lnsim;":"⋦","&loang;":"⟬","&loarr;":"⇽","&lobrk;":"⟦","&longleftarrow;":"⟵","&longleftrightarrow;":"⟷","&longmapsto;":"⟼","&longrightarrow;":"⟶","&looparrowleft;":"↫","&looparrowright;":"↬","&lopar;":"⦅","&lopf;":"𝕝","&loplus;":"⨭","&lotimes;":"⨴","&lowast;":"∗","&lowbar;":"_","&loz;":"◊","&lozenge;":"◊","&lozf;":"⧫","&lpar;":"(","&lparlt;":"⦓","&lrarr;":"⇆","&lrcorner;":"⌟","&lrhar;":"⇋","&lrhard;":"⥭","&lrm;":"‎","&lrtri;":"⊿","&lsaquo;":"‹","&lscr;":"𝓁","&lsh;":"↰","&lsim;":"≲","&lsime;":"⪍","&lsimg;":"⪏","&lsqb;":"[","&lsquo;":"‘","&lsquor;":"‚","&lstrok;":"ł","&lt":"<","&lt;":"<","&ltcc;":"⪦","&ltcir;":"⩹","&ltdot;":"⋖","&lthree;":"⋋","&ltimes;":"⋉","&ltlarr;":"⥶","&ltquest;":"⩻","&ltrPar;":"⦖","&ltri;":"◃","&ltrie;":"⊴","&ltrif;":"◂","&lurdshar;":"⥊","&luruhar;":"⥦","&lvertneqq;":"≨︀","&lvnE;":"≨︀","&mDDot;":"∺","&macr":"¯","&macr;":"¯","&male;":"♂","&malt;":"✠","&maltese;":"✠","&map;":"↦","&mapsto;":"↦","&mapstodown;":"↧","&mapstoleft;":"↤","&mapstoup;":"↥","&marker;":"▮","&mcomma;":"⨩","&mcy;":"м","&mdash;":"—","&measuredangle;":"∡","&mfr;":"𝔪","&mho;":"℧","&micro":"µ","&micro;":"µ","&mid;":"∣","&midast;":"*","&midcir;":"⫰","&middot":"·","&middot;":"·","&minus;":"−","&minusb;":"⊟","&minusd;":"∸","&minusdu;":"⨪","&mlcp;":"⫛","&mldr;":"…","&mnplus;":"∓","&models;":"⊧","&mopf;":"𝕞","&mp;":"∓","&mscr;":"𝓂","&mstpos;":"∾","&mu;":"μ","&multimap;":"⊸","&mumap;":"⊸","&nGg;":"⋙̸","&nGt;":"≫⃒","&nGtv;":"≫̸","&nLeftarrow;":"⇍","&nLeftrightarrow;":"⇎","&nLl;":"⋘̸","&nLt;":"≪⃒","&nLtv;":"≪̸","&nRightarrow;":"⇏","&nVDash;":"⊯","&nVdash;":"⊮","&nabla;":"∇","&nacute;":"ń","&nang;":"∠⃒","&nap;":"≉","&napE;":"⩰̸","&napid;":"≋̸","&napos;":"ŉ","&napprox;":"≉","&natur;":"♮","&natural;":"♮","&naturals;":"ℕ","&nbsp":" ","&nbsp;":" ","&nbump;":"≎̸","&nbumpe;":"≏̸","&ncap;":"⩃","&ncaron;":"ň","&ncedil;":"ņ","&ncong;":"≇","&ncongdot;":"⩭̸","&ncup;":"⩂","&ncy;":"н","&ndash;":"–","&ne;":"≠","&neArr;":"⇗","&nearhk;":"⤤","&nearr;":"↗","&nearrow;":"↗","&nedot;":"≐̸","&nequiv;":"≢","&nesear;":"⤨","&nesim;":"≂̸","&nexist;":"∄","&nexists;":"∄","&nfr;":"𝔫","&ngE;":"≧̸","&nge;":"≱","&ngeq;":"≱","&ngeqq;":"≧̸","&ngeqslant;":"⩾̸","&nges;":"⩾̸","&ngsim;":"≵","&ngt;":"≯","&ngtr;":"≯","&nhArr;":"⇎","&nharr;":"↮","&nhpar;":"⫲","&ni;":"∋","&nis;":"⋼","&nisd;":"⋺","&niv;":"∋","&njcy;":"њ","&nlArr;":"⇍","&nlE;":"≦̸","&nlarr;":"↚","&nldr;":"‥","&nle;":"≰","&nleftarrow;":"↚","&nleftrightarrow;":"↮","&nleq;":"≰","&nleqq;":"≦̸","&nleqslant;":"⩽̸","&nles;":"⩽̸","&nless;":"≮","&nlsim;":"≴","&nlt;":"≮","&nltri;":"⋪","&nltrie;":"⋬","&nmid;":"∤","&nopf;":"𝕟","&not":"¬","&not;":"¬","&notin;":"∉","&notinE;":"⋹̸","&notindot;":"⋵̸","&notinva;":"∉","&notinvb;":"⋷","&notinvc;":"⋶","&notni;":"∌","&notniva;":"∌","&notnivb;":"⋾","&notnivc;":"⋽","&npar;":"∦","&nparallel;":"∦","&nparsl;":"⫽⃥","&npart;":"∂̸","&npolint;":"⨔","&npr;":"⊀","&nprcue;":"⋠","&npre;":"⪯̸","&nprec;":"⊀","&npreceq;":"⪯̸","&nrArr;":"⇏","&nrarr;":"↛","&nrarrc;":"⤳̸","&nrarrw;":"↝̸","&nrightarrow;":"↛","&nrtri;":"⋫","&nrtrie;":"⋭","&nsc;":"⊁","&nsccue;":"⋡","&nsce;":"⪰̸","&nscr;":"𝓃","&nshortmid;":"∤","&nshortparallel;":"∦","&nsim;":"≁","&nsime;":"≄","&nsimeq;":"≄","&nsmid;":"∤","&nspar;":"∦","&nsqsube;":"⋢","&nsqsupe;":"⋣","&nsub;":"⊄","&nsubE;":"⫅̸","&nsube;":"⊈","&nsubset;":"⊂⃒","&nsubseteq;":"⊈","&nsubseteqq;":"⫅̸","&nsucc;":"⊁","&nsucceq;":"⪰̸","&nsup;":"⊅","&nsupE;":"⫆̸","&nsupe;":"⊉","&nsupset;":"⊃⃒","&nsupseteq;":"⊉","&nsupseteqq;":"⫆̸","&ntgl;":"≹","&ntilde":"ñ","&ntilde;":"ñ","&ntlg;":"≸","&ntriangleleft;":"⋪","&ntrianglelefteq;":"⋬","&ntriangleright;":"⋫","&ntrianglerighteq;":"⋭","&nu;":"ν","&num;":"#","&numero;":"№","&numsp;":" ","&nvDash;":"⊭","&nvHarr;":"⤄","&nvap;":"≍⃒","&nvdash;":"⊬","&nvge;":"≥⃒","&nvgt;":">⃒","&nvinfin;":"⧞","&nvlArr;":"⤂","&nvle;":"≤⃒","&nvlt;":"<⃒","&nvltrie;":"⊴⃒","&nvrArr;":"⤃","&nvrtrie;":"⊵⃒","&nvsim;":"∼⃒","&nwArr;":"⇖","&nwarhk;":"⤣","&nwarr;":"↖","&nwarrow;":"↖","&nwnear;":"⤧","&oS;":"Ⓢ","&oacute":"ó","&oacute;":"ó","&oast;":"⊛","&ocir;":"⊚","&ocirc":"ô","&ocirc;":"ô","&ocy;":"о","&odash;":"⊝","&odblac;":"ő","&odiv;":"⨸","&odot;":"⊙","&odsold;":"⦼","&oelig;":"œ","&ofcir;":"⦿","&ofr;":"𝔬","&ogon;":"˛","&ograve":"ò","&ograve;":"ò","&ogt;":"⧁","&ohbar;":"⦵","&ohm;":"Ω","&oint;":"∮","&olarr;":"↺","&olcir;":"⦾","&olcross;":"⦻","&oline;":"‾","&olt;":"⧀","&omacr;":"ō","&omega;":"ω","&omicron;":"ο","&omid;":"⦶","&ominus;":"⊖","&oopf;":"𝕠","&opar;":"⦷","&operp;":"⦹","&oplus;":"⊕","&or;":"∨","&orarr;":"↻","&ord;":"⩝","&order;":"ℴ","&orderof;":"ℴ","&ordf":"ª","&ordf;":"ª","&ordm":"º","&ordm;":"º","&origof;":"⊶","&oror;":"⩖","&orslope;":"⩗","&orv;":"⩛","&oscr;":"ℴ","&oslash":"ø","&oslash;":"ø","&osol;":"⊘","&otilde":"õ","&otilde;":"õ","&otimes;":"⊗","&otimesas;":"⨶","&ouml":"ö","&ouml;":"ö","&ovbar;":"⌽","&par;":"∥","&para":"¶","&para;":"¶","&parallel;":"∥","&parsim;":"⫳","&parsl;":"⫽","&part;":"∂","&pcy;":"п","&percnt;":"%","&period;":".","&permil;":"‰","&perp;":"⊥","&pertenk;":"‱","&pfr;":"𝔭","&phi;":"φ","&phiv;":"ϕ","&phmmat;":"ℳ","&phone;":"☎","&pi;":"π","&pitchfork;":"⋔","&piv;":"ϖ","&planck;":"ℏ","&planckh;":"ℎ","&plankv;":"ℏ","&plus;":"+","&plusacir;":"⨣","&plusb;":"⊞","&pluscir;":"⨢","&plusdo;":"∔","&plusdu;":"⨥","&pluse;":"⩲","&plusmn":"±","&plusmn;":"±","&plussim;":"⨦","&plustwo;":"⨧","&pm;":"±","&pointint;":"⨕","&popf;":"𝕡","&pound":"£","&pound;":"£","&pr;":"≺","&prE;":"⪳","&prap;":"⪷","&prcue;":"≼","&pre;":"⪯","&prec;":"≺","&precapprox;":"⪷","&preccurlyeq;":"≼","&preceq;":"⪯","&precnapprox;":"⪹","&precneqq;":"⪵","&precnsim;":"⋨","&precsim;":"≾","&prime;":"′","&primes;":"ℙ","&prnE;":"⪵","&prnap;":"⪹","&prnsim;":"⋨","&prod;":"∏","&profalar;":"⌮","&profline;":"⌒","&profsurf;":"⌓","&prop;":"∝","&propto;":"∝","&prsim;":"≾","&prurel;":"⊰","&pscr;":"𝓅","&psi;":"ψ","&puncsp;":" ","&qfr;":"𝔮","&qint;":"⨌","&qopf;":"𝕢","&qprime;":"⁗","&qscr;":"𝓆","&quaternions;":"ℍ","&quatint;":"⨖","&quest;":"?","&questeq;":"≟","&quot":'"',"&quot;":'"',"&rAarr;":"⇛","&rArr;":"⇒","&rAtail;":"⤜","&rBarr;":"⤏","&rHar;":"⥤","&race;":"∽̱","&racute;":"ŕ","&radic;":"√","&raemptyv;":"⦳","&rang;":"⟩","&rangd;":"⦒","&range;":"⦥","&rangle;":"⟩","&raquo":"»","&raquo;":"»","&rarr;":"→","&rarrap;":"⥵","&rarrb;":"⇥","&rarrbfs;":"⤠","&rarrc;":"⤳","&rarrfs;":"⤞","&rarrhk;":"↪","&rarrlp;":"↬","&rarrpl;":"⥅","&rarrsim;":"⥴","&rarrtl;":"↣","&rarrw;":"↝","&ratail;":"⤚","&ratio;":"∶","&rationals;":"ℚ","&rbarr;":"⤍","&rbbrk;":"❳","&rbrace;":"}","&rbrack;":"]","&rbrke;":"⦌","&rbrksld;":"⦎","&rbrkslu;":"⦐","&rcaron;":"ř","&rcedil;":"ŗ","&rceil;":"⌉","&rcub;":"}","&rcy;":"р","&rdca;":"⤷","&rdldhar;":"⥩","&rdquo;":"”","&rdquor;":"”","&rdsh;":"↳","&real;":"ℜ","&realine;":"ℛ","&realpart;":"ℜ","&reals;":"ℝ","&rect;":"▭","&reg":"®","&reg;":"®","&rfisht;":"⥽","&rfloor;":"⌋","&rfr;":"𝔯","&rhard;":"⇁","&rharu;":"⇀","&rharul;":"⥬","&rho;":"ρ","&rhov;":"ϱ","&rightarrow;":"→","&rightarrowtail;":"↣","&rightharpoondown;":"⇁","&rightharpoonup;":"⇀","&rightleftarrows;":"⇄","&rightleftharpoons;":"⇌","&rightrightarrows;":"⇉","&rightsquigarrow;":"↝","&rightthreetimes;":"⋌","&ring;":"˚","&risingdotseq;":"≓","&rlarr;":"⇄","&rlhar;":"⇌","&rlm;":"‏","&rmoust;":"⎱","&rmoustache;":"⎱","&rnmid;":"⫮","&roang;":"⟭","&roarr;":"⇾","&robrk;":"⟧","&ropar;":"⦆","&ropf;":"𝕣","&roplus;":"⨮","&rotimes;":"⨵","&rpar;":")","&rpargt;":"⦔","&rppolint;":"⨒","&rrarr;":"⇉","&rsaquo;":"›","&rscr;":"𝓇","&rsh;":"↱","&rsqb;":"]","&rsquo;":"’","&rsquor;":"’","&rthree;":"⋌","&rtimes;":"⋊","&rtri;":"▹","&rtrie;":"⊵","&rtrif;":"▸","&rtriltri;":"⧎","&ruluhar;":"⥨","&rx;":"℞","&sacute;":"ś","&sbquo;":"‚","&sc;":"≻","&scE;":"⪴","&scap;":"⪸","&scaron;":"š","&sccue;":"≽","&sce;":"⪰","&scedil;":"ş","&scirc;":"ŝ","&scnE;":"⪶","&scnap;":"⪺","&scnsim;":"⋩","&scpolint;":"⨓","&scsim;":"≿","&scy;":"с","&sdot;":"⋅","&sdotb;":"⊡","&sdote;":"⩦","&seArr;":"⇘","&searhk;":"⤥","&searr;":"↘","&searrow;":"↘","&sect":"§","&sect;":"§","&semi;":";","&seswar;":"⤩","&setminus;":"∖","&setmn;":"∖","&sext;":"✶","&sfr;":"𝔰","&sfrown;":"⌢","&sharp;":"♯","&shchcy;":"щ","&shcy;":"ш","&shortmid;":"∣","&shortparallel;":"∥","&shy":"­","&shy;":"­","&sigma;":"σ","&sigmaf;":"ς","&sigmav;":"ς","&sim;":"∼","&simdot;":"⩪","&sime;":"≃","&simeq;":"≃","&simg;":"⪞","&simgE;":"⪠","&siml;":"⪝","&simlE;":"⪟","&simne;":"≆","&simplus;":"⨤","&simrarr;":"⥲","&slarr;":"←","&smallsetminus;":"∖","&smashp;":"⨳","&smeparsl;":"⧤","&smid;":"∣","&smile;":"⌣","&smt;":"⪪","&smte;":"⪬","&smtes;":"⪬︀","&softcy;":"ь","&sol;":"/","&solb;":"⧄","&solbar;":"⌿","&sopf;":"𝕤","&spades;":"♠","&spadesuit;":"♠","&spar;":"∥","&sqcap;":"⊓","&sqcaps;":"⊓︀","&sqcup;":"⊔","&sqcups;":"⊔︀","&sqsub;":"⊏","&sqsube;":"⊑","&sqsubset;":"⊏","&sqsubseteq;":"⊑","&sqsup;":"⊐","&sqsupe;":"⊒","&sqsupset;":"⊐","&sqsupseteq;":"⊒","&squ;":"□","&square;":"□","&squarf;":"▪","&squf;":"▪","&srarr;":"→","&sscr;":"𝓈","&ssetmn;":"∖","&ssmile;":"⌣","&sstarf;":"⋆","&star;":"☆","&starf;":"★","&straightepsilon;":"ϵ","&straightphi;":"ϕ","&strns;":"¯","&sub;":"⊂","&subE;":"⫅","&subdot;":"⪽","&sube;":"⊆","&subedot;":"⫃","&submult;":"⫁","&subnE;":"⫋","&subne;":"⊊","&subplus;":"⪿","&subrarr;":"⥹","&subset;":"⊂","&subseteq;":"⊆","&subseteqq;":"⫅","&subsetneq;":"⊊","&subsetneqq;":"⫋","&subsim;":"⫇","&subsub;":"⫕","&subsup;":"⫓","&succ;":"≻","&succapprox;":"⪸","&succcurlyeq;":"≽","&succeq;":"⪰","&succnapprox;":"⪺","&succneqq;":"⪶","&succnsim;":"⋩","&succsim;":"≿","&sum;":"∑","&sung;":"♪","&sup1":"¹","&sup1;":"¹","&sup2":"²","&sup2;":"²","&sup3":"³","&sup3;":"³","&sup;":"⊃","&supE;":"⫆","&supdot;":"⪾","&supdsub;":"⫘","&supe;":"⊇","&supedot;":"⫄","&suphsol;":"⟉","&suphsub;":"⫗","&suplarr;":"⥻","&supmult;":"⫂","&supnE;":"⫌","&supne;":"⊋","&supplus;":"⫀","&supset;":"⊃","&supseteq;":"⊇","&supseteqq;":"⫆","&supsetneq;":"⊋","&supsetneqq;":"⫌","&supsim;":"⫈","&supsub;":"⫔","&supsup;":"⫖","&swArr;":"⇙","&swarhk;":"⤦","&swarr;":"↙","&swarrow;":"↙","&swnwar;":"⤪","&szlig":"ß","&szlig;":"ß","&target;":"⌖","&tau;":"τ","&tbrk;":"⎴","&tcaron;":"ť","&tcedil;":"ţ","&tcy;":"т","&tdot;":"⃛","&telrec;":"⌕","&tfr;":"𝔱","&there4;":"∴","&therefore;":"∴","&theta;":"θ","&thetasym;":"ϑ","&thetav;":"ϑ","&thickapprox;":"≈","&thicksim;":"∼","&thinsp;":" ","&thkap;":"≈","&thksim;":"∼","&thorn":"þ","&thorn;":"þ","&tilde;":"˜","&times":"×","&times;":"×","&timesb;":"⊠","&timesbar;":"⨱","&timesd;":"⨰","&tint;":"∭","&toea;":"⤨","&top;":"⊤","&topbot;":"⌶","&topcir;":"⫱","&topf;":"𝕥","&topfork;":"⫚","&tosa;":"⤩","&tprime;":"‴","&trade;":"™","&triangle;":"▵","&triangledown;":"▿","&triangleleft;":"◃","&trianglelefteq;":"⊴","&triangleq;":"≜","&triangleright;":"▹","&trianglerighteq;":"⊵","&tridot;":"◬","&trie;":"≜","&triminus;":"⨺","&triplus;":"⨹","&trisb;":"⧍","&tritime;":"⨻","&trpezium;":"⏢","&tscr;":"𝓉","&tscy;":"ц","&tshcy;":"ћ","&tstrok;":"ŧ","&twixt;":"≬","&twoheadleftarrow;":"↞","&twoheadrightarrow;":"↠","&uArr;":"⇑","&uHar;":"⥣","&uacute":"ú","&uacute;":"ú","&uarr;":"↑","&ubrcy;":"ў","&ubreve;":"ŭ","&ucirc":"û","&ucirc;":"û","&ucy;":"у","&udarr;":"⇅","&udblac;":"ű","&udhar;":"⥮","&ufisht;":"⥾","&ufr;":"𝔲","&ugrave":"ù","&ugrave;":"ù","&uharl;":"↿","&uharr;":"↾","&uhblk;":"▀","&ulcorn;":"⌜","&ulcorner;":"⌜","&ulcrop;":"⌏","&ultri;":"◸","&umacr;":"ū","&uml":"¨","&uml;":"¨","&uogon;":"ų","&uopf;":"𝕦","&uparrow;":"↑","&updownarrow;":"↕","&upharpoonleft;":"↿","&upharpoonright;":"↾","&uplus;":"⊎","&upsi;":"υ","&upsih;":"ϒ","&upsilon;":"υ","&upuparrows;":"⇈","&urcorn;":"⌝","&urcorner;":"⌝","&urcrop;":"⌎","&uring;":"ů","&urtri;":"◹","&uscr;":"𝓊","&utdot;":"⋰","&utilde;":"ũ","&utri;":"▵","&utrif;":"▴","&uuarr;":"⇈","&uuml":"ü","&uuml;":"ü","&uwangle;":"⦧","&vArr;":"⇕","&vBar;":"⫨","&vBarv;":"⫩","&vDash;":"⊨","&vangrt;":"⦜","&varepsilon;":"ϵ","&varkappa;":"ϰ","&varnothing;":"∅","&varphi;":"ϕ","&varpi;":"ϖ","&varpropto;":"∝","&varr;":"↕","&varrho;":"ϱ","&varsigma;":"ς","&varsubsetneq;":"⊊︀","&varsubsetneqq;":"⫋︀","&varsupsetneq;":"⊋︀","&varsupsetneqq;":"⫌︀","&vartheta;":"ϑ","&vartriangleleft;":"⊲","&vartriangleright;":"⊳","&vcy;":"в","&vdash;":"⊢","&vee;":"∨","&veebar;":"⊻","&veeeq;":"≚","&vellip;":"⋮","&verbar;":"|","&vert;":"|","&vfr;":"𝔳","&vltri;":"⊲","&vnsub;":"⊂⃒","&vnsup;":"⊃⃒","&vopf;":"𝕧","&vprop;":"∝","&vrtri;":"⊳","&vscr;":"𝓋","&vsubnE;":"⫋︀","&vsubne;":"⊊︀","&vsupnE;":"⫌︀","&vsupne;":"⊋︀","&vzigzag;":"⦚","&wcirc;":"ŵ","&wedbar;":"⩟","&wedge;":"∧","&wedgeq;":"≙","&weierp;":"℘","&wfr;":"𝔴","&wopf;":"𝕨","&wp;":"℘","&wr;":"≀","&wreath;":"≀","&wscr;":"𝓌","&xcap;":"⋂","&xcirc;":"◯","&xcup;":"⋃","&xdtri;":"▽","&xfr;":"𝔵","&xhArr;":"⟺","&xharr;":"⟷","&xi;":"ξ","&xlArr;":"⟸","&xlarr;":"⟵","&xmap;":"⟼","&xnis;":"⋻","&xodot;":"⨀","&xopf;":"𝕩","&xoplus;":"⨁","&xotime;":"⨂","&xrArr;":"⟹","&xrarr;":"⟶","&xscr;":"𝓍","&xsqcup;":"⨆","&xuplus;":"⨄","&xutri;":"△","&xvee;":"⋁","&xwedge;":"⋀","&yacute":"ý","&yacute;":"ý","&yacy;":"я","&ycirc;":"ŷ","&ycy;":"ы","&yen":"¥","&yen;":"¥","&yfr;":"𝔶","&yicy;":"ї","&yopf;":"𝕪","&yscr;":"𝓎","&yucy;":"ю","&yuml":"ÿ","&yuml;":"ÿ","&zacute;":"ź","&zcaron;":"ž","&zcy;":"з","&zdot;":"ż","&zeetrf;":"ℨ","&zeta;":"ζ","&zfr;":"𝔷","&zhcy;":"ж","&zigrarr;":"⇝","&zopf;":"𝕫","&zscr;":"𝓏","&zwj;":"‍","&zwnj;":"‌"},characters:{"Æ":"&AElig;","&":"&amp;","Á":"&Aacute;","Ă":"&Abreve;","Â":"&Acirc;","А":"&Acy;","𝔄":"&Afr;","À":"&Agrave;","Α":"&Alpha;","Ā":"&Amacr;","⩓":"&And;","Ą":"&Aogon;","𝔸":"&Aopf;","⁡":"&af;","Å":"&angst;","𝒜":"&Ascr;","≔":"&coloneq;","Ã":"&Atilde;","Ä":"&Auml;","∖":"&ssetmn;","⫧":"&Barv;","⌆":"&doublebarwedge;","Б":"&Bcy;","∵":"&because;","ℬ":"&bernou;","Β":"&Beta;","𝔅":"&Bfr;","𝔹":"&Bopf;","˘":"&breve;","≎":"&bump;","Ч":"&CHcy;","©":"&copy;","Ć":"&Cacute;","⋒":"&Cap;","ⅅ":"&DD;","ℭ":"&Cfr;","Č":"&Ccaron;","Ç":"&Ccedil;","Ĉ":"&Ccirc;","∰":"&Cconint;","Ċ":"&Cdot;","¸":"&cedil;","·":"&middot;","Χ":"&Chi;","⊙":"&odot;","⊖":"&ominus;","⊕":"&oplus;","⊗":"&otimes;","∲":"&cwconint;","”":"&rdquor;","’":"&rsquor;","∷":"&Proportion;","⩴":"&Colone;","≡":"&equiv;","∯":"&DoubleContourIntegral;","∮":"&oint;","ℂ":"&complexes;","∐":"&coprod;","∳":"&awconint;","⨯":"&Cross;","𝒞":"&Cscr;","⋓":"&Cup;","≍":"&asympeq;","⤑":"&DDotrahd;","Ђ":"&DJcy;","Ѕ":"&DScy;","Џ":"&DZcy;","‡":"&ddagger;","↡":"&Darr;","⫤":"&DoubleLeftTee;","Ď":"&Dcaron;","Д":"&Dcy;","∇":"&nabla;","Δ":"&Delta;","𝔇":"&Dfr;","´":"&acute;","˙":"&dot;","˝":"&dblac;","`":"&grave;","˜":"&tilde;","⋄":"&diamond;","ⅆ":"&dd;","𝔻":"&Dopf;","¨":"&uml;","⃜":"&DotDot;","≐":"&esdot;","⇓":"&dArr;","⇐":"&lArr;","⇔":"&iff;","⟸":"&xlArr;","⟺":"&xhArr;","⟹":"&xrArr;","⇒":"&rArr;","⊨":"&vDash;","⇑":"&uArr;","⇕":"&vArr;","∥":"&spar;","↓":"&downarrow;","⤓":"&DownArrowBar;","⇵":"&duarr;","̑":"&DownBreve;","⥐":"&DownLeftRightVector;","⥞":"&DownLeftTeeVector;","↽":"&lhard;","⥖":"&DownLeftVectorBar;","⥟":"&DownRightTeeVector;","⇁":"&rightharpoondown;","⥗":"&DownRightVectorBar;","⊤":"&top;","↧":"&mapstodown;","𝒟":"&Dscr;","Đ":"&Dstrok;","Ŋ":"&ENG;","Ð":"&ETH;","É":"&Eacute;","Ě":"&Ecaron;","Ê":"&Ecirc;","Э":"&Ecy;","Ė":"&Edot;","𝔈":"&Efr;","È":"&Egrave;","∈":"&isinv;","Ē":"&Emacr;","◻":"&EmptySmallSquare;","▫":"&EmptyVerySmallSquare;","Ę":"&Eogon;","𝔼":"&Eopf;","Ε":"&Epsilon;","⩵":"&Equal;","≂":"&esim;","⇌":"&rlhar;","ℰ":"&expectation;","⩳":"&Esim;","Η":"&Eta;","Ë":"&Euml;","∃":"&exist;","ⅇ":"&exponentiale;","Ф":"&Fcy;","𝔉":"&Ffr;","◼":"&FilledSmallSquare;","▪":"&squf;","𝔽":"&Fopf;","∀":"&forall;","ℱ":"&Fscr;","Ѓ":"&GJcy;",">":"&gt;","Γ":"&Gamma;","Ϝ":"&Gammad;","Ğ":"&Gbreve;","Ģ":"&Gcedil;","Ĝ":"&Gcirc;","Г":"&Gcy;","Ġ":"&Gdot;","𝔊":"&Gfr;","⋙":"&ggg;","𝔾":"&Gopf;","≥":"&geq;","⋛":"&gtreqless;","≧":"&geqq;","⪢":"&GreaterGreater;","≷":"&gtrless;","⩾":"&ges;","≳":"&gtrsim;","𝒢":"&Gscr;","≫":"&gg;","Ъ":"&HARDcy;","ˇ":"&caron;","^":"&Hat;","Ĥ":"&Hcirc;","ℌ":"&Poincareplane;","ℋ":"&hamilt;","ℍ":"&quaternions;","─":"&boxh;","Ħ":"&Hstrok;","≏":"&bumpeq;","Е":"&IEcy;","Ĳ":"&IJlig;","Ё":"&IOcy;","Í":"&Iacute;","Î":"&Icirc;","И":"&Icy;","İ":"&Idot;","ℑ":"&imagpart;","Ì":"&Igrave;","Ī":"&Imacr;","ⅈ":"&ii;","∬":"&Int;","∫":"&int;","⋂":"&xcap;","⁣":"&ic;","⁢":"&it;","Į":"&Iogon;","𝕀":"&Iopf;","Ι":"&Iota;","ℐ":"&imagline;","Ĩ":"&Itilde;","І":"&Iukcy;","Ï":"&Iuml;","Ĵ":"&Jcirc;","Й":"&Jcy;","𝔍":"&Jfr;","𝕁":"&Jopf;","𝒥":"&Jscr;","Ј":"&Jsercy;","Є":"&Jukcy;","Х":"&KHcy;","Ќ":"&KJcy;","Κ":"&Kappa;","Ķ":"&Kcedil;","К":"&Kcy;","𝔎":"&Kfr;","𝕂":"&Kopf;","𝒦":"&Kscr;","Љ":"&LJcy;","<":"&lt;","Ĺ":"&Lacute;","Λ":"&Lambda;","⟪":"&Lang;","ℒ":"&lagran;","↞":"&twoheadleftarrow;","Ľ":"&Lcaron;","Ļ":"&Lcedil;","Л":"&Lcy;","⟨":"&langle;","←":"&slarr;","⇤":"&larrb;","⇆":"&lrarr;","⌈":"&lceil;","⟦":"&lobrk;","⥡":"&LeftDownTeeVector;","⇃":"&downharpoonleft;","⥙":"&LeftDownVectorBar;","⌊":"&lfloor;","↔":"&leftrightarrow;","⥎":"&LeftRightVector;","⊣":"&dashv;","↤":"&mapstoleft;","⥚":"&LeftTeeVector;","⊲":"&vltri;","⧏":"&LeftTriangleBar;","⊴":"&trianglelefteq;","⥑":"&LeftUpDownVector;","⥠":"&LeftUpTeeVector;","↿":"&upharpoonleft;","⥘":"&LeftUpVectorBar;","↼":"&lharu;","⥒":"&LeftVectorBar;","⋚":"&lesseqgtr;","≦":"&leqq;","≶":"&lg;","⪡":"&LessLess;","⩽":"&les;","≲":"&lsim;","𝔏":"&Lfr;","⋘":"&Ll;","⇚":"&lAarr;","Ŀ":"&Lmidot;","⟵":"&xlarr;","⟷":"&xharr;","⟶":"&xrarr;","𝕃":"&Lopf;","↙":"&swarrow;","↘":"&searrow;","↰":"&lsh;","Ł":"&Lstrok;","≪":"&ll;","⤅":"&Map;","М":"&Mcy;"," ":"&MediumSpace;","ℳ":"&phmmat;","𝔐":"&Mfr;","∓":"&mp;","𝕄":"&Mopf;","Μ":"&Mu;","Њ":"&NJcy;","Ń":"&Nacute;","Ň":"&Ncaron;","Ņ":"&Ncedil;","Н":"&Ncy;","​":"&ZeroWidthSpace;","\n":"&NewLine;","𝔑":"&Nfr;","⁠":"&NoBreak;"," ":"&nbsp;","ℕ":"&naturals;","⫬":"&Not;","≢":"&nequiv;","≭":"&NotCupCap;","∦":"&nspar;","∉":"&notinva;","≠":"&ne;","≂̸":"&nesim;","∄":"&nexists;","≯":"&ngtr;","≱":"&ngeq;","≧̸":"&ngeqq;","≫̸":"&nGtv;","≹":"&ntgl;","⩾̸":"&nges;","≵":"&ngsim;","≎̸":"&nbump;","≏̸":"&nbumpe;","⋪":"&ntriangleleft;","⧏̸":"&NotLeftTriangleBar;","⋬":"&ntrianglelefteq;","≮":"&nlt;","≰":"&nleq;","≸":"&ntlg;","≪̸":"&nLtv;","⩽̸":"&nles;","≴":"&nlsim;","⪢̸":"&NotNestedGreaterGreater;","⪡̸":"&NotNestedLessLess;","⊀":"&nprec;","⪯̸":"&npreceq;","⋠":"&nprcue;","∌":"&notniva;","⋫":"&ntriangleright;","⧐̸":"&NotRightTriangleBar;","⋭":"&ntrianglerighteq;","⊏̸":"&NotSquareSubset;","⋢":"&nsqsube;","⊐̸":"&NotSquareSuperset;","⋣":"&nsqsupe;","⊂⃒":"&vnsub;","⊈":"&nsubseteq;","⊁":"&nsucc;","⪰̸":"&nsucceq;","⋡":"&nsccue;","≿̸":"&NotSucceedsTilde;","⊃⃒":"&vnsup;","⊉":"&nsupseteq;","≁":"&nsim;","≄":"&nsimeq;","≇":"&ncong;","≉":"&napprox;","∤":"&nsmid;","𝒩":"&Nscr;","Ñ":"&Ntilde;","Ν":"&Nu;","Œ":"&OElig;","Ó":"&Oacute;","Ô":"&Ocirc;","О":"&Ocy;","Ő":"&Odblac;","𝔒":"&Ofr;","Ò":"&Ograve;","Ō":"&Omacr;","Ω":"&ohm;","Ο":"&Omicron;","𝕆":"&Oopf;","“":"&ldquo;","‘":"&lsquo;","⩔":"&Or;","𝒪":"&Oscr;","Ø":"&Oslash;","Õ":"&Otilde;","⨷":"&Otimes;","Ö":"&Ouml;","‾":"&oline;","⏞":"&OverBrace;","⎴":"&tbrk;","⏜":"&OverParenthesis;","∂":"&part;","П":"&Pcy;","𝔓":"&Pfr;","Φ":"&Phi;","Π":"&Pi;","±":"&pm;","ℙ":"&primes;","⪻":"&Pr;","≺":"&prec;","⪯":"&preceq;","≼":"&preccurlyeq;","≾":"&prsim;","″":"&Prime;","∏":"&prod;","∝":"&vprop;","𝒫":"&Pscr;","Ψ":"&Psi;",'"':"&quot;","𝔔":"&Qfr;","ℚ":"&rationals;","𝒬":"&Qscr;","⤐":"&drbkarow;","®":"&reg;","Ŕ":"&Racute;","⟫":"&Rang;","↠":"&twoheadrightarrow;","⤖":"&Rarrtl;","Ř":"&Rcaron;","Ŗ":"&Rcedil;","Р":"&Rcy;","ℜ":"&realpart;","∋":"&niv;","⇋":"&lrhar;","⥯":"&duhar;","Ρ":"&Rho;","⟩":"&rangle;","→":"&srarr;","⇥":"&rarrb;","⇄":"&rlarr;","⌉":"&rceil;","⟧":"&robrk;","⥝":"&RightDownTeeVector;","⇂":"&downharpoonright;","⥕":"&RightDownVectorBar;","⌋":"&rfloor;","⊢":"&vdash;","↦":"&mapsto;","⥛":"&RightTeeVector;","⊳":"&vrtri;","⧐":"&RightTriangleBar;","⊵":"&trianglerighteq;","⥏":"&RightUpDownVector;","⥜":"&RightUpTeeVector;","↾":"&upharpoonright;","⥔":"&RightUpVectorBar;","⇀":"&rightharpoonup;","⥓":"&RightVectorBar;","ℝ":"&reals;","⥰":"&RoundImplies;","⇛":"&rAarr;","ℛ":"&realine;","↱":"&rsh;","⧴":"&RuleDelayed;","Щ":"&SHCHcy;","Ш":"&SHcy;","Ь":"&SOFTcy;","Ś":"&Sacute;","⪼":"&Sc;","Š":"&Scaron;","Ş":"&Scedil;","Ŝ":"&Scirc;","С":"&Scy;","𝔖":"&Sfr;","↑":"&uparrow;","Σ":"&Sigma;","∘":"&compfn;","𝕊":"&Sopf;","√":"&radic;","□":"&square;","⊓":"&sqcap;","⊏":"&sqsubset;","⊑":"&sqsubseteq;","⊐":"&sqsupset;","⊒":"&sqsupseteq;","⊔":"&sqcup;","𝒮":"&Sscr;","⋆":"&sstarf;","⋐":"&Subset;","⊆":"&subseteq;","≻":"&succ;","⪰":"&succeq;","≽":"&succcurlyeq;","≿":"&succsim;","∑":"&sum;","⋑":"&Supset;","⊃":"&supset;","⊇":"&supseteq;","Þ":"&THORN;","™":"&trade;","Ћ":"&TSHcy;","Ц":"&TScy;","\t":"&Tab;","Τ":"&Tau;","Ť":"&Tcaron;","Ţ":"&Tcedil;","Т":"&Tcy;","𝔗":"&Tfr;","∴":"&therefore;","Θ":"&Theta;","  ":"&ThickSpace;"," ":"&thinsp;","∼":"&thksim;","≃":"&simeq;","≅":"&cong;","≈":"&thkap;","𝕋":"&Topf;","⃛":"&tdot;","𝒯":"&Tscr;","Ŧ":"&Tstrok;","Ú":"&Uacute;","↟":"&Uarr;","⥉":"&Uarrocir;","Ў":"&Ubrcy;","Ŭ":"&Ubreve;","Û":"&Ucirc;","У":"&Ucy;","Ű":"&Udblac;","𝔘":"&Ufr;","Ù":"&Ugrave;","Ū":"&Umacr;",_:"&lowbar;","⏟":"&UnderBrace;","⎵":"&bbrk;","⏝":"&UnderParenthesis;","⋃":"&xcup;","⊎":"&uplus;","Ų":"&Uogon;","𝕌":"&Uopf;","⤒":"&UpArrowBar;","⇅":"&udarr;","↕":"&varr;","⥮":"&udhar;","⊥":"&perp;","↥":"&mapstoup;","↖":"&nwarrow;","↗":"&nearrow;","ϒ":"&upsih;","Υ":"&Upsilon;","Ů":"&Uring;","𝒰":"&Uscr;","Ũ":"&Utilde;","Ü":"&Uuml;","⊫":"&VDash;","⫫":"&Vbar;","В":"&Vcy;","⊩":"&Vdash;","⫦":"&Vdashl;","⋁":"&xvee;","‖":"&Vert;","∣":"&smid;","|":"&vert;","❘":"&VerticalSeparator;","≀":"&wreath;"," ":"&hairsp;","𝔙":"&Vfr;","𝕍":"&Vopf;","𝒱":"&Vscr;","⊪":"&Vvdash;","Ŵ":"&Wcirc;","⋀":"&xwedge;","𝔚":"&Wfr;","𝕎":"&Wopf;","𝒲":"&Wscr;","𝔛":"&Xfr;","Ξ":"&Xi;","𝕏":"&Xopf;","𝒳":"&Xscr;","Я":"&YAcy;","Ї":"&YIcy;","Ю":"&YUcy;","Ý":"&Yacute;","Ŷ":"&Ycirc;","Ы":"&Ycy;","𝔜":"&Yfr;","𝕐":"&Yopf;","𝒴":"&Yscr;","Ÿ":"&Yuml;","Ж":"&ZHcy;","Ź":"&Zacute;","Ž":"&Zcaron;","З":"&Zcy;","Ż":"&Zdot;","Ζ":"&Zeta;","ℨ":"&zeetrf;","ℤ":"&integers;","𝒵":"&Zscr;","á":"&aacute;","ă":"&abreve;","∾":"&mstpos;","∾̳":"&acE;","∿":"&acd;","â":"&acirc;","а":"&acy;","æ":"&aelig;","𝔞":"&afr;","à":"&agrave;","ℵ":"&aleph;","α":"&alpha;","ā":"&amacr;","⨿":"&amalg;","∧":"&wedge;","⩕":"&andand;","⩜":"&andd;","⩘":"&andslope;","⩚":"&andv;","∠":"&angle;","⦤":"&ange;","∡":"&measuredangle;","⦨":"&angmsdaa;","⦩":"&angmsdab;","⦪":"&angmsdac;","⦫":"&angmsdad;","⦬":"&angmsdae;","⦭":"&angmsdaf;","⦮":"&angmsdag;","⦯":"&angmsdah;","∟":"&angrt;","⊾":"&angrtvb;","⦝":"&angrtvbd;","∢":"&angsph;","⍼":"&angzarr;","ą":"&aogon;","𝕒":"&aopf;","⩰":"&apE;","⩯":"&apacir;","≊":"&approxeq;","≋":"&apid;","'":"&apos;","å":"&aring;","𝒶":"&ascr;","*":"&midast;","ã":"&atilde;","ä":"&auml;","⨑":"&awint;","⫭":"&bNot;","≌":"&bcong;","϶":"&bepsi;","‵":"&bprime;","∽":"&bsim;","⋍":"&bsime;","⊽":"&barvee;","⌅":"&barwedge;","⎶":"&bbrktbrk;","б":"&bcy;","„":"&ldquor;","⦰":"&bemptyv;","β":"&beta;","ℶ":"&beth;","≬":"&twixt;","𝔟":"&bfr;","◯":"&xcirc;","⨀":"&xodot;","⨁":"&xoplus;","⨂":"&xotime;","⨆":"&xsqcup;","★":"&starf;","▽":"&xdtri;","△":"&xutri;","⨄":"&xuplus;","⤍":"&rbarr;","⧫":"&lozf;","▴":"&utrif;","▾":"&dtrif;","◂":"&ltrif;","▸":"&rtrif;","␣":"&blank;","▒":"&blk12;","░":"&blk14;","▓":"&blk34;","█":"&block;","=⃥":"&bne;","≡⃥":"&bnequiv;","⌐":"&bnot;","𝕓":"&bopf;","⋈":"&bowtie;","╗":"&boxDL;","╔":"&boxDR;","╖":"&boxDl;","╓":"&boxDr;","═":"&boxH;","╦":"&boxHD;","╩":"&boxHU;","╤":"&boxHd;","╧":"&boxHu;","╝":"&boxUL;","╚":"&boxUR;","╜":"&boxUl;","╙":"&boxUr;","║":"&boxV;","╬":"&boxVH;","╣":"&boxVL;","╠":"&boxVR;","╫":"&boxVh;","╢":"&boxVl;","╟":"&boxVr;","⧉":"&boxbox;","╕":"&boxdL;","╒":"&boxdR;","┐":"&boxdl;","┌":"&boxdr;","╥":"&boxhD;","╨":"&boxhU;","┬":"&boxhd;","┴":"&boxhu;","⊟":"&minusb;","⊞":"&plusb;","⊠":"&timesb;","╛":"&boxuL;","╘":"&boxuR;","┘":"&boxul;","└":"&boxur;","│":"&boxv;","╪":"&boxvH;","╡":"&boxvL;","╞":"&boxvR;","┼":"&boxvh;","┤":"&boxvl;","├":"&boxvr;","¦":"&brvbar;","𝒷":"&bscr;","⁏":"&bsemi;","\\":"&bsol;","⧅":"&bsolb;","⟈":"&bsolhsub;","•":"&bullet;","⪮":"&bumpE;","ć":"&cacute;","∩":"&cap;","⩄":"&capand;","⩉":"&capbrcup;","⩋":"&capcap;","⩇":"&capcup;","⩀":"&capdot;","∩︀":"&caps;","⁁":"&caret;","⩍":"&ccaps;","č":"&ccaron;","ç":"&ccedil;","ĉ":"&ccirc;","⩌":"&ccups;","⩐":"&ccupssm;","ċ":"&cdot;","⦲":"&cemptyv;","¢":"&cent;","𝔠":"&cfr;","ч":"&chcy;","✓":"&checkmark;","χ":"&chi;","○":"&cir;","⧃":"&cirE;","ˆ":"&circ;","≗":"&cire;","↺":"&olarr;","↻":"&orarr;","Ⓢ":"&oS;","⊛":"&oast;","⊚":"&ocir;","⊝":"&odash;","⨐":"&cirfnint;","⫯":"&cirmid;","⧂":"&cirscir;","♣":"&clubsuit;",":":"&colon;",",":"&comma;","@":"&commat;","∁":"&complement;","⩭":"&congdot;","𝕔":"&copf;","℗":"&copysr;","↵":"&crarr;","✗":"&cross;","𝒸":"&cscr;","⫏":"&csub;","⫑":"&csube;","⫐":"&csup;","⫒":"&csupe;","⋯":"&ctdot;","⤸":"&cudarrl;","⤵":"&cudarrr;","⋞":"&curlyeqprec;","⋟":"&curlyeqsucc;","↶":"&curvearrowleft;","⤽":"&cularrp;","∪":"&cup;","⩈":"&cupbrcap;","⩆":"&cupcap;","⩊":"&cupcup;","⊍":"&cupdot;","⩅":"&cupor;","∪︀":"&cups;","↷":"&curvearrowright;","⤼":"&curarrm;","⋎":"&cuvee;","⋏":"&cuwed;","¤":"&curren;","∱":"&cwint;","⌭":"&cylcty;","⥥":"&dHar;","†":"&dagger;","ℸ":"&daleth;","‐":"&hyphen;","⤏":"&rBarr;","ď":"&dcaron;","д":"&dcy;","⇊":"&downdownarrows;","⩷":"&eDDot;","°":"&deg;","δ":"&delta;","⦱":"&demptyv;","⥿":"&dfisht;","𝔡":"&dfr;","♦":"&diams;","ϝ":"&gammad;","⋲":"&disin;","÷":"&divide;","⋇":"&divonx;","ђ":"&djcy;","⌞":"&llcorner;","⌍":"&dlcrop;",$:"&dollar;","𝕕":"&dopf;","≑":"&eDot;","∸":"&minusd;","∔":"&plusdo;","⊡":"&sdotb;","⌟":"&lrcorner;","⌌":"&drcrop;","𝒹":"&dscr;","ѕ":"&dscy;","⧶":"&dsol;","đ":"&dstrok;","⋱":"&dtdot;","▿":"&triangledown;","⦦":"&dwangle;","џ":"&dzcy;","⟿":"&dzigrarr;","é":"&eacute;","⩮":"&easter;","ě":"&ecaron;","≖":"&eqcirc;","ê":"&ecirc;","≕":"&eqcolon;","э":"&ecy;","ė":"&edot;","≒":"&fallingdotseq;","𝔢":"&efr;","⪚":"&eg;","è":"&egrave;","⪖":"&eqslantgtr;","⪘":"&egsdot;","⪙":"&el;","⏧":"&elinters;","ℓ":"&ell;","⪕":"&eqslantless;","⪗":"&elsdot;","ē":"&emacr;","∅":"&varnothing;"," ":"&emsp13;"," ":"&emsp14;"," ":"&emsp;","ŋ":"&eng;"," ":"&ensp;","ę":"&eogon;","𝕖":"&eopf;","⋕":"&epar;","⧣":"&eparsl;","⩱":"&eplus;","ε":"&epsilon;","ϵ":"&varepsilon;","=":"&equals;","≟":"&questeq;","⩸":"&equivDD;","⧥":"&eqvparsl;","≓":"&risingdotseq;","⥱":"&erarr;","ℯ":"&escr;","η":"&eta;","ð":"&eth;","ë":"&euml;","€":"&euro;","!":"&excl;","ф":"&fcy;","♀":"&female;","ﬃ":"&ffilig;","ﬀ":"&fflig;","ﬄ":"&ffllig;","𝔣":"&ffr;","ﬁ":"&filig;",fj:"&fjlig;","♭":"&flat;","ﬂ":"&fllig;","▱":"&fltns;","ƒ":"&fnof;","𝕗":"&fopf;","⋔":"&pitchfork;","⫙":"&forkv;","⨍":"&fpartint;","½":"&half;","⅓":"&frac13;","¼":"&frac14;","⅕":"&frac15;","⅙":"&frac16;","⅛":"&frac18;","⅔":"&frac23;","⅖":"&frac25;","¾":"&frac34;","⅗":"&frac35;","⅜":"&frac38;","⅘":"&frac45;","⅚":"&frac56;","⅝":"&frac58;","⅞":"&frac78;","⁄":"&frasl;","⌢":"&sfrown;","𝒻":"&fscr;","⪌":"&gtreqqless;","ǵ":"&gacute;","γ":"&gamma;","⪆":"&gtrapprox;","ğ":"&gbreve;","ĝ":"&gcirc;","г":"&gcy;","ġ":"&gdot;","⪩":"&gescc;","⪀":"&gesdot;","⪂":"&gesdoto;","⪄":"&gesdotol;","⋛︀":"&gesl;","⪔":"&gesles;","𝔤":"&gfr;","ℷ":"&gimel;","ѓ":"&gjcy;","⪒":"&glE;","⪥":"&gla;","⪤":"&glj;","≩":"&gneqq;","⪊":"&gnapprox;","⪈":"&gneq;","⋧":"&gnsim;","𝕘":"&gopf;","ℊ":"&gscr;","⪎":"&gsime;","⪐":"&gsiml;","⪧":"&gtcc;","⩺":"&gtcir;","⋗":"&gtrdot;","⦕":"&gtlPar;","⩼":"&gtquest;","⥸":"&gtrarr;","≩︀":"&gvnE;","ъ":"&hardcy;","⥈":"&harrcir;","↭":"&leftrightsquigarrow;","ℏ":"&plankv;","ĥ":"&hcirc;","♥":"&heartsuit;","…":"&mldr;","⊹":"&hercon;","𝔥":"&hfr;","⤥":"&searhk;","⤦":"&swarhk;","⇿":"&hoarr;","∻":"&homtht;","↩":"&larrhk;","↪":"&rarrhk;","𝕙":"&hopf;","―":"&horbar;","𝒽":"&hscr;","ħ":"&hstrok;","⁃":"&hybull;","í":"&iacute;","î":"&icirc;","и":"&icy;","е":"&iecy;","¡":"&iexcl;","𝔦":"&ifr;","ì":"&igrave;","⨌":"&qint;","∭":"&tint;","⧜":"&iinfin;","℩":"&iiota;","ĳ":"&ijlig;","ī":"&imacr;","ı":"&inodot;","⊷":"&imof;","Ƶ":"&imped;","℅":"&incare;","∞":"&infin;","⧝":"&infintie;","⊺":"&intercal;","⨗":"&intlarhk;","⨼":"&iprod;","ё":"&iocy;","į":"&iogon;","𝕚":"&iopf;","ι":"&iota;","¿":"&iquest;","𝒾":"&iscr;","⋹":"&isinE;","⋵":"&isindot;","⋴":"&isins;","⋳":"&isinsv;","ĩ":"&itilde;","і":"&iukcy;","ï":"&iuml;","ĵ":"&jcirc;","й":"&jcy;","𝔧":"&jfr;","ȷ":"&jmath;","𝕛":"&jopf;","𝒿":"&jscr;","ј":"&jsercy;","є":"&jukcy;","κ":"&kappa;","ϰ":"&varkappa;","ķ":"&kcedil;","к":"&kcy;","𝔨":"&kfr;","ĸ":"&kgreen;","х":"&khcy;","ќ":"&kjcy;","𝕜":"&kopf;","𝓀":"&kscr;","⤛":"&lAtail;","⤎":"&lBarr;","⪋":"&lesseqqgtr;","⥢":"&lHar;","ĺ":"&lacute;","⦴":"&laemptyv;","λ":"&lambda;","⦑":"&langd;","⪅":"&lessapprox;","«":"&laquo;","⤟":"&larrbfs;","⤝":"&larrfs;","↫":"&looparrowleft;","⤹":"&larrpl;","⥳":"&larrsim;","↢":"&leftarrowtail;","⪫":"&lat;","⤙":"&latail;","⪭":"&late;","⪭︀":"&lates;","⤌":"&lbarr;","❲":"&lbbrk;","{":"&lcub;","[":"&lsqb;","⦋":"&lbrke;","⦏":"&lbrksld;","⦍":"&lbrkslu;","ľ":"&lcaron;","ļ":"&lcedil;","л":"&lcy;","⤶":"&ldca;","⥧":"&ldrdhar;","⥋":"&ldrushar;","↲":"&ldsh;","≤":"&leq;","⇇":"&llarr;","⋋":"&lthree;","⪨":"&lescc;","⩿":"&lesdot;","⪁":"&lesdoto;","⪃":"&lesdotor;","⋚︀":"&lesg;","⪓":"&lesges;","⋖":"&ltdot;","⥼":"&lfisht;","𝔩":"&lfr;","⪑":"&lgE;","⥪":"&lharul;","▄":"&lhblk;","љ":"&ljcy;","⥫":"&llhard;","◺":"&lltri;","ŀ":"&lmidot;","⎰":"&lmoustache;","≨":"&lneqq;","⪉":"&lnapprox;","⪇":"&lneq;","⋦":"&lnsim;","⟬":"&loang;","⇽":"&loarr;","⟼":"&xmap;","↬":"&rarrlp;","⦅":"&lopar;","𝕝":"&lopf;","⨭":"&loplus;","⨴":"&lotimes;","∗":"&lowast;","◊":"&lozenge;","(":"&lpar;","⦓":"&lparlt;","⥭":"&lrhard;","‎":"&lrm;","⊿":"&lrtri;","‹":"&lsaquo;","𝓁":"&lscr;","⪍":"&lsime;","⪏":"&lsimg;","‚":"&sbquo;","ł":"&lstrok;","⪦":"&ltcc;","⩹":"&ltcir;","⋉":"&ltimes;","⥶":"&ltlarr;","⩻":"&ltquest;","⦖":"&ltrPar;","◃":"&triangleleft;","⥊":"&lurdshar;","⥦":"&luruhar;","≨︀":"&lvnE;","∺":"&mDDot;","¯":"&strns;","♂":"&male;","✠":"&maltese;","▮":"&marker;","⨩":"&mcomma;","м":"&mcy;","—":"&mdash;","𝔪":"&mfr;","℧":"&mho;","µ":"&micro;","⫰":"&midcir;","−":"&minus;","⨪":"&minusdu;","⫛":"&mlcp;","⊧":"&models;","𝕞":"&mopf;","𝓂":"&mscr;","μ":"&mu;","⊸":"&mumap;","⋙̸":"&nGg;","≫⃒":"&nGt;","⇍":"&nlArr;","⇎":"&nhArr;","⋘̸":"&nLl;","≪⃒":"&nLt;","⇏":"&nrArr;","⊯":"&nVDash;","⊮":"&nVdash;","ń":"&nacute;","∠⃒":"&nang;","⩰̸":"&napE;","≋̸":"&napid;","ŉ":"&napos;","♮":"&natural;","⩃":"&ncap;","ň":"&ncaron;","ņ":"&ncedil;","⩭̸":"&ncongdot;","⩂":"&ncup;","н":"&ncy;","–":"&ndash;","⇗":"&neArr;","⤤":"&nearhk;","≐̸":"&nedot;","⤨":"&toea;","𝔫":"&nfr;","↮":"&nleftrightarrow;","⫲":"&nhpar;","⋼":"&nis;","⋺":"&nisd;","њ":"&njcy;","≦̸":"&nleqq;","↚":"&nleftarrow;","‥":"&nldr;","𝕟":"&nopf;","¬":"&not;","⋹̸":"&notinE;","⋵̸":"&notindot;","⋷":"&notinvb;","⋶":"&notinvc;","⋾":"&notnivb;","⋽":"&notnivc;","⫽⃥":"&nparsl;","∂̸":"&npart;","⨔":"&npolint;","↛":"&nrightarrow;","⤳̸":"&nrarrc;","↝̸":"&nrarrw;","𝓃":"&nscr;","⊄":"&nsub;","⫅̸":"&nsubseteqq;","⊅":"&nsup;","⫆̸":"&nsupseteqq;","ñ":"&ntilde;","ν":"&nu;","#":"&num;","№":"&numero;"," ":"&numsp;","⊭":"&nvDash;","⤄":"&nvHarr;","≍⃒":"&nvap;","⊬":"&nvdash;","≥⃒":"&nvge;",">⃒":"&nvgt;","⧞":"&nvinfin;","⤂":"&nvlArr;","≤⃒":"&nvle;","<⃒":"&nvlt;","⊴⃒":"&nvltrie;","⤃":"&nvrArr;","⊵⃒":"&nvrtrie;","∼⃒":"&nvsim;","⇖":"&nwArr;","⤣":"&nwarhk;","⤧":"&nwnear;","ó":"&oacute;","ô":"&ocirc;","о":"&ocy;","ő":"&odblac;","⨸":"&odiv;","⦼":"&odsold;","œ":"&oelig;","⦿":"&ofcir;","𝔬":"&ofr;","˛":"&ogon;","ò":"&ograve;","⧁":"&ogt;","⦵":"&ohbar;","⦾":"&olcir;","⦻":"&olcross;","⧀":"&olt;","ō":"&omacr;","ω":"&omega;","ο":"&omicron;","⦶":"&omid;","𝕠":"&oopf;","⦷":"&opar;","⦹":"&operp;","∨":"&vee;","⩝":"&ord;","ℴ":"&oscr;","ª":"&ordf;","º":"&ordm;","⊶":"&origof;","⩖":"&oror;","⩗":"&orslope;","⩛":"&orv;","ø":"&oslash;","⊘":"&osol;","õ":"&otilde;","⨶":"&otimesas;","ö":"&ouml;","⌽":"&ovbar;","¶":"&para;","⫳":"&parsim;","⫽":"&parsl;","п":"&pcy;","%":"&percnt;",".":"&period;","‰":"&permil;","‱":"&pertenk;","𝔭":"&pfr;","φ":"&phi;","ϕ":"&varphi;","☎":"&phone;","π":"&pi;","ϖ":"&varpi;","ℎ":"&planckh;","+":"&plus;","⨣":"&plusacir;","⨢":"&pluscir;","⨥":"&plusdu;","⩲":"&pluse;","⨦":"&plussim;","⨧":"&plustwo;","⨕":"&pointint;","𝕡":"&popf;","£":"&pound;","⪳":"&prE;","⪷":"&precapprox;","⪹":"&prnap;","⪵":"&prnE;","⋨":"&prnsim;","′":"&prime;","⌮":"&profalar;","⌒":"&profline;","⌓":"&profsurf;","⊰":"&prurel;","𝓅":"&pscr;","ψ":"&psi;"," ":"&puncsp;","𝔮":"&qfr;","𝕢":"&qopf;","⁗":"&qprime;","𝓆":"&qscr;","⨖":"&quatint;","?":"&quest;","⤜":"&rAtail;","⥤":"&rHar;","∽̱":"&race;","ŕ":"&racute;","⦳":"&raemptyv;","⦒":"&rangd;","⦥":"&range;","»":"&raquo;","⥵":"&rarrap;","⤠":"&rarrbfs;","⤳":"&rarrc;","⤞":"&rarrfs;","⥅":"&rarrpl;","⥴":"&rarrsim;","↣":"&rightarrowtail;","↝":"&rightsquigarrow;","⤚":"&ratail;","∶":"&ratio;","❳":"&rbbrk;","}":"&rcub;","]":"&rsqb;","⦌":"&rbrke;","⦎":"&rbrksld;","⦐":"&rbrkslu;","ř":"&rcaron;","ŗ":"&rcedil;","р":"&rcy;","⤷":"&rdca;","⥩":"&rdldhar;","↳":"&rdsh;","▭":"&rect;","⥽":"&rfisht;","𝔯":"&rfr;","⥬":"&rharul;","ρ":"&rho;","ϱ":"&varrho;","⇉":"&rrarr;","⋌":"&rthree;","˚":"&ring;","‏":"&rlm;","⎱":"&rmoustache;","⫮":"&rnmid;","⟭":"&roang;","⇾":"&roarr;","⦆":"&ropar;","𝕣":"&ropf;","⨮":"&roplus;","⨵":"&rotimes;",")":"&rpar;","⦔":"&rpargt;","⨒":"&rppolint;","›":"&rsaquo;","𝓇":"&rscr;","⋊":"&rtimes;","▹":"&triangleright;","⧎":"&rtriltri;","⥨":"&ruluhar;","℞":"&rx;","ś":"&sacute;","⪴":"&scE;","⪸":"&succapprox;","š":"&scaron;","ş":"&scedil;","ŝ":"&scirc;","⪶":"&succneqq;","⪺":"&succnapprox;","⋩":"&succnsim;","⨓":"&scpolint;","с":"&scy;","⋅":"&sdot;","⩦":"&sdote;","⇘":"&seArr;","§":"&sect;",";":"&semi;","⤩":"&tosa;","✶":"&sext;","𝔰":"&sfr;","♯":"&sharp;","щ":"&shchcy;","ш":"&shcy;","­":"&shy;","σ":"&sigma;","ς":"&varsigma;","⩪":"&simdot;","⪞":"&simg;","⪠":"&simgE;","⪝":"&siml;","⪟":"&simlE;","≆":"&simne;","⨤":"&simplus;","⥲":"&simrarr;","⨳":"&smashp;","⧤":"&smeparsl;","⌣":"&ssmile;","⪪":"&smt;","⪬":"&smte;","⪬︀":"&smtes;","ь":"&softcy;","/":"&sol;","⧄":"&solb;","⌿":"&solbar;","𝕤":"&sopf;","♠":"&spadesuit;","⊓︀":"&sqcaps;","⊔︀":"&sqcups;","𝓈":"&sscr;","☆":"&star;","⊂":"&subset;","⫅":"&subseteqq;","⪽":"&subdot;","⫃":"&subedot;","⫁":"&submult;","⫋":"&subsetneqq;","⊊":"&subsetneq;","⪿":"&subplus;","⥹":"&subrarr;","⫇":"&subsim;","⫕":"&subsub;","⫓":"&subsup;","♪":"&sung;","¹":"&sup1;","²":"&sup2;","³":"&sup3;","⫆":"&supseteqq;","⪾":"&supdot;","⫘":"&supdsub;","⫄":"&supedot;","⟉":"&suphsol;","⫗":"&suphsub;","⥻":"&suplarr;","⫂":"&supmult;","⫌":"&supsetneqq;","⊋":"&supsetneq;","⫀":"&supplus;","⫈":"&supsim;","⫔":"&supsub;","⫖":"&supsup;","⇙":"&swArr;","⤪":"&swnwar;","ß":"&szlig;","⌖":"&target;","τ":"&tau;","ť":"&tcaron;","ţ":"&tcedil;","т":"&tcy;","⌕":"&telrec;","𝔱":"&tfr;","θ":"&theta;","ϑ":"&vartheta;","þ":"&thorn;","×":"&times;","⨱":"&timesbar;","⨰":"&timesd;","⌶":"&topbot;","⫱":"&topcir;","𝕥":"&topf;","⫚":"&topfork;","‴":"&tprime;","▵":"&utri;","≜":"&trie;","◬":"&tridot;","⨺":"&triminus;","⨹":"&triplus;","⧍":"&trisb;","⨻":"&tritime;","⏢":"&trpezium;","𝓉":"&tscr;","ц":"&tscy;","ћ":"&tshcy;","ŧ":"&tstrok;","⥣":"&uHar;","ú":"&uacute;","ў":"&ubrcy;","ŭ":"&ubreve;","û":"&ucirc;","у":"&ucy;","ű":"&udblac;","⥾":"&ufisht;","𝔲":"&ufr;","ù":"&ugrave;","▀":"&uhblk;","⌜":"&ulcorner;","⌏":"&ulcrop;","◸":"&ultri;","ū":"&umacr;","ų":"&uogon;","𝕦":"&uopf;","υ":"&upsilon;","⇈":"&uuarr;","⌝":"&urcorner;","⌎":"&urcrop;","ů":"&uring;","◹":"&urtri;","𝓊":"&uscr;","⋰":"&utdot;","ũ":"&utilde;","ü":"&uuml;","⦧":"&uwangle;","⫨":"&vBar;","⫩":"&vBarv;","⦜":"&vangrt;","⊊︀":"&vsubne;","⫋︀":"&vsubnE;","⊋︀":"&vsupne;","⫌︀":"&vsupnE;","в":"&vcy;","⊻":"&veebar;","≚":"&veeeq;","⋮":"&vellip;","𝔳":"&vfr;","𝕧":"&vopf;","𝓋":"&vscr;","⦚":"&vzigzag;","ŵ":"&wcirc;","⩟":"&wedbar;","≙":"&wedgeq;","℘":"&wp;","𝔴":"&wfr;","𝕨":"&wopf;","𝓌":"&wscr;","𝔵":"&xfr;","ξ":"&xi;","⋻":"&xnis;","𝕩":"&xopf;","𝓍":"&xscr;","ý":"&yacute;","я":"&yacy;","ŷ":"&ycirc;","ы":"&ycy;","¥":"&yen;","𝔶":"&yfr;","ї":"&yicy;","𝕪":"&yopf;","𝓎":"&yscr;","ю":"&yucy;","ÿ":"&yuml;","ź":"&zacute;","ž":"&zcaron;","з":"&zcy;","ż":"&zdot;","ζ":"&zeta;","𝔷":"&zfr;","ж":"&zhcy;","⇝":"&zigrarr;","𝕫":"&zopf;","𝓏":"&zscr;","‍":"&zwj;","‌":"&zwnj;"}}};
-//# sourceMappingURL=./named-references.js.map
+
+
+/** @type {import('./shams')} */
+/* eslint complexity: [2, 18], max-statements: [2, 33] */
+module.exports = function hasSymbols() {
+	if (typeof Symbol !== 'function' || typeof Object.getOwnPropertySymbols !== 'function') { return false; }
+	if (typeof Symbol.iterator === 'symbol') { return true; }
+
+	/** @type {{ [k in symbol]?: unknown }} */
+	var obj = {};
+	var sym = Symbol('test');
+	var symObj = Object(sym);
+	if (typeof sym === 'string') { return false; }
+
+	if (Object.prototype.toString.call(sym) !== '[object Symbol]') { return false; }
+	if (Object.prototype.toString.call(symObj) !== '[object Symbol]') { return false; }
+
+	// temp disabled per https://github.com/ljharb/object.assign/issues/17
+	// if (sym instanceof Symbol) { return false; }
+	// temp disabled per https://github.com/WebReflection/get-own-property-symbols/issues/4
+	// if (!(symObj instanceof Symbol)) { return false; }
+
+	// if (typeof Symbol.prototype.toString !== 'function') { return false; }
+	// if (String(sym) !== Symbol.prototype.toString.call(sym)) { return false; }
+
+	var symVal = 42;
+	obj[sym] = symVal;
+	for (var _ in obj) { return false; } // eslint-disable-line no-restricted-syntax, no-unreachable-loop
+	if (typeof Object.keys === 'function' && Object.keys(obj).length !== 0) { return false; }
+
+	if (typeof Object.getOwnPropertyNames === 'function' && Object.getOwnPropertyNames(obj).length !== 0) { return false; }
+
+	var syms = Object.getOwnPropertySymbols(obj);
+	if (syms.length !== 1 || syms[0] !== sym) { return false; }
+
+	if (!Object.prototype.propertyIsEnumerable.call(obj, sym)) { return false; }
+
+	if (typeof Object.getOwnPropertyDescriptor === 'function') {
+		// eslint-disable-next-line no-extra-parens
+		var descriptor = /** @type {PropertyDescriptor} */ (Object.getOwnPropertyDescriptor(obj, sym));
+		if (descriptor.value !== symVal || descriptor.enumerable !== true) { return false; }
+	}
+
+	return true;
+};
+
 
 /***/ }),
 
-/***/ 45439:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 99038:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.numericUnicodeMap={0:65533,128:8364,130:8218,131:402,132:8222,133:8230,134:8224,135:8225,136:710,137:8240,138:352,139:8249,140:338,142:381,145:8216,146:8217,147:8220,148:8221,149:8226,150:8211,151:8212,152:732,153:8482,154:353,155:8250,156:339,158:382,159:376};
-//# sourceMappingURL=./numeric-unicode-map.js.map
+
+
+var hasSymbols = __nccwpck_require__(57747);
+
+/** @type {import('.')} */
+module.exports = function hasToStringTagShams() {
+	return hasSymbols() && !!Symbol.toStringTag;
+};
+
 
 /***/ }),
 
-/***/ 1454:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 62157:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.fromCodePoint=String.fromCodePoint||function(astralCodePoint){return String.fromCharCode(Math.floor((astralCodePoint-65536)/1024)+55296,(astralCodePoint-65536)%1024+56320)};exports.getCodePoint=String.prototype.codePointAt?function(input,position){return input.codePointAt(position)}:function(input,position){return(input.charCodeAt(position)-55296)*1024+input.charCodeAt(position+1)-56320+65536};exports.highSurrogateFrom=55296;exports.highSurrogateTo=56319;
-//# sourceMappingURL=./surrogate-pairs.js.map
+
+
+var call = Function.prototype.call;
+var $hasOwn = Object.prototype.hasOwnProperty;
+var bind = __nccwpck_require__(88334);
+
+/** @type {import('.')} */
+module.exports = bind.call(call, $hasOwn);
+
 
 /***/ }),
 
@@ -59210,52 +60357,6 @@ if (typeof Object.create === 'function') {
     }
   }
 }
-
-
-/***/ }),
-
-/***/ 63287:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-
-/*!
- * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-function isObject(o) {
-  return Object.prototype.toString.call(o) === '[object Object]';
-}
-
-function isPlainObject(o) {
-  var ctor,prot;
-
-  if (isObject(o) === false) return false;
-
-  // If has modified constructor
-  ctor = o.constructor;
-  if (ctor === undefined) return true;
-
-  // If has modified prototype
-  prot = ctor.prototype;
-  if (isObject(prot) === false) return false;
-
-  // If constructor does not have an Object-specific method
-  if (prot.hasOwnProperty('isPrototypeOf') === false) {
-    return false;
-  }
-
-  // Most likely a plain Object
-  return true;
-}
-
-exports.isPlainObject = isPlainObject;
 
 
 /***/ }),
@@ -60159,7 +61260,6 @@ var JSON = module.exports;
 /***/ 96010:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var bufferEqual = __nccwpck_require__(9239);
 var Buffer = (__nccwpck_require__(21867).Buffer);
 var crypto = __nccwpck_require__(6113);
 var formatEcdsa = __nccwpck_require__(11728);
@@ -60296,10 +61396,25 @@ function createHmacSigner(bits) {
   }
 }
 
+var bufferEqual;
+var timingSafeEqual = 'timingSafeEqual' in crypto ? function timingSafeEqual(a, b) {
+  if (a.byteLength !== b.byteLength) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(a, b)
+} : function timingSafeEqual(a, b) {
+  if (!bufferEqual) {
+    bufferEqual = __nccwpck_require__(9239);
+  }
+
+  return bufferEqual(a, b)
+}
+
 function createHmacVerifier(bits) {
   return function verify(thing, signature, secret) {
     var computedSig = createHmacSigner(bits)(thing, secret);
-    return bufferEqual(Buffer.from(signature), Buffer.from(computedSig));
+    return timingSafeEqual(Buffer.from(signature), Buffer.from(computedSig));
   }
 }
 
@@ -60731,6 +61846,111 @@ VerifyStream.isValid = isValidJws;
 VerifyStream.verify = jwsVerify;
 
 module.exports = VerifyStream;
+
+
+/***/ }),
+
+/***/ 19775:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./abs')} */
+module.exports = Math.abs;
+
+
+/***/ }),
+
+/***/ 60924:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./floor')} */
+module.exports = Math.floor;
+
+
+/***/ }),
+
+/***/ 57661:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./isNaN')} */
+module.exports = Number.isNaN || function isNaN(a) {
+	return a !== a;
+};
+
+
+/***/ }),
+
+/***/ 52419:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./max')} */
+module.exports = Math.max;
+
+
+/***/ }),
+
+/***/ 73373:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./min')} */
+module.exports = Math.min;
+
+
+/***/ }),
+
+/***/ 78029:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./pow')} */
+module.exports = Math.pow;
+
+
+/***/ }),
+
+/***/ 59396:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./round')} */
+module.exports = Math.round;
+
+
+/***/ }),
+
+/***/ 39091:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var $isNaN = __nccwpck_require__(57661);
+
+/** @type {import('./sign')} */
+module.exports = function sign(number) {
+	if ($isNaN(number) || number === 0) {
+		return number;
+	}
+	return number < 0 ? -1 : +1;
+};
 
 
 /***/ }),
@@ -66571,7 +67791,7 @@ var objectKeys = Object.keys || function (obj) {
 
 module.exports = Duplex;
 var Readable = __nccwpck_require__(51433);
-var Writable = __nccwpck_require__(32094);
+var Writable = __nccwpck_require__(26993);
 __nccwpck_require__(44124)(Duplex, Readable);
 {
   // Allow the keys array to be GC'ed.
@@ -67937,7 +69157,7 @@ function done(stream, er, data) {
 
 /***/ }),
 
-/***/ 32094:
+/***/ 26993:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -69360,7 +70580,7 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
   exports = module.exports = __nccwpck_require__(51433);
   exports.Stream = Stream || exports;
   exports.Readable = exports;
-  exports.Writable = __nccwpck_require__(32094);
+  exports.Writable = __nccwpck_require__(26993);
   exports.Duplex = __nccwpck_require__(41359);
   exports.Transform = __nccwpck_require__(34415);
   exports.PassThrough = __nccwpck_require__(81542);
@@ -79498,6 +80718,132 @@ module.exports = buildConnector
 
 /***/ }),
 
+/***/ 14462:
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {Record<string, string | undefined>} */
+const headerNameLowerCasedRecord = {}
+
+// https://developer.mozilla.org/docs/Web/HTTP/Headers
+const wellknownHeaderNames = [
+  'Accept',
+  'Accept-Encoding',
+  'Accept-Language',
+  'Accept-Ranges',
+  'Access-Control-Allow-Credentials',
+  'Access-Control-Allow-Headers',
+  'Access-Control-Allow-Methods',
+  'Access-Control-Allow-Origin',
+  'Access-Control-Expose-Headers',
+  'Access-Control-Max-Age',
+  'Access-Control-Request-Headers',
+  'Access-Control-Request-Method',
+  'Age',
+  'Allow',
+  'Alt-Svc',
+  'Alt-Used',
+  'Authorization',
+  'Cache-Control',
+  'Clear-Site-Data',
+  'Connection',
+  'Content-Disposition',
+  'Content-Encoding',
+  'Content-Language',
+  'Content-Length',
+  'Content-Location',
+  'Content-Range',
+  'Content-Security-Policy',
+  'Content-Security-Policy-Report-Only',
+  'Content-Type',
+  'Cookie',
+  'Cross-Origin-Embedder-Policy',
+  'Cross-Origin-Opener-Policy',
+  'Cross-Origin-Resource-Policy',
+  'Date',
+  'Device-Memory',
+  'Downlink',
+  'ECT',
+  'ETag',
+  'Expect',
+  'Expect-CT',
+  'Expires',
+  'Forwarded',
+  'From',
+  'Host',
+  'If-Match',
+  'If-Modified-Since',
+  'If-None-Match',
+  'If-Range',
+  'If-Unmodified-Since',
+  'Keep-Alive',
+  'Last-Modified',
+  'Link',
+  'Location',
+  'Max-Forwards',
+  'Origin',
+  'Permissions-Policy',
+  'Pragma',
+  'Proxy-Authenticate',
+  'Proxy-Authorization',
+  'RTT',
+  'Range',
+  'Referer',
+  'Referrer-Policy',
+  'Refresh',
+  'Retry-After',
+  'Sec-WebSocket-Accept',
+  'Sec-WebSocket-Extensions',
+  'Sec-WebSocket-Key',
+  'Sec-WebSocket-Protocol',
+  'Sec-WebSocket-Version',
+  'Server',
+  'Server-Timing',
+  'Service-Worker-Allowed',
+  'Service-Worker-Navigation-Preload',
+  'Set-Cookie',
+  'SourceMap',
+  'Strict-Transport-Security',
+  'Supports-Loading-Mode',
+  'TE',
+  'Timing-Allow-Origin',
+  'Trailer',
+  'Transfer-Encoding',
+  'Upgrade',
+  'Upgrade-Insecure-Requests',
+  'User-Agent',
+  'Vary',
+  'Via',
+  'WWW-Authenticate',
+  'X-Content-Type-Options',
+  'X-DNS-Prefetch-Control',
+  'X-Frame-Options',
+  'X-Permitted-Cross-Domain-Policies',
+  'X-Powered-By',
+  'X-Requested-With',
+  'X-XSS-Protection'
+]
+
+for (let i = 0; i < wellknownHeaderNames.length; ++i) {
+  const key = wellknownHeaderNames[i]
+  const lowerCasedKey = key.toLowerCase()
+  headerNameLowerCasedRecord[key] = headerNameLowerCasedRecord[lowerCasedKey] =
+    lowerCasedKey
+}
+
+// Note: object prototypes should not be able to be referenced. e.g. `Object#hasOwnProperty`.
+Object.setPrototypeOf(headerNameLowerCasedRecord, null)
+
+module.exports = {
+  wellknownHeaderNames,
+  headerNameLowerCasedRecord
+}
+
+
+/***/ }),
+
 /***/ 48045:
 /***/ ((module) => {
 
@@ -80328,6 +81674,7 @@ const { InvalidArgumentError } = __nccwpck_require__(48045)
 const { Blob } = __nccwpck_require__(14300)
 const nodeUtil = __nccwpck_require__(73837)
 const { stringify } = __nccwpck_require__(63477)
+const { headerNameLowerCasedRecord } = __nccwpck_require__(14462)
 
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(v => Number(v))
 
@@ -80535,6 +81882,15 @@ const KEEPALIVE_TIMEOUT_EXPR = /timeout=(\d+)/
 function parseKeepAliveTimeout (val) {
   const m = val.toString().match(KEEPALIVE_TIMEOUT_EXPR)
   return m ? parseInt(m[1], 10) * 1000 : null
+}
+
+/**
+ * Retrieves a header name and returns its lowercase value.
+ * @param {string | Buffer} value Header name
+ * @returns {string}
+ */
+function headerNameToString (value) {
+  return headerNameLowerCasedRecord[value] || value.toLowerCase()
 }
 
 function parseHeaders (headers, obj = {}) {
@@ -80808,6 +82164,7 @@ module.exports = {
   isIterable,
   isAsyncIterable,
   isDestroyed,
+  headerNameToString,
   parseRawHeaders,
   parseHeaders,
   parseKeepAliveTimeout,
@@ -81087,6 +82444,14 @@ const { isUint8Array, isArrayBuffer } = __nccwpck_require__(29830)
 const { File: UndiciFile } = __nccwpck_require__(78511)
 const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(685)
 
+let random
+try {
+  const crypto = __nccwpck_require__(6005)
+  random = (max) => crypto.randomInt(0, max)
+} catch {
+  random = (max) => Math.floor(Math.random(max))
+}
+
 let ReadableStream = globalThis.ReadableStream
 
 /** @type {globalThis['File']} */
@@ -81172,7 +82537,7 @@ function extractBody (object, keepalive = false) {
     // Set source to a copy of the bytes held by object.
     source = new Uint8Array(object.buffer.slice(object.byteOffset, object.byteOffset + object.byteLength))
   } else if (util.isFormDataLike(object)) {
-    const boundary = `----formdata-undici-0${`${Math.floor(Math.random() * 1e11)}`.padStart(11, '0')}`
+    const boundary = `----formdata-undici-0${`${random(1e11)}`.padStart(11, '0')}`
     const prefix = `--${boundary}\r\nContent-Disposition: form-data`
 
     /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
@@ -87455,14 +88820,18 @@ const { isBlobLike, toUSVString, ReadableStreamFrom } = __nccwpck_require__(8398
 const assert = __nccwpck_require__(39491)
 const { isUint8Array } = __nccwpck_require__(29830)
 
+let supportedHashes = []
+
 // https://nodejs.org/api/crypto.html#determining-if-crypto-support-is-unavailable
 /** @type {import('crypto')|undefined} */
 let crypto
 
 try {
   crypto = __nccwpck_require__(6113)
+  const possibleRelevantHashes = ['sha256', 'sha384', 'sha512']
+  supportedHashes = crypto.getHashes().filter((hash) => possibleRelevantHashes.includes(hash))
+/* c8 ignore next 3 */
 } catch {
-
 }
 
 function responseURL (response) {
@@ -87990,66 +89359,56 @@ function bytesMatch (bytes, metadataList) {
     return true
   }
 
-  // 3. If parsedMetadata is the empty set, return true.
+  // 3. If response is not eligible for integrity validation, return false.
+  // TODO
+
+  // 4. If parsedMetadata is the empty set, return true.
   if (parsedMetadata.length === 0) {
     return true
   }
 
-  // 4. Let metadata be the result of getting the strongest
+  // 5. Let metadata be the result of getting the strongest
   //    metadata from parsedMetadata.
-  const list = parsedMetadata.sort((c, d) => d.algo.localeCompare(c.algo))
-  // get the strongest algorithm
-  const strongest = list[0].algo
-  // get all entries that use the strongest algorithm; ignore weaker
-  const metadata = list.filter((item) => item.algo === strongest)
+  const strongest = getStrongestMetadata(parsedMetadata)
+  const metadata = filterMetadataListByAlgorithm(parsedMetadata, strongest)
 
-  // 5. For each item in metadata:
+  // 6. For each item in metadata:
   for (const item of metadata) {
     // 1. Let algorithm be the alg component of item.
     const algorithm = item.algo
 
     // 2. Let expectedValue be the val component of item.
-    let expectedValue = item.hash
+    const expectedValue = item.hash
 
     // See https://github.com/web-platform-tests/wpt/commit/e4c5cc7a5e48093220528dfdd1c4012dc3837a0e
     // "be liberal with padding". This is annoying, and it's not even in the spec.
 
-    if (expectedValue.endsWith('==')) {
-      expectedValue = expectedValue.slice(0, -2)
-    }
-
     // 3. Let actualValue be the result of applying algorithm to bytes.
     let actualValue = crypto.createHash(algorithm).update(bytes).digest('base64')
 
-    if (actualValue.endsWith('==')) {
-      actualValue = actualValue.slice(0, -2)
+    if (actualValue[actualValue.length - 1] === '=') {
+      if (actualValue[actualValue.length - 2] === '=') {
+        actualValue = actualValue.slice(0, -2)
+      } else {
+        actualValue = actualValue.slice(0, -1)
+      }
     }
 
     // 4. If actualValue is a case-sensitive match for expectedValue,
     //    return true.
-    if (actualValue === expectedValue) {
-      return true
-    }
-
-    let actualBase64URL = crypto.createHash(algorithm).update(bytes).digest('base64url')
-
-    if (actualBase64URL.endsWith('==')) {
-      actualBase64URL = actualBase64URL.slice(0, -2)
-    }
-
-    if (actualBase64URL === expectedValue) {
+    if (compareBase64Mixed(actualValue, expectedValue)) {
       return true
     }
   }
 
-  // 6. Return false.
+  // 7. Return false.
   return false
 }
 
 // https://w3c.github.io/webappsec-subresource-integrity/#grammardef-hash-with-options
 // https://www.w3.org/TR/CSP2/#source-list-syntax
 // https://www.rfc-editor.org/rfc/rfc5234#appendix-B.1
-const parseHashWithOptions = /((?<algo>sha256|sha384|sha512)-(?<hash>[A-z0-9+/]{1}.*={0,2}))( +[\x21-\x7e]?)?/i
+const parseHashWithOptions = /(?<algo>sha256|sha384|sha512)-((?<hash>[A-Za-z0-9+/]+|[A-Za-z0-9_-]+)={0,2}(?:\s|$)( +[!-~]*)?)?/i
 
 /**
  * @see https://w3c.github.io/webappsec-subresource-integrity/#parse-metadata
@@ -88063,8 +89422,6 @@ function parseMetadata (metadata) {
   // 2. Let empty be equal to true.
   let empty = true
 
-  const supportedHashes = crypto.getHashes()
-
   // 3. For each token returned by splitting metadata on spaces:
   for (const token of metadata.split(' ')) {
     // 1. Set empty to false.
@@ -88074,7 +89431,11 @@ function parseMetadata (metadata) {
     const parsedToken = parseHashWithOptions.exec(token)
 
     // 3. If token does not parse, continue to the next token.
-    if (parsedToken === null || parsedToken.groups === undefined) {
+    if (
+      parsedToken === null ||
+      parsedToken.groups === undefined ||
+      parsedToken.groups.algo === undefined
+    ) {
       // Note: Chromium blocks the request at this point, but Firefox
       // gives a warning that an invalid integrity was given. The
       // correct behavior is to ignore these, and subsequently not
@@ -88083,11 +89444,11 @@ function parseMetadata (metadata) {
     }
 
     // 4. Let algorithm be the hash-algo component of token.
-    const algorithm = parsedToken.groups.algo
+    const algorithm = parsedToken.groups.algo.toLowerCase()
 
     // 5. If algorithm is a hash function recognized by the user
     //    agent, add the parsed token to result.
-    if (supportedHashes.includes(algorithm.toLowerCase())) {
+    if (supportedHashes.includes(algorithm)) {
       result.push(parsedToken.groups)
     }
   }
@@ -88098,6 +89459,82 @@ function parseMetadata (metadata) {
   }
 
   return result
+}
+
+/**
+ * @param {{ algo: 'sha256' | 'sha384' | 'sha512' }[]} metadataList
+ */
+function getStrongestMetadata (metadataList) {
+  // Let algorithm be the algo component of the first item in metadataList.
+  // Can be sha256
+  let algorithm = metadataList[0].algo
+  // If the algorithm is sha512, then it is the strongest
+  // and we can return immediately
+  if (algorithm[3] === '5') {
+    return algorithm
+  }
+
+  for (let i = 1; i < metadataList.length; ++i) {
+    const metadata = metadataList[i]
+    // If the algorithm is sha512, then it is the strongest
+    // and we can break the loop immediately
+    if (metadata.algo[3] === '5') {
+      algorithm = 'sha512'
+      break
+    // If the algorithm is sha384, then a potential sha256 or sha384 is ignored
+    } else if (algorithm[3] === '3') {
+      continue
+    // algorithm is sha256, check if algorithm is sha384 and if so, set it as
+    // the strongest
+    } else if (metadata.algo[3] === '3') {
+      algorithm = 'sha384'
+    }
+  }
+  return algorithm
+}
+
+function filterMetadataListByAlgorithm (metadataList, algorithm) {
+  if (metadataList.length === 1) {
+    return metadataList
+  }
+
+  let pos = 0
+  for (let i = 0; i < metadataList.length; ++i) {
+    if (metadataList[i].algo === algorithm) {
+      metadataList[pos++] = metadataList[i]
+    }
+  }
+
+  metadataList.length = pos
+
+  return metadataList
+}
+
+/**
+ * Compares two base64 strings, allowing for base64url
+ * in the second string.
+ *
+* @param {string} actualValue always base64
+ * @param {string} expectedValue base64 or base64url
+ * @returns {boolean}
+ */
+function compareBase64Mixed (actualValue, expectedValue) {
+  if (actualValue.length !== expectedValue.length) {
+    return false
+  }
+  for (let i = 0; i < actualValue.length; ++i) {
+    if (actualValue[i] !== expectedValue[i]) {
+      if (
+        (actualValue[i] === '+' && expectedValue[i] === '-') ||
+        (actualValue[i] === '/' && expectedValue[i] === '_')
+      ) {
+        continue
+      }
+      return false
+    }
+  }
+
+  return true
 }
 
 // https://w3c.github.io/webappsec-upgrade-insecure-requests/#upgrade-request
@@ -88515,7 +89952,8 @@ module.exports = {
   urlHasHttpsScheme,
   urlIsHttpHttpsScheme,
   readAllBytes,
-  normalizeMethodRecord
+  normalizeMethodRecord,
+  parseMetadata
 }
 
 
@@ -90602,12 +92040,17 @@ function parseLocation (statusCode, headers) {
 
 // https://tools.ietf.org/html/rfc7231#section-6.4.4
 function shouldRemoveHeader (header, removeContent, unknownOrigin) {
-  return (
-    (header.length === 4 && header.toString().toLowerCase() === 'host') ||
-    (removeContent && header.toString().toLowerCase().indexOf('content-') === 0) ||
-    (unknownOrigin && header.length === 13 && header.toString().toLowerCase() === 'authorization') ||
-    (unknownOrigin && header.length === 6 && header.toString().toLowerCase() === 'cookie')
-  )
+  if (header.length === 4) {
+    return util.headerNameToString(header) === 'host'
+  }
+  if (removeContent && util.headerNameToString(header).startsWith('content-')) {
+    return true
+  }
+  if (unknownOrigin && (header.length === 13 || header.length === 6 || header.length === 19)) {
+    const name = util.headerNameToString(header)
+    return name === 'authorization' || name === 'cookie' || name === 'proxy-authorization'
+  }
+  return false
 }
 
 // https://tools.ietf.org/html/rfc7231#section-6.4
@@ -95148,221 +96591,6 @@ module.exports = __nccwpck_require__(73837).deprecate;
 
 /***/ }),
 
-/***/ 2155:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var v1 = __nccwpck_require__(18749);
-var v4 = __nccwpck_require__(80824);
-
-var uuid = v4;
-uuid.v1 = v1;
-uuid.v4 = v4;
-
-module.exports = uuid;
-
-
-/***/ }),
-
-/***/ 92707:
-/***/ ((module) => {
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-var byteToHex = [];
-for (var i = 0; i < 256; ++i) {
-  byteToHex[i] = (i + 0x100).toString(16).substr(1);
-}
-
-function bytesToUuid(buf, offset) {
-  var i = offset || 0;
-  var bth = byteToHex;
-  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]], '-',
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]],
-    bth[buf[i++]], bth[buf[i++]]
-  ]).join('');
-}
-
-module.exports = bytesToUuid;
-
-
-/***/ }),
-
-/***/ 15859:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-// Unique ID creation requires a high quality random # generator.  In node.js
-// this is pretty straight-forward - we use the crypto API.
-
-var crypto = __nccwpck_require__(6113);
-
-module.exports = function nodeRNG() {
-  return crypto.randomBytes(16);
-};
-
-
-/***/ }),
-
-/***/ 18749:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var rng = __nccwpck_require__(15859);
-var bytesToUuid = __nccwpck_require__(92707);
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-
-var _nodeId;
-var _clockseq;
-
-// Previous uuid creation time
-var _lastMSecs = 0;
-var _lastNSecs = 0;
-
-// See https://github.com/uuidjs/uuid for API details
-function v1(options, buf, offset) {
-  var i = buf && offset || 0;
-  var b = buf || [];
-
-  options = options || {};
-  var node = options.node || _nodeId;
-  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
-
-  // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-  if (node == null || clockseq == null) {
-    var seedBytes = rng();
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [
-        seedBytes[0] | 0x01,
-        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
-      ];
-    }
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  }
-
-  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
-
-  // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
-
-  // Time since last uuid creation (in msecs)
-  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
-
-  // Per 4.2.1.2, Bump clockseq on clock regression
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  }
-
-  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  }
-
-  // Per 4.2.1.2 Throw error if too many uuids are requested
-  if (nsecs >= 10000) {
-    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq;
-
-  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-  msecs += 12219292800000;
-
-  // `time_low`
-  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff;
-
-  // `time_mid`
-  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff;
-
-  // `time_high_and_version`
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-  b[i++] = tmh >>> 16 & 0xff;
-
-  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-  b[i++] = clockseq >>> 8 | 0x80;
-
-  // `clock_seq_low`
-  b[i++] = clockseq & 0xff;
-
-  // `node`
-  for (var n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf ? buf : bytesToUuid(b);
-}
-
-module.exports = v1;
-
-
-/***/ }),
-
-/***/ 80824:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var rng = __nccwpck_require__(15859);
-var bytesToUuid = __nccwpck_require__(92707);
-
-function v4(options, buf, offset) {
-  var i = buf && offset || 0;
-
-  if (typeof(options) == 'string') {
-    buf = options === 'binary' ? new Array(16) : null;
-    options = null;
-  }
-  options = options || {};
-
-  var rnds = options.random || (options.rng || rng)();
-
-  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-  rnds[6] = (rnds[6] & 0x0f) | 0x40;
-  rnds[8] = (rnds[8] & 0x3f) | 0x80;
-
-  // Copy bytes to buffer, if provided
-  if (buf) {
-    for (var ii = 0; ii < 16; ++ii) {
-      buf[i + ii] = rnds[ii];
-    }
-  }
-
-  return buf || bytesToUuid(rnds);
-}
-
-module.exports = v4;
-
-
-/***/ }),
-
 /***/ 62940:
 /***/ ((module) => {
 
@@ -95677,11 +96905,14 @@ function isCacheFeatureAvailable() {
 exports.isCacheFeatureAvailable = isCacheFeatureAvailable;
 /**
  * Returns this action runs on GitHub Enterprise Server or not.
- * (port from https://github.com/actions/toolkit/blob/457303960f03375db6f033e214b9f90d79c3fe5c/packages/cache/src/internal/cacheUtils.ts#L134)
  */
 function isGhes() {
-    const url = process.env['GITHUB_SERVER_URL'] || 'https://github.com';
-    return new URL(url).hostname.toUpperCase() !== 'GITHUB.COM';
+    const ghUrl = new URL(process.env['GITHUB_SERVER_URL'] || 'https://github.com');
+    const hostname = ghUrl.hostname.trimEnd().toUpperCase();
+    const isGitHubHost = hostname === 'GITHUB.COM';
+    const isGitHubEnterpriseCloudHost = hostname.endsWith('.GHE.COM');
+    const isLocalHost = hostname.endsWith('.LOCALHOST');
+    return !isGitHubHost && !isGitHubEnterpriseCloudHost && !isLocalHost;
 }
 
 
@@ -95824,6 +97055,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 6005:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:crypto");
 
 /***/ }),
 
@@ -105399,7 +106638,7 @@ Dicer.prototype._write = function (data, encoding, cb) {
   if (this._headerFirst && this._isPreamble) {
     if (!this._part) {
       this._part = new PartStream(this._partOpts)
-      if (this._events.preamble) { this.emit('preamble', this._part) } else { this._ignore() }
+      if (this.listenerCount('preamble') !== 0) { this.emit('preamble', this._part) } else { this._ignore() }
     }
     const r = this._hparser.push(data)
     if (!this._inHeader && r !== undefined && r < data.length) { data = data.slice(r) } else { return cb() }
@@ -105456,7 +106695,7 @@ Dicer.prototype._oninfo = function (isMatch, data, start, end) {
       }
     }
     if (this._dashes === 2) {
-      if ((start + i) < end && this._events.trailer) { this.emit('trailer', data.slice(start + i, end)) }
+      if ((start + i) < end && this.listenerCount('trailer') !== 0) { this.emit('trailer', data.slice(start + i, end)) }
       this.reset()
       this._finished = true
       // no more parts will be added
@@ -105474,7 +106713,13 @@ Dicer.prototype._oninfo = function (isMatch, data, start, end) {
     this._part._read = function (n) {
       self._unpause()
     }
-    if (this._isPreamble && this._events.preamble) { this.emit('preamble', this._part) } else if (this._isPreamble !== true && this._events.part) { this.emit('part', this._part) } else { this._ignore() }
+    if (this._isPreamble && this.listenerCount('preamble') !== 0) {
+      this.emit('preamble', this._part)
+    } else if (this._isPreamble !== true && this.listenerCount('part') !== 0) {
+      this.emit('part', this._part)
+    } else {
+      this._ignore()
+    }
     if (!this._isPreamble) { this._inHeader = true }
   }
   if (data && start < end && !this._ignoreData) {
@@ -106157,7 +107402,7 @@ function Multipart (boy, cfg) {
 
         ++nfiles
 
-        if (!boy._events.file) {
+        if (boy.listenerCount('file') === 0) {
           self.parser._ignore()
           return
         }
@@ -106686,7 +107931,7 @@ const decoders = {
     if (textDecoders.has(this.toString())) {
       try {
         return textDecoders.get(this).decode(data)
-      } catch (e) { }
+      } catch {}
     }
     return typeof data === 'string'
       ? data
@@ -107694,13 +108939,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -109753,6 +111008,11 @@ class Bucket extends index_js_1.ServiceObject {
             callback = queryOrCallback;
         }
         query = Object.assign({}, query);
+        if (query.fields &&
+            query.autoPaginate &&
+            !query.fields.includes('nextPageToken')) {
+            query.fields = `${query.fields},nextPageToken`;
+        }
         this.request({
             uri: '/o',
             qs: query,
@@ -109765,6 +111025,10 @@ class Bucket extends index_js_1.ServiceObject {
             const itemsArray = resp.items ? resp.items : [];
             const files = itemsArray.map((file) => {
                 const options = {};
+                if (query.fields) {
+                    const fileInstance = file;
+                    return fileInstance;
+                }
                 if (query.versions) {
                     options.generation = file.generation;
                 }
@@ -110121,6 +111385,25 @@ class Bucket extends index_js_1.ServiceObject {
                 ifMetagenerationMatch: metageneration,
             },
         }, callback);
+    }
+    /**
+     * @typedef {object} RestoreOptions Options for Bucket#restore(). See an
+     *     {@link https://cloud.google.com/storage/docs/json_api/v1/buckets/restore#resource| Object resource}.
+     * @param {number} [generation] If present, selects a specific revision of this object.
+     * @param {string} [projection] Specifies the set of properties to return. If used, must be 'full' or 'noAcl'.
+     */
+    /**
+     * Restores a soft-deleted bucket
+     * @param {RestoreOptions} options Restore options.
+     * @returns {Promise<Bucket>}
+     */
+    async restore(options) {
+        const [bucket] = await this.request({
+            method: 'POST',
+            uri: '/restore',
+            qs: options,
+        });
+        return bucket;
     }
     /**
      * @typedef {array} MakeBucketPrivateResponse
@@ -111186,7 +112469,7 @@ paginator_1.paginator.extend(Bucket, 'getFiles');
  * that a callback is omitted.
  */
 (0, promisify_1.promisifyAll)(Bucket, {
-    exclude: ['cloudStorageURI', 'request', 'file', 'notification'],
+    exclude: ['cloudStorageURI', 'request', 'file', 'notification', 'restore'],
 });
 
 
@@ -111506,8 +112789,15 @@ class CRC32C {
         const crc32c = new CRC32C();
         await new Promise((resolve, reject) => {
             (0, fs_1.createReadStream)(file)
-                .on('data', (d) => crc32c.update(d))
-                .on('end', resolve)
+                .on('data', (d) => {
+                if (typeof d === 'string') {
+                    crc32c.update(Buffer.from(d));
+                }
+                else {
+                    crc32c.update(d);
+                }
+            })
+                .on('end', () => resolve())
                 .on('error', reject);
         });
         return crc32c;
@@ -111600,13 +112890,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -111975,6 +113275,8 @@ class File extends index_js_1.ServiceObject {
              * @param {string} [options.userProject] The ID of the project which will be
              *     billed for the request.
              * @param {number} [options.generation] The generation number to get
+             * @param {string} [options.restoreToken] If this is a soft-deleted object in an HNS-enabled bucket, returns the restore token which will
+             *    be necessary to restore it if there's a name conflict with another object.
              * @param {boolean} [options.softDeleted] If true, returns the soft-deleted object.
                   Object `generation` is required if `softDeleted` is set to True.
              * @param {GetFileCallback} [callback] Callback function.
@@ -113245,8 +114547,12 @@ class File extends index_js_1.ServiceObject {
                 writable.write(data);
                 fileStream
                     .pipe(writable)
-                    .on('error', callback)
-                    .on('finish', callback);
+                    .on('error', (err) => {
+                    callback(err, Buffer.from(''));
+                })
+                    .on('finish', () => {
+                    callback(null, data);
+                });
             })
                 .on('end', () => {
                 // In the case of an empty file no data will be received before the end event fires
@@ -114190,6 +115496,160 @@ class File extends index_js_1.ServiceObject {
         return `${this.storage.apiEndpoint}/${this.bucket.name}/${encodeURIComponent(this.name)}`;
     }
     /**
+     * @typedef {array} MoveFileAtomicResponse
+     * @property {File} 0 The moved {@link File}.
+     * @property {object} 1 The full API response.
+     */
+    /**
+     * @callback MoveFileAtomicCallback
+     * @param {?Error} err Request error, if any.
+     * @param {File} movedFile The moved {@link File}.
+     * @param {object} apiResponse The full API response.
+     */
+    /**
+     * @typedef {object} MoveFileAtomicOptions Configuration options for File#moveFileAtomic(). See an
+     *     {@link https://cloud.google.com/storage/docs/json_api/v1/objects#resource| Object resource}.
+     * @property {string} [userProject] The ID of the project which will be
+     *     billed for the request.
+     * @property {object} [preconditionOpts] Precondition options.
+     * @property {number} [preconditionOpts.ifGenerationMatch] Makes the operation conditional on whether the object's current generation matches the given value.
+     */
+    /**
+     * Move this file within the same HNS-enabled bucket.
+     * The source object must exist and be a live object.
+     * The source and destination object IDs must be different.
+     * Overwriting the destination object is allowed by default, but can be prevented
+     * using preconditions.
+     * If the destination path includes non-existent parent folders, they will be created.
+     *
+     * See {@link https://cloud.google.com/storage/docs/json_api/v1/objects/move| Objects: move API Documentation}
+     *
+     * @throws {Error} If the destination file is not provided.
+     *
+     * @param {string|File} destination Destination file name or File object within the same bucket..
+     * @param {MoveFileAtomicOptions} [options] Configuration options. See an
+     * @param {MoveFileAtomicCallback} [callback] Callback function.
+     * @returns {Promise<MoveFileAtomicResponse>}
+     *
+     * @example
+     * ```
+     * const {Storage} = require('@google-cloud/storage');
+     * const storage = new Storage();
+     *
+     * //-
+     * // Assume 'my-hns-bucket' is an HNS-enabled bucket.
+     * //-
+     * const bucket = storage.bucket('my-hns-bucket');
+     * const file = bucket.file('my-image.png');
+     *
+     * //-
+     * // If you pass in a string for the destination, the file is copied to its
+     * // current bucket, under the new name provided.
+     * //-
+     * file.moveFileAtomic('moved-image.png', function(err, movedFile, apiResponse) {
+     *   // `my-hns-bucket` now contains:
+     *   // - "moved-image.png"
+     *
+     *   // `movedFile` is an instance of a File object that refers to your new
+     *   // file.
+     * });
+     *
+     * //-
+     * // Move the file to a subdirectory, creating parent folders if necessary.
+     * //-
+     * file.moveFileAtomic('new-folder/subfolder/moved-image.png', function(err, movedFile, apiResponse) {
+     * // `my-hns-bucket` now contains:
+     * // - "new-folder/subfolder/moved-image.png"
+     * });
+     *
+     * //-
+     * // Prevent overwriting an existing destination object using preconditions.
+     * //-
+     * file.moveFileAtomic('existing-destination.png', {
+     * preconditionOpts: {
+     * ifGenerationMatch: 0 // Fails if the destination object exists.
+     * }
+     * }, function(err, movedFile, apiResponse) {
+     * if (err) {
+     * // Handle the error (e.g., the destination object already exists).
+     * } else {
+     * // Move successful.
+     * }
+     * });
+     *
+     * //-
+     * // If the callback is omitted, we'll return a Promise.
+     * //-
+     * file.moveFileAtomic('moved-image.png).then(function(data) {
+     *   const newFile = data[0];
+     *   const apiResponse = data[1];
+     * });
+     *
+     * ```
+     * @example <caption>include:samples/files.js</caption>
+     * region_tag:storage_move_file_hns
+     * Another example:
+     */
+    moveFileAtomic(destination, optionsOrCallback, callback) {
+        var _a, _b;
+        const noDestinationError = new Error(FileExceptionMessages.DESTINATION_NO_NAME);
+        if (!destination) {
+            throw noDestinationError;
+        }
+        let options = {};
+        if (typeof optionsOrCallback === 'function') {
+            callback = optionsOrCallback;
+        }
+        else if (optionsOrCallback) {
+            options = { ...optionsOrCallback };
+        }
+        callback = callback || index_js_1.util.noop;
+        let destName;
+        let newFile;
+        if (typeof destination === 'string') {
+            const parsedDestination = GS_URL_REGEXP.exec(destination);
+            if (parsedDestination !== null && parsedDestination.length === 3) {
+                destName = parsedDestination[2];
+            }
+            else {
+                destName = destination;
+            }
+        }
+        else if (destination instanceof File) {
+            destName = destination.name;
+            newFile = destination;
+        }
+        else {
+            throw noDestinationError;
+        }
+        newFile = newFile || this.bucket.file(destName);
+        if (!this.shouldRetryBasedOnPreconditionAndIdempotencyStrat(options === null || options === void 0 ? void 0 : options.preconditionOpts)) {
+            this.storage.retryOptions.autoRetry = false;
+        }
+        const query = {};
+        if (options.userProject !== undefined) {
+            query.userProject = options.userProject;
+            delete options.userProject;
+        }
+        if (((_a = options.preconditionOpts) === null || _a === void 0 ? void 0 : _a.ifGenerationMatch) !== undefined) {
+            query.ifGenerationMatch = (_b = options.preconditionOpts) === null || _b === void 0 ? void 0 : _b.ifGenerationMatch;
+            delete options.preconditionOpts;
+        }
+        this.request({
+            method: 'POST',
+            uri: `/moveTo/o/${encodeURIComponent(newFile.name)}`,
+            qs: query,
+            json: options,
+        }, (err, resp) => {
+            this.storage.retryOptions.autoRetry = this.instanceRetryValue;
+            if (err) {
+                callback(err, null, resp);
+                return;
+            }
+            callback(null, newFile, resp);
+        });
+    }
+    /**
      * @typedef {array} MoveResponse
      * @property {File} 0 The destination File.
      * @property {object} 1 The full API response.
@@ -114443,6 +115903,8 @@ class File extends index_js_1.ServiceObject {
      * @param {string} [userProject] The ID of the project which will be
      *     billed for the request.
      * @param {number} [generation] If present, selects a specific revision of this object.
+     * @param {string} [restoreToken] Returns an option that must be specified when getting a soft-deleted object from an HNS-enabled
+     *  bucket that has a naming and generation conflict with another object in the same bucket.
      * @param {string} [projection] Specifies the set of properties to return. If used, must be 'full' or 'noAcl'.
      * @param {string | number} [ifGenerationMatch] Request proceeds if the generation of the target resource
      *  matches the value used in the precondition.
@@ -114609,7 +116071,9 @@ class File extends index_js_1.ServiceObject {
                     }
                     return bail(err);
                 };
-                if (typeof data === 'string' || Buffer.isBuffer(data)) {
+                if (typeof data === 'string' ||
+                    Buffer.isBuffer(data) ||
+                    data instanceof Uint8Array) {
                     writable
                         .on('error', handleError)
                         .on('finish', () => resolve())
@@ -114769,7 +116233,7 @@ class File extends index_js_1.ServiceObject {
         if (!this.shouldRetryBasedOnPreconditionAndIdempotencyStrat(options.preconditionOpts)) {
             retryOptions.autoRetry = false;
         }
-        const uploadStream = resumableUpload.upload({
+        const cfg = {
             authClient: this.storage.authClient,
             apiEndpoint: this.storage.apiEndpoint,
             bucket: this.bucket.name,
@@ -114792,7 +116256,16 @@ class File extends index_js_1.ServiceObject {
             highWaterMark: options === null || options === void 0 ? void 0 : options.highWaterMark,
             universeDomain: this.bucket.storage.universeDomain,
             [util_js_1.GCCL_GCS_CMD_KEY]: options[util_js_1.GCCL_GCS_CMD_KEY],
-        });
+        };
+        let uploadStream;
+        try {
+            uploadStream = resumableUpload.upload(cfg);
+        }
+        catch (error) {
+            dup.destroy(error);
+            this.storage.retryOptions.autoRetry = this.instanceRetryValue;
+            return;
+        }
         uploadStream
             .on('response', resp => {
             dup.emit('response', resp);
@@ -115791,7 +117264,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Notification = exports.Iam = exports.HmacKey = exports.File = exports.Channel = exports.Bucket = exports.Storage = exports.IdempotencyStrategy = exports.ApiError = void 0;
+exports.Notification = exports.Iam = exports.HmacKey = exports.File = exports.Channel = exports.Bucket = exports.Storage = exports.RETRYABLE_ERR_FN_DEFAULT = exports.IdempotencyStrategy = exports.ApiError = void 0;
 /**
  * The `@google-cloud/storage` package has a single named export which is the
  * {@link Storage} (ES6) class, which should be instantiated with `new`.
@@ -115840,6 +117313,7 @@ var index_js_1 = __nccwpck_require__(4052);
 Object.defineProperty(exports, "ApiError", ({ enumerable: true, get: function () { return index_js_1.ApiError; } }));
 var storage_js_1 = __nccwpck_require__(33030);
 Object.defineProperty(exports, "IdempotencyStrategy", ({ enumerable: true, get: function () { return storage_js_1.IdempotencyStrategy; } }));
+Object.defineProperty(exports, "RETRYABLE_ERR_FN_DEFAULT", ({ enumerable: true, get: function () { return storage_js_1.RETRYABLE_ERR_FN_DEFAULT; } }));
 Object.defineProperty(exports, "Storage", ({ enumerable: true, get: function () { return storage_js_1.Storage; } }));
 var bucket_js_1 = __nccwpck_require__(23973);
 Object.defineProperty(exports, "Bucket", ({ enumerable: true, get: function () { return bucket_js_1.Bucket; } }));
@@ -116199,13 +117673,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Service = exports.DEFAULT_PROJECT_ID_TOKEN = void 0;
 /*!
@@ -116430,13 +117914,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -116446,7 +117940,7 @@ exports.util = exports.Util = exports.PartialFailureError = exports.ApiError = e
  * @module common/util
  */
 const projectify_1 = __nccwpck_require__(3497);
-const htmlEntities = __importStar(__nccwpck_require__(52589));
+const htmlEntities = __importStar(__nccwpck_require__(1263));
 const google_auth_library_1 = __nccwpck_require__(20810);
 const retry_request_1 = __importDefault(__nccwpck_require__(63515));
 const stream_1 = __nccwpck_require__(12781);
@@ -117410,13 +118904,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -117433,7 +118937,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _Upload_instances, _Upload_gcclGcsCmd, _Upload_resetLocalBuffersCache, _Upload_addLocalBufferCache;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkUploadStatus = exports.createURI = exports.upload = exports.Upload = exports.PROTOCOL_REGEX = void 0;
+exports.Upload = exports.PROTOCOL_REGEX = void 0;
+exports.upload = upload;
+exports.createURI = createURI;
+exports.checkUploadStatus = checkUploadStatus;
 const abort_controller_1 = __importDefault(__nccwpck_require__(61659));
 const crypto_1 = __nccwpck_require__(6113);
 const gaxios = __importStar(__nccwpck_require__(59555));
@@ -117533,11 +119040,20 @@ class Upload extends stream_1.Writable {
         this.retryOptions = cfg.retryOptions;
         this.isPartialUpload = (_a = cfg.isPartialUpload) !== null && _a !== void 0 ? _a : false;
         if (cfg.key) {
-            const base64Key = Buffer.from(cfg.key).toString('base64');
-            this.encryption = {
-                key: base64Key,
-                hash: (0, crypto_1.createHash)('sha256').update(cfg.key).digest('base64'),
-            };
+            if (typeof cfg.key === 'string') {
+                const base64Key = Buffer.from(cfg.key).toString('base64');
+                this.encryption = {
+                    key: base64Key,
+                    hash: (0, crypto_1.createHash)('sha256').update(cfg.key).digest('base64'),
+                };
+            }
+            else {
+                const base64Key = cfg.key.toString('base64');
+                this.encryption = {
+                    key: base64Key,
+                    hash: (0, crypto_1.createHash)('sha256').update(cfg.key).digest('base64'),
+                };
+            }
         }
         this.predefinedAcl = cfg.predefinedAcl;
         if (cfg.private)
@@ -118180,7 +119696,7 @@ class Upload extends stream_1.Writable {
             else {
                 const retryDelay = this.getRetryDelay();
                 if (retryDelay <= 0) {
-                    this.destroy(new Error(`Retry total time limit exceeded - ${resp.data}`));
+                    this.destroy(new Error(`Retry total time limit exceeded - ${JSON.stringify(resp.data)}`));
                     return;
                 }
                 // Unshift the local cache back in case it's needed for the next request.
@@ -118198,7 +119714,7 @@ class Upload extends stream_1.Writable {
             this.numRetries++;
         }
         else {
-            this.destroy(new Error('Retry limit exceeded - ' + resp.data));
+            this.destroy(new Error(`Retry limit exceeded - ${JSON.stringify(resp.data)}`));
         }
     }
     /**
@@ -118247,7 +119763,6 @@ _Upload_gcclGcsCmd = new WeakMap(), _Upload_instances = new WeakSet(), _Upload_r
 function upload(cfg) {
     return new Upload(cfg);
 }
-exports.upload = upload;
 function createURI(cfg, callback) {
     const up = new Upload(cfg);
     if (!callback) {
@@ -118255,7 +119770,6 @@ function createURI(cfg, callback) {
     }
     up.createURI().then(r => callback(null, r), callback);
 }
-exports.createURI = createURI;
 /**
  * Check the status of an existing resumable upload.
  *
@@ -118266,7 +119780,6 @@ function checkUploadStatus(cfg) {
     const up = new Upload(cfg);
     return up.checkUploadStatus();
 }
-exports.checkUploadStatus = checkUploadStatus;
 
 
 /***/ }),
@@ -118305,13 +119818,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SigningError = exports.URLSigner = exports.PATH_STYLED_HOST = exports.SignerExceptionMessages = void 0;
 const crypto = __importStar(__nccwpck_require__(6113));
@@ -119220,8 +120743,7 @@ class Storage extends index_js_1.Service {
      *     Multi-Regional.
      * @property {boolean} [nearline=false] Specify the storage class as Nearline.
      * @property {boolean} [regional=false] Specify the storage class as Regional.
-     * @property {boolean} [requesterPays=false] **Early Access Testers Only**
-     *     Force the use of the User Project metadata field to assign operational
+     * @property {boolean} [requesterPays=false] Force the use of the User Project metadata field to assign operational
      *     costs when an operation is made on a Bucket and its objects.
      * @property {string} [rpo] For dual-region buckets, controls whether turbo
      *      replication is enabled (`ASYNC_TURBO`) or disabled (`DEFAULT`).
@@ -119363,6 +120885,18 @@ class Storage extends index_js_1.Service {
             query.enableObjectRetention = body.enableObjectRetention;
             delete body.enableObjectRetention;
         }
+        if (body.predefinedAcl) {
+            query.predefinedAcl = body.predefinedAcl;
+            delete body.predefinedAcl;
+        }
+        if (body.predefinedDefaultObjectAcl) {
+            query.predefinedDefaultObjectAcl = body.predefinedDefaultObjectAcl;
+            delete body.predefinedDefaultObjectAcl;
+        }
+        if (body.projection) {
+            query.projection = body.projection;
+            delete body.projection;
+        }
         this.request({
             method: 'POST',
             uri: '/b',
@@ -119494,6 +121028,8 @@ class Storage extends index_js_1.Service {
      *     representing part of the larger set of results to view.
      * @property {string} [userProject] The ID of the project which will be billed
      *     for the request.
+     *  @param {boolean} [softDeleted] If true, returns the soft-deleted object.
+     *     Object `generation` is required if `softDeleted` is set to True.
      */
     /**
      * @typedef {array} GetBucketsResponse
@@ -119800,13 +121336,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -120086,6 +121632,8 @@ class TransferManager {
      * @typedef {object} UploadManyFilesOptions
      * @property {number} [concurrencyLimit] The number of concurrently executing promises
      * to use when uploading the files.
+     * @property {Function} [customDestinationBuilder] A fuction that will take the current path of a local file
+     * and return a string representing a custom path to be used to upload the file to GCS.
      * @property {boolean} [skipIfExists] Do not upload the file if it already exists in
      * the bucket. This will set the precondition ifGenerationMatch = 0.
      * @property {string} [prefix] A prefix to append to all of the uploaded files.
@@ -120155,9 +121703,9 @@ class TransferManager {
                 ...options.passthroughOptions,
                 [util_js_1.GCCL_GCS_CMD_KEY]: GCCL_GCS_CMD_FEATURE.UPLOAD_MANY,
             };
-            passThroughOptionsCopy.destination = filePath
-                .split(path.sep)
-                .join(path.posix.sep);
+            passThroughOptionsCopy.destination = options.customDestinationBuilder
+                ? options.customDestinationBuilder(filePath, options)
+                : filePath.split(path.sep).join(path.posix.sep);
             if (options.prefix) {
                 passThroughOptionsCopy.destination = path.posix.join(...options.prefix.split(path.sep), passThroughOptionsCopy.destination);
             }
@@ -120173,6 +121721,8 @@ class TransferManager {
      * @property {string} [stripPrefix] A prefix to remove from all of the downloaded files.
      * @property {object} [passthroughOptions] {@link DownloadOptions} Options to be passed through
      * to each individual download operation.
+     * @property {boolean} [skipIfExists] Do not download the file if it already exists in
+     * the destination.
      *
      */
     /**
@@ -120241,6 +121791,10 @@ class TransferManager {
             }
             if (options.stripPrefix) {
                 passThroughOptionsCopy.destination = file.name.replace(regex, '');
+            }
+            if (options.skipIfExists &&
+                (0, fs_1.existsSync)(passThroughOptionsCopy.destination || '')) {
+                continue;
             }
             promises.push(limit(async () => {
                 const destination = passThroughOptionsCopy.destination;
@@ -120491,17 +122045,40 @@ var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? fun
 } : function (o, v) {
   o["default"] = v;
 });
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  __setModuleDefault(result, mod);
-  return result;
-};
+var __importStar = this && this.__importStar || function () {
+  var ownKeys = function (o) {
+    ownKeys = Object.getOwnPropertyNames || function (o) {
+      var ar = [];
+      for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+      return ar;
+    };
+    return ownKeys(o);
+  };
+  return function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+    __setModuleDefault(result, mod);
+    return result;
+  };
+}();
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.PassThroughShim = exports.getModuleFormat = exports.getDirName = exports.getUserAgentString = exports.getRuntimeTrackingString = exports.formatAsUTCISO = exports.convertObjKeysToSnakeCase = exports.unicodeJSONStringify = exports.objectKeyToLowercase = exports.qsStringify = exports.encodeURI = exports.fixedEncodeURIComponent = exports.objectEntries = exports.normalize = void 0;
+exports.PassThroughShim = void 0;
+exports.normalize = normalize;
+exports.objectEntries = objectEntries;
+exports.fixedEncodeURIComponent = fixedEncodeURIComponent;
+exports.encodeURI = encodeURI;
+exports.qsStringify = qsStringify;
+exports.objectKeyToLowercase = objectKeyToLowercase;
+exports.unicodeJSONStringify = unicodeJSONStringify;
+exports.convertObjKeysToSnakeCase = convertObjKeysToSnakeCase;
+exports.formatAsUTCISO = formatAsUTCISO;
+exports.getRuntimeTrackingString = getRuntimeTrackingString;
+exports.getUserAgentString = getUserAgentString;
+exports.getDirName = getDirName;
+exports.getModuleFormat = getModuleFormat;
 const path = __importStar(__nccwpck_require__(71017));
 const querystring = __importStar(__nccwpck_require__(63477));
 const stream_1 = __nccwpck_require__(12781);
@@ -120520,7 +122097,6 @@ function normalize(optionsOrCallback, cb) {
     callback
   };
 }
-exports.normalize = normalize;
 /**
  * Flatten an object into an Array of arrays, [[key, value], ..].
  * Implements Object.entries() for Node.js <8
@@ -120529,7 +122105,6 @@ exports.normalize = normalize;
 function objectEntries(obj) {
   return Object.keys(obj).map(key => [key, obj[key]]);
 }
-exports.objectEntries = objectEntries;
 /**
  * Encode `str` with encodeURIComponent, plus these
  * reserved characters: `! * ' ( )`.
@@ -120542,7 +122117,6 @@ exports.objectEntries = objectEntries;
 function fixedEncodeURIComponent(str) {
   return encodeURIComponent(str).replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
 }
-exports.fixedEncodeURIComponent = fixedEncodeURIComponent;
 /**
  * URI encode `uri` for generating signed URLs, using fixedEncodeURIComponent.
  *
@@ -120557,7 +122131,6 @@ function encodeURI(uri, encodeSlash) {
   // %2F if encodeSlash is `true`, or '/' if `false`.
   return uri.split('/').map(fixedEncodeURIComponent).join(encodeSlash ? '%2F' : '/');
 }
-exports.encodeURI = encodeURI;
 /**
  * Serialize an object to a URL query string using util.encodeURI(uri, true).
  * @param {string} url The object to serialize.
@@ -120568,7 +122141,6 @@ function qsStringify(qs) {
     encodeURIComponent: component => encodeURI(component, true)
   });
 }
-exports.qsStringify = qsStringify;
 function objectKeyToLowercase(object) {
   const newObj = {};
   for (let key of Object.keys(object)) {
@@ -120578,7 +122150,6 @@ function objectKeyToLowercase(object) {
   }
   return newObj;
 }
-exports.objectKeyToLowercase = objectKeyToLowercase;
 /**
  * JSON encode str, with unicode \u+ representation.
  * @param {object} obj The object to encode.
@@ -120587,7 +122158,6 @@ exports.objectKeyToLowercase = objectKeyToLowercase;
 function unicodeJSONStringify(obj) {
   return JSON.stringify(obj).replace(/[\u0080-\uFFFF]/g, char => '\\u' + ('0000' + char.charCodeAt(0).toString(16)).slice(-4));
 }
-exports.unicodeJSONStringify = unicodeJSONStringify;
 /**
  * Converts the given objects keys to snake_case
  * @param {object} obj object to convert keys to snake case.
@@ -120611,7 +122181,6 @@ function convertObjKeysToSnakeCase(obj) {
   }
   return obj;
 }
-exports.convertObjKeysToSnakeCase = convertObjKeysToSnakeCase;
 /**
  * Formats the provided date object as a UTC ISO string.
  * @param {Date} dateTimeToFormat date object to be formatted.
@@ -120633,7 +122202,6 @@ function formatAsUTCISO(dateTimeToFormat, includeTime = false, dateDelimiter = '
   }
   return resultString;
 }
-exports.formatAsUTCISO = formatAsUTCISO;
 /**
  * Examines the runtime environment and returns the appropriate tracking string.
  * @returns {string} metrics tracking string based on the current runtime environment.
@@ -120656,7 +122224,6 @@ function getRuntimeTrackingString() {
     return `gl-node/${process.versions.node}`;
   }
 }
-exports.getRuntimeTrackingString = getRuntimeTrackingString;
 /**
  * Looks at package.json and creates the user-agent string to be applied to request headers.
  * @returns {string} user agent string.
@@ -120667,7 +122234,6 @@ function getUserAgentString() {
   .replace('/', '-'); // For UA spec-compliance purposes.
   return hyphenatedPackageName + '/' + pkg.version;
 }
-exports.getUserAgentString = getUserAgentString;
 function getDirName() {
   let dirToUse = '';
   try {
@@ -120679,11 +122245,9 @@ function getDirName() {
   }
   return dirToUse;
 }
-exports.getDirName = getDirName;
 function getModuleFormat() {
   return isEsm ? 'ESM' : 'CJS';
 }
-exports.getModuleFormat = getModuleFormat;
 class PassThroughShim extends stream_1.PassThrough {
   constructor() {
     super(...arguments);
@@ -120722,6 +122286,882 @@ class PassThroughShim extends stream_1.PassThrough {
   }
 }
 exports.PassThroughShim = PassThroughShim;
+
+
+/***/ }),
+
+/***/ 1263:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.encode = encode;
+exports.decodeEntity = decodeEntity;
+exports.decode = decode;
+var named_references_js_1 = __nccwpck_require__(15197);
+var numeric_unicode_map_js_1 = __nccwpck_require__(24690);
+var surrogate_pairs_js_1 = __nccwpck_require__(77955);
+var allNamedReferences = __assign(__assign({}, named_references_js_1.namedReferences), { all: named_references_js_1.namedReferences.html5 });
+var encodeRegExps = {
+    specialChars: /[<>'"&]/g,
+    nonAscii: /[<>'"&\u0080-\uD7FF\uE000-\uFFFF\uDC00-\uDFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g,
+    nonAsciiPrintable: /[<>'"&\x01-\x08\x11-\x15\x17-\x1F\x7f-\uD7FF\uE000-\uFFFF\uDC00-\uDFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g,
+    nonAsciiPrintableOnly: /[\x01-\x08\x11-\x15\x17-\x1F\x7f-\uD7FF\uE000-\uFFFF\uDC00-\uDFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g,
+    extensive: /[\x01-\x0c\x0e-\x1f\x21-\x2c\x2e-\x2f\x3a-\x40\x5b-\x60\x7b-\x7d\x7f-\uD7FF\uE000-\uFFFF\uDC00-\uDFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g
+};
+var defaultEncodeOptions = {
+    mode: 'specialChars',
+    level: 'all',
+    numeric: 'decimal'
+};
+/** Encodes all the necessary (specified by `level`) characters in the text */
+function encode(text, _a) {
+    var _b = _a === void 0 ? defaultEncodeOptions : _a, _c = _b.mode, mode = _c === void 0 ? 'specialChars' : _c, _d = _b.numeric, numeric = _d === void 0 ? 'decimal' : _d, _e = _b.level, level = _e === void 0 ? 'all' : _e;
+    if (!text) {
+        return '';
+    }
+    var encodeRegExp = encodeRegExps[mode];
+    var references = allNamedReferences[level].characters;
+    var isHex = numeric === 'hexadecimal';
+    return String.prototype.replace.call(text, encodeRegExp, function (input) {
+        var result = references[input];
+        if (!result) {
+            var code = input.length > 1 ? (0, surrogate_pairs_js_1.getCodePoint)(input, 0) : input.charCodeAt(0);
+            result = (isHex ? '&#x' + code.toString(16) : '&#' + code) + ';';
+        }
+        return result;
+    });
+}
+var defaultDecodeOptions = {
+    scope: 'body',
+    level: 'all'
+};
+var strict = /&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);/g;
+var attribute = /&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+)[;=]?/g;
+var baseDecodeRegExps = {
+    xml: {
+        strict: strict,
+        attribute: attribute,
+        body: named_references_js_1.bodyRegExps.xml
+    },
+    html4: {
+        strict: strict,
+        attribute: attribute,
+        body: named_references_js_1.bodyRegExps.html4
+    },
+    html5: {
+        strict: strict,
+        attribute: attribute,
+        body: named_references_js_1.bodyRegExps.html5
+    }
+};
+var decodeRegExps = __assign(__assign({}, baseDecodeRegExps), { all: baseDecodeRegExps.html5 });
+var fromCharCode = String.fromCharCode;
+var outOfBoundsChar = fromCharCode(65533);
+var defaultDecodeEntityOptions = {
+    level: 'all'
+};
+function getDecodedEntity(entity, references, isAttribute, isStrict) {
+    var decodeResult = entity;
+    var decodeEntityLastChar = entity[entity.length - 1];
+    if (isAttribute && decodeEntityLastChar === '=') {
+        decodeResult = entity;
+    }
+    else if (isStrict && decodeEntityLastChar !== ';') {
+        decodeResult = entity;
+    }
+    else {
+        var decodeResultByReference = references[entity];
+        if (decodeResultByReference) {
+            decodeResult = decodeResultByReference;
+        }
+        else if (entity[0] === '&' && entity[1] === '#') {
+            var decodeSecondChar = entity[2];
+            var decodeCode = decodeSecondChar == 'x' || decodeSecondChar == 'X'
+                ? parseInt(entity.substr(3), 16)
+                : parseInt(entity.substr(2));
+            decodeResult =
+                decodeCode >= 0x10ffff
+                    ? outOfBoundsChar
+                    : decodeCode > 65535
+                        ? (0, surrogate_pairs_js_1.fromCodePoint)(decodeCode)
+                        : fromCharCode(numeric_unicode_map_js_1.numericUnicodeMap[decodeCode] || decodeCode);
+        }
+    }
+    return decodeResult;
+}
+/** Decodes a single entity */
+function decodeEntity(entity, _a) {
+    var _b = _a === void 0 ? defaultDecodeEntityOptions : _a, _c = _b.level, level = _c === void 0 ? 'all' : _c;
+    if (!entity) {
+        return '';
+    }
+    return getDecodedEntity(entity, allNamedReferences[level].entities, false, false);
+}
+/** Decodes all entities in the text */
+function decode(text, _a) {
+    var _b = _a === void 0 ? defaultDecodeOptions : _a, _c = _b.level, level = _c === void 0 ? 'all' : _c, _d = _b.scope, scope = _d === void 0 ? level === 'xml' ? 'strict' : 'body' : _d;
+    if (!text) {
+        return '';
+    }
+    var decodeRegExp = decodeRegExps[level][scope];
+    var references = allNamedReferences[level].entities;
+    var isAttribute = scope === 'attribute';
+    var isStrict = scope === 'strict';
+    return text.replace(decodeRegExp, function (entity) { return getDecodedEntity(entity, references, isAttribute, isStrict); });
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 15197:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.namedReferences = exports.bodyRegExps = void 0;
+// This file is autogenerated by tools/process-named-references.ts
+var pairDivider = "~";
+var blockDivider = "~~";
+function generateNamedReferences(input, prev) {
+    var entities = {};
+    var characters = {};
+    var blocks = input.split(blockDivider);
+    var isOptionalBlock = false;
+    for (var i = 0; blocks.length > i; i++) {
+        var entries = blocks[i].split(pairDivider);
+        for (var j = 0; j < entries.length; j += 2) {
+            var entity = entries[j];
+            var character = entries[j + 1];
+            var fullEntity = '&' + entity + ';';
+            entities[fullEntity] = character;
+            if (isOptionalBlock) {
+                entities['&' + entity] = character;
+            }
+            characters[character] = fullEntity;
+        }
+        isOptionalBlock = true;
+    }
+    return prev ?
+        { entities: __assign(__assign({}, entities), prev.entities), characters: __assign(__assign({}, characters), prev.characters) } :
+        { entities: entities, characters: characters };
+}
+exports.bodyRegExps = {
+    xml: /&(?:#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,
+    html4: /&notin;|&(?:nbsp|iexcl|cent|pound|curren|yen|brvbar|sect|uml|copy|ordf|laquo|not|shy|reg|macr|deg|plusmn|sup2|sup3|acute|micro|para|middot|cedil|sup1|ordm|raquo|frac14|frac12|frac34|iquest|Agrave|Aacute|Acirc|Atilde|Auml|Aring|AElig|Ccedil|Egrave|Eacute|Ecirc|Euml|Igrave|Iacute|Icirc|Iuml|ETH|Ntilde|Ograve|Oacute|Ocirc|Otilde|Ouml|times|Oslash|Ugrave|Uacute|Ucirc|Uuml|Yacute|THORN|szlig|agrave|aacute|acirc|atilde|auml|aring|aelig|ccedil|egrave|eacute|ecirc|euml|igrave|iacute|icirc|iuml|eth|ntilde|ograve|oacute|ocirc|otilde|ouml|divide|oslash|ugrave|uacute|ucirc|uuml|yacute|thorn|yuml|quot|amp|lt|gt|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g,
+    html5: /&centerdot;|&copysr;|&divideontimes;|&gtcc;|&gtcir;|&gtdot;|&gtlPar;|&gtquest;|&gtrapprox;|&gtrarr;|&gtrdot;|&gtreqless;|&gtreqqless;|&gtrless;|&gtrsim;|&ltcc;|&ltcir;|&ltdot;|&lthree;|&ltimes;|&ltlarr;|&ltquest;|&ltrPar;|&ltri;|&ltrie;|&ltrif;|&notin;|&notinE;|&notindot;|&notinva;|&notinvb;|&notinvc;|&notni;|&notniva;|&notnivb;|&notnivc;|&parallel;|&timesb;|&timesbar;|&timesd;|&(?:AElig|AMP|Aacute|Acirc|Agrave|Aring|Atilde|Auml|COPY|Ccedil|ETH|Eacute|Ecirc|Egrave|Euml|GT|Iacute|Icirc|Igrave|Iuml|LT|Ntilde|Oacute|Ocirc|Ograve|Oslash|Otilde|Ouml|QUOT|REG|THORN|Uacute|Ucirc|Ugrave|Uuml|Yacute|aacute|acirc|acute|aelig|agrave|amp|aring|atilde|auml|brvbar|ccedil|cedil|cent|copy|curren|deg|divide|eacute|ecirc|egrave|eth|euml|frac12|frac14|frac34|gt|iacute|icirc|iexcl|igrave|iquest|iuml|laquo|lt|macr|micro|middot|nbsp|not|ntilde|oacute|ocirc|ograve|ordf|ordm|oslash|otilde|ouml|para|plusmn|pound|quot|raquo|reg|sect|shy|sup1|sup2|sup3|szlig|thorn|times|uacute|ucirc|ugrave|uml|uuml|yacute|yen|yuml|#\d+|#[xX][\da-fA-F]+|[0-9a-zA-Z]+);?/g
+};
+exports.namedReferences = {};
+exports.namedReferences.xml = generateNamedReferences("lt~<~gt~>~quot~\"~apos~'~amp~&");
+exports.namedReferences.html4 = generateNamedReferences("apos~'~OElig~Œ~oelig~œ~Scaron~Š~scaron~š~Yuml~Ÿ~circ~ˆ~tilde~˜~ensp~ ~emsp~ ~thinsp~ ~zwnj~‌~zwj~‍~lrm~‎~rlm~‏~ndash~–~mdash~—~lsquo~‘~rsquo~’~sbquo~‚~ldquo~“~rdquo~”~bdquo~„~dagger~†~Dagger~‡~permil~‰~lsaquo~‹~rsaquo~›~euro~€~fnof~ƒ~Alpha~Α~Beta~Β~Gamma~Γ~Delta~Δ~Epsilon~Ε~Zeta~Ζ~Eta~Η~Theta~Θ~Iota~Ι~Kappa~Κ~Lambda~Λ~Mu~Μ~Nu~Ν~Xi~Ξ~Omicron~Ο~Pi~Π~Rho~Ρ~Sigma~Σ~Tau~Τ~Upsilon~Υ~Phi~Φ~Chi~Χ~Psi~Ψ~Omega~Ω~alpha~α~beta~β~gamma~γ~delta~δ~epsilon~ε~zeta~ζ~eta~η~theta~θ~iota~ι~kappa~κ~lambda~λ~mu~μ~nu~ν~xi~ξ~omicron~ο~pi~π~rho~ρ~sigmaf~ς~sigma~σ~tau~τ~upsilon~υ~phi~φ~chi~χ~psi~ψ~omega~ω~thetasym~ϑ~upsih~ϒ~piv~ϖ~bull~•~hellip~…~prime~′~Prime~″~oline~‾~frasl~⁄~weierp~℘~image~ℑ~real~ℜ~trade~™~alefsym~ℵ~larr~←~uarr~↑~rarr~→~darr~↓~harr~↔~crarr~↵~lArr~⇐~uArr~⇑~rArr~⇒~dArr~⇓~hArr~⇔~forall~∀~part~∂~exist~∃~empty~∅~nabla~∇~isin~∈~notin~∉~ni~∋~prod~∏~sum~∑~minus~−~lowast~∗~radic~√~prop~∝~infin~∞~ang~∠~and~∧~or~∨~cap~∩~cup~∪~int~∫~there4~∴~sim~∼~cong~≅~asymp~≈~ne~≠~equiv~≡~le~≤~ge~≥~sub~⊂~sup~⊃~nsub~⊄~sube~⊆~supe~⊇~oplus~⊕~otimes~⊗~perp~⊥~sdot~⋅~lceil~⌈~rceil~⌉~lfloor~⌊~rfloor~⌋~lang~〈~rang~〉~loz~◊~spades~♠~clubs~♣~hearts~♥~diams~♦~~nbsp~ ~iexcl~¡~cent~¢~pound~£~curren~¤~yen~¥~brvbar~¦~sect~§~uml~¨~copy~©~ordf~ª~laquo~«~not~¬~shy~­~reg~®~macr~¯~deg~°~plusmn~±~sup2~²~sup3~³~acute~´~micro~µ~para~¶~middot~·~cedil~¸~sup1~¹~ordm~º~raquo~»~frac14~¼~frac12~½~frac34~¾~iquest~¿~Agrave~À~Aacute~Á~Acirc~Â~Atilde~Ã~Auml~Ä~Aring~Å~AElig~Æ~Ccedil~Ç~Egrave~È~Eacute~É~Ecirc~Ê~Euml~Ë~Igrave~Ì~Iacute~Í~Icirc~Î~Iuml~Ï~ETH~Ð~Ntilde~Ñ~Ograve~Ò~Oacute~Ó~Ocirc~Ô~Otilde~Õ~Ouml~Ö~times~×~Oslash~Ø~Ugrave~Ù~Uacute~Ú~Ucirc~Û~Uuml~Ü~Yacute~Ý~THORN~Þ~szlig~ß~agrave~à~aacute~á~acirc~â~atilde~ã~auml~ä~aring~å~aelig~æ~ccedil~ç~egrave~è~eacute~é~ecirc~ê~euml~ë~igrave~ì~iacute~í~icirc~î~iuml~ï~eth~ð~ntilde~ñ~ograve~ò~oacute~ó~ocirc~ô~otilde~õ~ouml~ö~divide~÷~oslash~ø~ugrave~ù~uacute~ú~ucirc~û~uuml~ü~yacute~ý~thorn~þ~yuml~ÿ~quot~\"~amp~&~lt~<~gt~>");
+exports.namedReferences.html5 = generateNamedReferences("Abreve~Ă~Acy~А~Afr~𝔄~Amacr~Ā~And~⩓~Aogon~Ą~Aopf~𝔸~ApplyFunction~⁡~Ascr~𝒜~Assign~≔~Backslash~∖~Barv~⫧~Barwed~⌆~Bcy~Б~Because~∵~Bernoullis~ℬ~Bfr~𝔅~Bopf~𝔹~Breve~˘~Bscr~ℬ~Bumpeq~≎~CHcy~Ч~Cacute~Ć~Cap~⋒~CapitalDifferentialD~ⅅ~Cayleys~ℭ~Ccaron~Č~Ccirc~Ĉ~Cconint~∰~Cdot~Ċ~Cedilla~¸~CenterDot~·~Cfr~ℭ~CircleDot~⊙~CircleMinus~⊖~CirclePlus~⊕~CircleTimes~⊗~ClockwiseContourIntegral~∲~CloseCurlyDoubleQuote~”~CloseCurlyQuote~’~Colon~∷~Colone~⩴~Congruent~≡~Conint~∯~ContourIntegral~∮~Copf~ℂ~Coproduct~∐~CounterClockwiseContourIntegral~∳~Cross~⨯~Cscr~𝒞~Cup~⋓~CupCap~≍~DD~ⅅ~DDotrahd~⤑~DJcy~Ђ~DScy~Ѕ~DZcy~Џ~Darr~↡~Dashv~⫤~Dcaron~Ď~Dcy~Д~Del~∇~Dfr~𝔇~DiacriticalAcute~´~DiacriticalDot~˙~DiacriticalDoubleAcute~˝~DiacriticalGrave~`~DiacriticalTilde~˜~Diamond~⋄~DifferentialD~ⅆ~Dopf~𝔻~Dot~¨~DotDot~⃜~DotEqual~≐~DoubleContourIntegral~∯~DoubleDot~¨~DoubleDownArrow~⇓~DoubleLeftArrow~⇐~DoubleLeftRightArrow~⇔~DoubleLeftTee~⫤~DoubleLongLeftArrow~⟸~DoubleLongLeftRightArrow~⟺~DoubleLongRightArrow~⟹~DoubleRightArrow~⇒~DoubleRightTee~⊨~DoubleUpArrow~⇑~DoubleUpDownArrow~⇕~DoubleVerticalBar~∥~DownArrow~↓~DownArrowBar~⤓~DownArrowUpArrow~⇵~DownBreve~̑~DownLeftRightVector~⥐~DownLeftTeeVector~⥞~DownLeftVector~↽~DownLeftVectorBar~⥖~DownRightTeeVector~⥟~DownRightVector~⇁~DownRightVectorBar~⥗~DownTee~⊤~DownTeeArrow~↧~Downarrow~⇓~Dscr~𝒟~Dstrok~Đ~ENG~Ŋ~Ecaron~Ě~Ecy~Э~Edot~Ė~Efr~𝔈~Element~∈~Emacr~Ē~EmptySmallSquare~◻~EmptyVerySmallSquare~▫~Eogon~Ę~Eopf~𝔼~Equal~⩵~EqualTilde~≂~Equilibrium~⇌~Escr~ℰ~Esim~⩳~Exists~∃~ExponentialE~ⅇ~Fcy~Ф~Ffr~𝔉~FilledSmallSquare~◼~FilledVerySmallSquare~▪~Fopf~𝔽~ForAll~∀~Fouriertrf~ℱ~Fscr~ℱ~GJcy~Ѓ~Gammad~Ϝ~Gbreve~Ğ~Gcedil~Ģ~Gcirc~Ĝ~Gcy~Г~Gdot~Ġ~Gfr~𝔊~Gg~⋙~Gopf~𝔾~GreaterEqual~≥~GreaterEqualLess~⋛~GreaterFullEqual~≧~GreaterGreater~⪢~GreaterLess~≷~GreaterSlantEqual~⩾~GreaterTilde~≳~Gscr~𝒢~Gt~≫~HARDcy~Ъ~Hacek~ˇ~Hat~^~Hcirc~Ĥ~Hfr~ℌ~HilbertSpace~ℋ~Hopf~ℍ~HorizontalLine~─~Hscr~ℋ~Hstrok~Ħ~HumpDownHump~≎~HumpEqual~≏~IEcy~Е~IJlig~Ĳ~IOcy~Ё~Icy~И~Idot~İ~Ifr~ℑ~Im~ℑ~Imacr~Ī~ImaginaryI~ⅈ~Implies~⇒~Int~∬~Integral~∫~Intersection~⋂~InvisibleComma~⁣~InvisibleTimes~⁢~Iogon~Į~Iopf~𝕀~Iscr~ℐ~Itilde~Ĩ~Iukcy~І~Jcirc~Ĵ~Jcy~Й~Jfr~𝔍~Jopf~𝕁~Jscr~𝒥~Jsercy~Ј~Jukcy~Є~KHcy~Х~KJcy~Ќ~Kcedil~Ķ~Kcy~К~Kfr~𝔎~Kopf~𝕂~Kscr~𝒦~LJcy~Љ~Lacute~Ĺ~Lang~⟪~Laplacetrf~ℒ~Larr~↞~Lcaron~Ľ~Lcedil~Ļ~Lcy~Л~LeftAngleBracket~⟨~LeftArrow~←~LeftArrowBar~⇤~LeftArrowRightArrow~⇆~LeftCeiling~⌈~LeftDoubleBracket~⟦~LeftDownTeeVector~⥡~LeftDownVector~⇃~LeftDownVectorBar~⥙~LeftFloor~⌊~LeftRightArrow~↔~LeftRightVector~⥎~LeftTee~⊣~LeftTeeArrow~↤~LeftTeeVector~⥚~LeftTriangle~⊲~LeftTriangleBar~⧏~LeftTriangleEqual~⊴~LeftUpDownVector~⥑~LeftUpTeeVector~⥠~LeftUpVector~↿~LeftUpVectorBar~⥘~LeftVector~↼~LeftVectorBar~⥒~Leftarrow~⇐~Leftrightarrow~⇔~LessEqualGreater~⋚~LessFullEqual~≦~LessGreater~≶~LessLess~⪡~LessSlantEqual~⩽~LessTilde~≲~Lfr~𝔏~Ll~⋘~Lleftarrow~⇚~Lmidot~Ŀ~LongLeftArrow~⟵~LongLeftRightArrow~⟷~LongRightArrow~⟶~Longleftarrow~⟸~Longleftrightarrow~⟺~Longrightarrow~⟹~Lopf~𝕃~LowerLeftArrow~↙~LowerRightArrow~↘~Lscr~ℒ~Lsh~↰~Lstrok~Ł~Lt~≪~Map~⤅~Mcy~М~MediumSpace~ ~Mellintrf~ℳ~Mfr~𝔐~MinusPlus~∓~Mopf~𝕄~Mscr~ℳ~NJcy~Њ~Nacute~Ń~Ncaron~Ň~Ncedil~Ņ~Ncy~Н~NegativeMediumSpace~​~NegativeThickSpace~​~NegativeThinSpace~​~NegativeVeryThinSpace~​~NestedGreaterGreater~≫~NestedLessLess~≪~NewLine~\n~Nfr~𝔑~NoBreak~⁠~NonBreakingSpace~ ~Nopf~ℕ~Not~⫬~NotCongruent~≢~NotCupCap~≭~NotDoubleVerticalBar~∦~NotElement~∉~NotEqual~≠~NotEqualTilde~≂̸~NotExists~∄~NotGreater~≯~NotGreaterEqual~≱~NotGreaterFullEqual~≧̸~NotGreaterGreater~≫̸~NotGreaterLess~≹~NotGreaterSlantEqual~⩾̸~NotGreaterTilde~≵~NotHumpDownHump~≎̸~NotHumpEqual~≏̸~NotLeftTriangle~⋪~NotLeftTriangleBar~⧏̸~NotLeftTriangleEqual~⋬~NotLess~≮~NotLessEqual~≰~NotLessGreater~≸~NotLessLess~≪̸~NotLessSlantEqual~⩽̸~NotLessTilde~≴~NotNestedGreaterGreater~⪢̸~NotNestedLessLess~⪡̸~NotPrecedes~⊀~NotPrecedesEqual~⪯̸~NotPrecedesSlantEqual~⋠~NotReverseElement~∌~NotRightTriangle~⋫~NotRightTriangleBar~⧐̸~NotRightTriangleEqual~⋭~NotSquareSubset~⊏̸~NotSquareSubsetEqual~⋢~NotSquareSuperset~⊐̸~NotSquareSupersetEqual~⋣~NotSubset~⊂⃒~NotSubsetEqual~⊈~NotSucceeds~⊁~NotSucceedsEqual~⪰̸~NotSucceedsSlantEqual~⋡~NotSucceedsTilde~≿̸~NotSuperset~⊃⃒~NotSupersetEqual~⊉~NotTilde~≁~NotTildeEqual~≄~NotTildeFullEqual~≇~NotTildeTilde~≉~NotVerticalBar~∤~Nscr~𝒩~Ocy~О~Odblac~Ő~Ofr~𝔒~Omacr~Ō~Oopf~𝕆~OpenCurlyDoubleQuote~“~OpenCurlyQuote~‘~Or~⩔~Oscr~𝒪~Otimes~⨷~OverBar~‾~OverBrace~⏞~OverBracket~⎴~OverParenthesis~⏜~PartialD~∂~Pcy~П~Pfr~𝔓~PlusMinus~±~Poincareplane~ℌ~Popf~ℙ~Pr~⪻~Precedes~≺~PrecedesEqual~⪯~PrecedesSlantEqual~≼~PrecedesTilde~≾~Product~∏~Proportion~∷~Proportional~∝~Pscr~𝒫~Qfr~𝔔~Qopf~ℚ~Qscr~𝒬~RBarr~⤐~Racute~Ŕ~Rang~⟫~Rarr~↠~Rarrtl~⤖~Rcaron~Ř~Rcedil~Ŗ~Rcy~Р~Re~ℜ~ReverseElement~∋~ReverseEquilibrium~⇋~ReverseUpEquilibrium~⥯~Rfr~ℜ~RightAngleBracket~⟩~RightArrow~→~RightArrowBar~⇥~RightArrowLeftArrow~⇄~RightCeiling~⌉~RightDoubleBracket~⟧~RightDownTeeVector~⥝~RightDownVector~⇂~RightDownVectorBar~⥕~RightFloor~⌋~RightTee~⊢~RightTeeArrow~↦~RightTeeVector~⥛~RightTriangle~⊳~RightTriangleBar~⧐~RightTriangleEqual~⊵~RightUpDownVector~⥏~RightUpTeeVector~⥜~RightUpVector~↾~RightUpVectorBar~⥔~RightVector~⇀~RightVectorBar~⥓~Rightarrow~⇒~Ropf~ℝ~RoundImplies~⥰~Rrightarrow~⇛~Rscr~ℛ~Rsh~↱~RuleDelayed~⧴~SHCHcy~Щ~SHcy~Ш~SOFTcy~Ь~Sacute~Ś~Sc~⪼~Scedil~Ş~Scirc~Ŝ~Scy~С~Sfr~𝔖~ShortDownArrow~↓~ShortLeftArrow~←~ShortRightArrow~→~ShortUpArrow~↑~SmallCircle~∘~Sopf~𝕊~Sqrt~√~Square~□~SquareIntersection~⊓~SquareSubset~⊏~SquareSubsetEqual~⊑~SquareSuperset~⊐~SquareSupersetEqual~⊒~SquareUnion~⊔~Sscr~𝒮~Star~⋆~Sub~⋐~Subset~⋐~SubsetEqual~⊆~Succeeds~≻~SucceedsEqual~⪰~SucceedsSlantEqual~≽~SucceedsTilde~≿~SuchThat~∋~Sum~∑~Sup~⋑~Superset~⊃~SupersetEqual~⊇~Supset~⋑~TRADE~™~TSHcy~Ћ~TScy~Ц~Tab~\t~Tcaron~Ť~Tcedil~Ţ~Tcy~Т~Tfr~𝔗~Therefore~∴~ThickSpace~  ~ThinSpace~ ~Tilde~∼~TildeEqual~≃~TildeFullEqual~≅~TildeTilde~≈~Topf~𝕋~TripleDot~⃛~Tscr~𝒯~Tstrok~Ŧ~Uarr~↟~Uarrocir~⥉~Ubrcy~Ў~Ubreve~Ŭ~Ucy~У~Udblac~Ű~Ufr~𝔘~Umacr~Ū~UnderBar~_~UnderBrace~⏟~UnderBracket~⎵~UnderParenthesis~⏝~Union~⋃~UnionPlus~⊎~Uogon~Ų~Uopf~𝕌~UpArrow~↑~UpArrowBar~⤒~UpArrowDownArrow~⇅~UpDownArrow~↕~UpEquilibrium~⥮~UpTee~⊥~UpTeeArrow~↥~Uparrow~⇑~Updownarrow~⇕~UpperLeftArrow~↖~UpperRightArrow~↗~Upsi~ϒ~Uring~Ů~Uscr~𝒰~Utilde~Ũ~VDash~⊫~Vbar~⫫~Vcy~В~Vdash~⊩~Vdashl~⫦~Vee~⋁~Verbar~‖~Vert~‖~VerticalBar~∣~VerticalLine~|~VerticalSeparator~❘~VerticalTilde~≀~VeryThinSpace~ ~Vfr~𝔙~Vopf~𝕍~Vscr~𝒱~Vvdash~⊪~Wcirc~Ŵ~Wedge~⋀~Wfr~𝔚~Wopf~𝕎~Wscr~𝒲~Xfr~𝔛~Xopf~𝕏~Xscr~𝒳~YAcy~Я~YIcy~Ї~YUcy~Ю~Ycirc~Ŷ~Ycy~Ы~Yfr~𝔜~Yopf~𝕐~Yscr~𝒴~ZHcy~Ж~Zacute~Ź~Zcaron~Ž~Zcy~З~Zdot~Ż~ZeroWidthSpace~​~Zfr~ℨ~Zopf~ℤ~Zscr~𝒵~abreve~ă~ac~∾~acE~∾̳~acd~∿~acy~а~af~⁡~afr~𝔞~aleph~ℵ~amacr~ā~amalg~⨿~andand~⩕~andd~⩜~andslope~⩘~andv~⩚~ange~⦤~angle~∠~angmsd~∡~angmsdaa~⦨~angmsdab~⦩~angmsdac~⦪~angmsdad~⦫~angmsdae~⦬~angmsdaf~⦭~angmsdag~⦮~angmsdah~⦯~angrt~∟~angrtvb~⊾~angrtvbd~⦝~angsph~∢~angst~Å~angzarr~⍼~aogon~ą~aopf~𝕒~ap~≈~apE~⩰~apacir~⩯~ape~≊~apid~≋~approx~≈~approxeq~≊~ascr~𝒶~ast~*~asympeq~≍~awconint~∳~awint~⨑~bNot~⫭~backcong~≌~backepsilon~϶~backprime~‵~backsim~∽~backsimeq~⋍~barvee~⊽~barwed~⌅~barwedge~⌅~bbrk~⎵~bbrktbrk~⎶~bcong~≌~bcy~б~becaus~∵~because~∵~bemptyv~⦰~bepsi~϶~bernou~ℬ~beth~ℶ~between~≬~bfr~𝔟~bigcap~⋂~bigcirc~◯~bigcup~⋃~bigodot~⨀~bigoplus~⨁~bigotimes~⨂~bigsqcup~⨆~bigstar~★~bigtriangledown~▽~bigtriangleup~△~biguplus~⨄~bigvee~⋁~bigwedge~⋀~bkarow~⤍~blacklozenge~⧫~blacksquare~▪~blacktriangle~▴~blacktriangledown~▾~blacktriangleleft~◂~blacktriangleright~▸~blank~␣~blk12~▒~blk14~░~blk34~▓~block~█~bne~=⃥~bnequiv~≡⃥~bnot~⌐~bopf~𝕓~bot~⊥~bottom~⊥~bowtie~⋈~boxDL~╗~boxDR~╔~boxDl~╖~boxDr~╓~boxH~═~boxHD~╦~boxHU~╩~boxHd~╤~boxHu~╧~boxUL~╝~boxUR~╚~boxUl~╜~boxUr~╙~boxV~║~boxVH~╬~boxVL~╣~boxVR~╠~boxVh~╫~boxVl~╢~boxVr~╟~boxbox~⧉~boxdL~╕~boxdR~╒~boxdl~┐~boxdr~┌~boxh~─~boxhD~╥~boxhU~╨~boxhd~┬~boxhu~┴~boxminus~⊟~boxplus~⊞~boxtimes~⊠~boxuL~╛~boxuR~╘~boxul~┘~boxur~└~boxv~│~boxvH~╪~boxvL~╡~boxvR~╞~boxvh~┼~boxvl~┤~boxvr~├~bprime~‵~breve~˘~bscr~𝒷~bsemi~⁏~bsim~∽~bsime~⋍~bsol~\\~bsolb~⧅~bsolhsub~⟈~bullet~•~bump~≎~bumpE~⪮~bumpe~≏~bumpeq~≏~cacute~ć~capand~⩄~capbrcup~⩉~capcap~⩋~capcup~⩇~capdot~⩀~caps~∩︀~caret~⁁~caron~ˇ~ccaps~⩍~ccaron~č~ccirc~ĉ~ccups~⩌~ccupssm~⩐~cdot~ċ~cemptyv~⦲~centerdot~·~cfr~𝔠~chcy~ч~check~✓~checkmark~✓~cir~○~cirE~⧃~circeq~≗~circlearrowleft~↺~circlearrowright~↻~circledR~®~circledS~Ⓢ~circledast~⊛~circledcirc~⊚~circleddash~⊝~cire~≗~cirfnint~⨐~cirmid~⫯~cirscir~⧂~clubsuit~♣~colon~:~colone~≔~coloneq~≔~comma~,~commat~@~comp~∁~compfn~∘~complement~∁~complexes~ℂ~congdot~⩭~conint~∮~copf~𝕔~coprod~∐~copysr~℗~cross~✗~cscr~𝒸~csub~⫏~csube~⫑~csup~⫐~csupe~⫒~ctdot~⋯~cudarrl~⤸~cudarrr~⤵~cuepr~⋞~cuesc~⋟~cularr~↶~cularrp~⤽~cupbrcap~⩈~cupcap~⩆~cupcup~⩊~cupdot~⊍~cupor~⩅~cups~∪︀~curarr~↷~curarrm~⤼~curlyeqprec~⋞~curlyeqsucc~⋟~curlyvee~⋎~curlywedge~⋏~curvearrowleft~↶~curvearrowright~↷~cuvee~⋎~cuwed~⋏~cwconint~∲~cwint~∱~cylcty~⌭~dHar~⥥~daleth~ℸ~dash~‐~dashv~⊣~dbkarow~⤏~dblac~˝~dcaron~ď~dcy~д~dd~ⅆ~ddagger~‡~ddarr~⇊~ddotseq~⩷~demptyv~⦱~dfisht~⥿~dfr~𝔡~dharl~⇃~dharr~⇂~diam~⋄~diamond~⋄~diamondsuit~♦~die~¨~digamma~ϝ~disin~⋲~div~÷~divideontimes~⋇~divonx~⋇~djcy~ђ~dlcorn~⌞~dlcrop~⌍~dollar~$~dopf~𝕕~dot~˙~doteq~≐~doteqdot~≑~dotminus~∸~dotplus~∔~dotsquare~⊡~doublebarwedge~⌆~downarrow~↓~downdownarrows~⇊~downharpoonleft~⇃~downharpoonright~⇂~drbkarow~⤐~drcorn~⌟~drcrop~⌌~dscr~𝒹~dscy~ѕ~dsol~⧶~dstrok~đ~dtdot~⋱~dtri~▿~dtrif~▾~duarr~⇵~duhar~⥯~dwangle~⦦~dzcy~џ~dzigrarr~⟿~eDDot~⩷~eDot~≑~easter~⩮~ecaron~ě~ecir~≖~ecolon~≕~ecy~э~edot~ė~ee~ⅇ~efDot~≒~efr~𝔢~eg~⪚~egs~⪖~egsdot~⪘~el~⪙~elinters~⏧~ell~ℓ~els~⪕~elsdot~⪗~emacr~ē~emptyset~∅~emptyv~∅~emsp13~ ~emsp14~ ~eng~ŋ~eogon~ę~eopf~𝕖~epar~⋕~eparsl~⧣~eplus~⩱~epsi~ε~epsiv~ϵ~eqcirc~≖~eqcolon~≕~eqsim~≂~eqslantgtr~⪖~eqslantless~⪕~equals~=~equest~≟~equivDD~⩸~eqvparsl~⧥~erDot~≓~erarr~⥱~escr~ℯ~esdot~≐~esim~≂~excl~!~expectation~ℰ~exponentiale~ⅇ~fallingdotseq~≒~fcy~ф~female~♀~ffilig~ﬃ~fflig~ﬀ~ffllig~ﬄ~ffr~𝔣~filig~ﬁ~fjlig~fj~flat~♭~fllig~ﬂ~fltns~▱~fopf~𝕗~fork~⋔~forkv~⫙~fpartint~⨍~frac13~⅓~frac15~⅕~frac16~⅙~frac18~⅛~frac23~⅔~frac25~⅖~frac35~⅗~frac38~⅜~frac45~⅘~frac56~⅚~frac58~⅝~frac78~⅞~frown~⌢~fscr~𝒻~gE~≧~gEl~⪌~gacute~ǵ~gammad~ϝ~gap~⪆~gbreve~ğ~gcirc~ĝ~gcy~г~gdot~ġ~gel~⋛~geq~≥~geqq~≧~geqslant~⩾~ges~⩾~gescc~⪩~gesdot~⪀~gesdoto~⪂~gesdotol~⪄~gesl~⋛︀~gesles~⪔~gfr~𝔤~gg~≫~ggg~⋙~gimel~ℷ~gjcy~ѓ~gl~≷~glE~⪒~gla~⪥~glj~⪤~gnE~≩~gnap~⪊~gnapprox~⪊~gne~⪈~gneq~⪈~gneqq~≩~gnsim~⋧~gopf~𝕘~grave~`~gscr~ℊ~gsim~≳~gsime~⪎~gsiml~⪐~gtcc~⪧~gtcir~⩺~gtdot~⋗~gtlPar~⦕~gtquest~⩼~gtrapprox~⪆~gtrarr~⥸~gtrdot~⋗~gtreqless~⋛~gtreqqless~⪌~gtrless~≷~gtrsim~≳~gvertneqq~≩︀~gvnE~≩︀~hairsp~ ~half~½~hamilt~ℋ~hardcy~ъ~harrcir~⥈~harrw~↭~hbar~ℏ~hcirc~ĥ~heartsuit~♥~hercon~⊹~hfr~𝔥~hksearow~⤥~hkswarow~⤦~hoarr~⇿~homtht~∻~hookleftarrow~↩~hookrightarrow~↪~hopf~𝕙~horbar~―~hscr~𝒽~hslash~ℏ~hstrok~ħ~hybull~⁃~hyphen~‐~ic~⁣~icy~и~iecy~е~iff~⇔~ifr~𝔦~ii~ⅈ~iiiint~⨌~iiint~∭~iinfin~⧜~iiota~℩~ijlig~ĳ~imacr~ī~imagline~ℐ~imagpart~ℑ~imath~ı~imof~⊷~imped~Ƶ~in~∈~incare~℅~infintie~⧝~inodot~ı~intcal~⊺~integers~ℤ~intercal~⊺~intlarhk~⨗~intprod~⨼~iocy~ё~iogon~į~iopf~𝕚~iprod~⨼~iscr~𝒾~isinE~⋹~isindot~⋵~isins~⋴~isinsv~⋳~isinv~∈~it~⁢~itilde~ĩ~iukcy~і~jcirc~ĵ~jcy~й~jfr~𝔧~jmath~ȷ~jopf~𝕛~jscr~𝒿~jsercy~ј~jukcy~є~kappav~ϰ~kcedil~ķ~kcy~к~kfr~𝔨~kgreen~ĸ~khcy~х~kjcy~ќ~kopf~𝕜~kscr~𝓀~lAarr~⇚~lAtail~⤛~lBarr~⤎~lE~≦~lEg~⪋~lHar~⥢~lacute~ĺ~laemptyv~⦴~lagran~ℒ~langd~⦑~langle~⟨~lap~⪅~larrb~⇤~larrbfs~⤟~larrfs~⤝~larrhk~↩~larrlp~↫~larrpl~⤹~larrsim~⥳~larrtl~↢~lat~⪫~latail~⤙~late~⪭~lates~⪭︀~lbarr~⤌~lbbrk~❲~lbrace~{~lbrack~[~lbrke~⦋~lbrksld~⦏~lbrkslu~⦍~lcaron~ľ~lcedil~ļ~lcub~{~lcy~л~ldca~⤶~ldquor~„~ldrdhar~⥧~ldrushar~⥋~ldsh~↲~leftarrow~←~leftarrowtail~↢~leftharpoondown~↽~leftharpoonup~↼~leftleftarrows~⇇~leftrightarrow~↔~leftrightarrows~⇆~leftrightharpoons~⇋~leftrightsquigarrow~↭~leftthreetimes~⋋~leg~⋚~leq~≤~leqq~≦~leqslant~⩽~les~⩽~lescc~⪨~lesdot~⩿~lesdoto~⪁~lesdotor~⪃~lesg~⋚︀~lesges~⪓~lessapprox~⪅~lessdot~⋖~lesseqgtr~⋚~lesseqqgtr~⪋~lessgtr~≶~lesssim~≲~lfisht~⥼~lfr~𝔩~lg~≶~lgE~⪑~lhard~↽~lharu~↼~lharul~⥪~lhblk~▄~ljcy~љ~ll~≪~llarr~⇇~llcorner~⌞~llhard~⥫~lltri~◺~lmidot~ŀ~lmoust~⎰~lmoustache~⎰~lnE~≨~lnap~⪉~lnapprox~⪉~lne~⪇~lneq~⪇~lneqq~≨~lnsim~⋦~loang~⟬~loarr~⇽~lobrk~⟦~longleftarrow~⟵~longleftrightarrow~⟷~longmapsto~⟼~longrightarrow~⟶~looparrowleft~↫~looparrowright~↬~lopar~⦅~lopf~𝕝~loplus~⨭~lotimes~⨴~lowbar~_~lozenge~◊~lozf~⧫~lpar~(~lparlt~⦓~lrarr~⇆~lrcorner~⌟~lrhar~⇋~lrhard~⥭~lrtri~⊿~lscr~𝓁~lsh~↰~lsim~≲~lsime~⪍~lsimg~⪏~lsqb~[~lsquor~‚~lstrok~ł~ltcc~⪦~ltcir~⩹~ltdot~⋖~lthree~⋋~ltimes~⋉~ltlarr~⥶~ltquest~⩻~ltrPar~⦖~ltri~◃~ltrie~⊴~ltrif~◂~lurdshar~⥊~luruhar~⥦~lvertneqq~≨︀~lvnE~≨︀~mDDot~∺~male~♂~malt~✠~maltese~✠~map~↦~mapsto~↦~mapstodown~↧~mapstoleft~↤~mapstoup~↥~marker~▮~mcomma~⨩~mcy~м~measuredangle~∡~mfr~𝔪~mho~℧~mid~∣~midast~*~midcir~⫰~minusb~⊟~minusd~∸~minusdu~⨪~mlcp~⫛~mldr~…~mnplus~∓~models~⊧~mopf~𝕞~mp~∓~mscr~𝓂~mstpos~∾~multimap~⊸~mumap~⊸~nGg~⋙̸~nGt~≫⃒~nGtv~≫̸~nLeftarrow~⇍~nLeftrightarrow~⇎~nLl~⋘̸~nLt~≪⃒~nLtv~≪̸~nRightarrow~⇏~nVDash~⊯~nVdash~⊮~nacute~ń~nang~∠⃒~nap~≉~napE~⩰̸~napid~≋̸~napos~ŉ~napprox~≉~natur~♮~natural~♮~naturals~ℕ~nbump~≎̸~nbumpe~≏̸~ncap~⩃~ncaron~ň~ncedil~ņ~ncong~≇~ncongdot~⩭̸~ncup~⩂~ncy~н~neArr~⇗~nearhk~⤤~nearr~↗~nearrow~↗~nedot~≐̸~nequiv~≢~nesear~⤨~nesim~≂̸~nexist~∄~nexists~∄~nfr~𝔫~ngE~≧̸~nge~≱~ngeq~≱~ngeqq~≧̸~ngeqslant~⩾̸~nges~⩾̸~ngsim~≵~ngt~≯~ngtr~≯~nhArr~⇎~nharr~↮~nhpar~⫲~nis~⋼~nisd~⋺~niv~∋~njcy~њ~nlArr~⇍~nlE~≦̸~nlarr~↚~nldr~‥~nle~≰~nleftarrow~↚~nleftrightarrow~↮~nleq~≰~nleqq~≦̸~nleqslant~⩽̸~nles~⩽̸~nless~≮~nlsim~≴~nlt~≮~nltri~⋪~nltrie~⋬~nmid~∤~nopf~𝕟~notinE~⋹̸~notindot~⋵̸~notinva~∉~notinvb~⋷~notinvc~⋶~notni~∌~notniva~∌~notnivb~⋾~notnivc~⋽~npar~∦~nparallel~∦~nparsl~⫽⃥~npart~∂̸~npolint~⨔~npr~⊀~nprcue~⋠~npre~⪯̸~nprec~⊀~npreceq~⪯̸~nrArr~⇏~nrarr~↛~nrarrc~⤳̸~nrarrw~↝̸~nrightarrow~↛~nrtri~⋫~nrtrie~⋭~nsc~⊁~nsccue~⋡~nsce~⪰̸~nscr~𝓃~nshortmid~∤~nshortparallel~∦~nsim~≁~nsime~≄~nsimeq~≄~nsmid~∤~nspar~∦~nsqsube~⋢~nsqsupe~⋣~nsubE~⫅̸~nsube~⊈~nsubset~⊂⃒~nsubseteq~⊈~nsubseteqq~⫅̸~nsucc~⊁~nsucceq~⪰̸~nsup~⊅~nsupE~⫆̸~nsupe~⊉~nsupset~⊃⃒~nsupseteq~⊉~nsupseteqq~⫆̸~ntgl~≹~ntlg~≸~ntriangleleft~⋪~ntrianglelefteq~⋬~ntriangleright~⋫~ntrianglerighteq~⋭~num~#~numero~№~numsp~ ~nvDash~⊭~nvHarr~⤄~nvap~≍⃒~nvdash~⊬~nvge~≥⃒~nvgt~>⃒~nvinfin~⧞~nvlArr~⤂~nvle~≤⃒~nvlt~<⃒~nvltrie~⊴⃒~nvrArr~⤃~nvrtrie~⊵⃒~nvsim~∼⃒~nwArr~⇖~nwarhk~⤣~nwarr~↖~nwarrow~↖~nwnear~⤧~oS~Ⓢ~oast~⊛~ocir~⊚~ocy~о~odash~⊝~odblac~ő~odiv~⨸~odot~⊙~odsold~⦼~ofcir~⦿~ofr~𝔬~ogon~˛~ogt~⧁~ohbar~⦵~ohm~Ω~oint~∮~olarr~↺~olcir~⦾~olcross~⦻~olt~⧀~omacr~ō~omid~⦶~ominus~⊖~oopf~𝕠~opar~⦷~operp~⦹~orarr~↻~ord~⩝~order~ℴ~orderof~ℴ~origof~⊶~oror~⩖~orslope~⩗~orv~⩛~oscr~ℴ~osol~⊘~otimesas~⨶~ovbar~⌽~par~∥~parallel~∥~parsim~⫳~parsl~⫽~pcy~п~percnt~%~period~.~pertenk~‱~pfr~𝔭~phiv~ϕ~phmmat~ℳ~phone~☎~pitchfork~⋔~planck~ℏ~planckh~ℎ~plankv~ℏ~plus~+~plusacir~⨣~plusb~⊞~pluscir~⨢~plusdo~∔~plusdu~⨥~pluse~⩲~plussim~⨦~plustwo~⨧~pm~±~pointint~⨕~popf~𝕡~pr~≺~prE~⪳~prap~⪷~prcue~≼~pre~⪯~prec~≺~precapprox~⪷~preccurlyeq~≼~preceq~⪯~precnapprox~⪹~precneqq~⪵~precnsim~⋨~precsim~≾~primes~ℙ~prnE~⪵~prnap~⪹~prnsim~⋨~profalar~⌮~profline~⌒~profsurf~⌓~propto~∝~prsim~≾~prurel~⊰~pscr~𝓅~puncsp~ ~qfr~𝔮~qint~⨌~qopf~𝕢~qprime~⁗~qscr~𝓆~quaternions~ℍ~quatint~⨖~quest~?~questeq~≟~rAarr~⇛~rAtail~⤜~rBarr~⤏~rHar~⥤~race~∽̱~racute~ŕ~raemptyv~⦳~rangd~⦒~range~⦥~rangle~⟩~rarrap~⥵~rarrb~⇥~rarrbfs~⤠~rarrc~⤳~rarrfs~⤞~rarrhk~↪~rarrlp~↬~rarrpl~⥅~rarrsim~⥴~rarrtl~↣~rarrw~↝~ratail~⤚~ratio~∶~rationals~ℚ~rbarr~⤍~rbbrk~❳~rbrace~}~rbrack~]~rbrke~⦌~rbrksld~⦎~rbrkslu~⦐~rcaron~ř~rcedil~ŗ~rcub~}~rcy~р~rdca~⤷~rdldhar~⥩~rdquor~”~rdsh~↳~realine~ℛ~realpart~ℜ~reals~ℝ~rect~▭~rfisht~⥽~rfr~𝔯~rhard~⇁~rharu~⇀~rharul~⥬~rhov~ϱ~rightarrow~→~rightarrowtail~↣~rightharpoondown~⇁~rightharpoonup~⇀~rightleftarrows~⇄~rightleftharpoons~⇌~rightrightarrows~⇉~rightsquigarrow~↝~rightthreetimes~⋌~ring~˚~risingdotseq~≓~rlarr~⇄~rlhar~⇌~rmoust~⎱~rmoustache~⎱~rnmid~⫮~roang~⟭~roarr~⇾~robrk~⟧~ropar~⦆~ropf~𝕣~roplus~⨮~rotimes~⨵~rpar~)~rpargt~⦔~rppolint~⨒~rrarr~⇉~rscr~𝓇~rsh~↱~rsqb~]~rsquor~’~rthree~⋌~rtimes~⋊~rtri~▹~rtrie~⊵~rtrif~▸~rtriltri~⧎~ruluhar~⥨~rx~℞~sacute~ś~sc~≻~scE~⪴~scap~⪸~sccue~≽~sce~⪰~scedil~ş~scirc~ŝ~scnE~⪶~scnap~⪺~scnsim~⋩~scpolint~⨓~scsim~≿~scy~с~sdotb~⊡~sdote~⩦~seArr~⇘~searhk~⤥~searr~↘~searrow~↘~semi~;~seswar~⤩~setminus~∖~setmn~∖~sext~✶~sfr~𝔰~sfrown~⌢~sharp~♯~shchcy~щ~shcy~ш~shortmid~∣~shortparallel~∥~sigmav~ς~simdot~⩪~sime~≃~simeq~≃~simg~⪞~simgE~⪠~siml~⪝~simlE~⪟~simne~≆~simplus~⨤~simrarr~⥲~slarr~←~smallsetminus~∖~smashp~⨳~smeparsl~⧤~smid~∣~smile~⌣~smt~⪪~smte~⪬~smtes~⪬︀~softcy~ь~sol~/~solb~⧄~solbar~⌿~sopf~𝕤~spadesuit~♠~spar~∥~sqcap~⊓~sqcaps~⊓︀~sqcup~⊔~sqcups~⊔︀~sqsub~⊏~sqsube~⊑~sqsubset~⊏~sqsubseteq~⊑~sqsup~⊐~sqsupe~⊒~sqsupset~⊐~sqsupseteq~⊒~squ~□~square~□~squarf~▪~squf~▪~srarr~→~sscr~𝓈~ssetmn~∖~ssmile~⌣~sstarf~⋆~star~☆~starf~★~straightepsilon~ϵ~straightphi~ϕ~strns~¯~subE~⫅~subdot~⪽~subedot~⫃~submult~⫁~subnE~⫋~subne~⊊~subplus~⪿~subrarr~⥹~subset~⊂~subseteq~⊆~subseteqq~⫅~subsetneq~⊊~subsetneqq~⫋~subsim~⫇~subsub~⫕~subsup~⫓~succ~≻~succapprox~⪸~succcurlyeq~≽~succeq~⪰~succnapprox~⪺~succneqq~⪶~succnsim~⋩~succsim~≿~sung~♪~supE~⫆~supdot~⪾~supdsub~⫘~supedot~⫄~suphsol~⟉~suphsub~⫗~suplarr~⥻~supmult~⫂~supnE~⫌~supne~⊋~supplus~⫀~supset~⊃~supseteq~⊇~supseteqq~⫆~supsetneq~⊋~supsetneqq~⫌~supsim~⫈~supsub~⫔~supsup~⫖~swArr~⇙~swarhk~⤦~swarr~↙~swarrow~↙~swnwar~⤪~target~⌖~tbrk~⎴~tcaron~ť~tcedil~ţ~tcy~т~tdot~⃛~telrec~⌕~tfr~𝔱~therefore~∴~thetav~ϑ~thickapprox~≈~thicksim~∼~thkap~≈~thksim~∼~timesb~⊠~timesbar~⨱~timesd~⨰~tint~∭~toea~⤨~top~⊤~topbot~⌶~topcir~⫱~topf~𝕥~topfork~⫚~tosa~⤩~tprime~‴~triangle~▵~triangledown~▿~triangleleft~◃~trianglelefteq~⊴~triangleq~≜~triangleright~▹~trianglerighteq~⊵~tridot~◬~trie~≜~triminus~⨺~triplus~⨹~trisb~⧍~tritime~⨻~trpezium~⏢~tscr~𝓉~tscy~ц~tshcy~ћ~tstrok~ŧ~twixt~≬~twoheadleftarrow~↞~twoheadrightarrow~↠~uHar~⥣~ubrcy~ў~ubreve~ŭ~ucy~у~udarr~⇅~udblac~ű~udhar~⥮~ufisht~⥾~ufr~𝔲~uharl~↿~uharr~↾~uhblk~▀~ulcorn~⌜~ulcorner~⌜~ulcrop~⌏~ultri~◸~umacr~ū~uogon~ų~uopf~𝕦~uparrow~↑~updownarrow~↕~upharpoonleft~↿~upharpoonright~↾~uplus~⊎~upsi~υ~upuparrows~⇈~urcorn~⌝~urcorner~⌝~urcrop~⌎~uring~ů~urtri~◹~uscr~𝓊~utdot~⋰~utilde~ũ~utri~▵~utrif~▴~uuarr~⇈~uwangle~⦧~vArr~⇕~vBar~⫨~vBarv~⫩~vDash~⊨~vangrt~⦜~varepsilon~ϵ~varkappa~ϰ~varnothing~∅~varphi~ϕ~varpi~ϖ~varpropto~∝~varr~↕~varrho~ϱ~varsigma~ς~varsubsetneq~⊊︀~varsubsetneqq~⫋︀~varsupsetneq~⊋︀~varsupsetneqq~⫌︀~vartheta~ϑ~vartriangleleft~⊲~vartriangleright~⊳~vcy~в~vdash~⊢~vee~∨~veebar~⊻~veeeq~≚~vellip~⋮~verbar~|~vert~|~vfr~𝔳~vltri~⊲~vnsub~⊂⃒~vnsup~⊃⃒~vopf~𝕧~vprop~∝~vrtri~⊳~vscr~𝓋~vsubnE~⫋︀~vsubne~⊊︀~vsupnE~⫌︀~vsupne~⊋︀~vzigzag~⦚~wcirc~ŵ~wedbar~⩟~wedge~∧~wedgeq~≙~wfr~𝔴~wopf~𝕨~wp~℘~wr~≀~wreath~≀~wscr~𝓌~xcap~⋂~xcirc~◯~xcup~⋃~xdtri~▽~xfr~𝔵~xhArr~⟺~xharr~⟷~xlArr~⟸~xlarr~⟵~xmap~⟼~xnis~⋻~xodot~⨀~xopf~𝕩~xoplus~⨁~xotime~⨂~xrArr~⟹~xrarr~⟶~xscr~𝓍~xsqcup~⨆~xuplus~⨄~xutri~△~xvee~⋁~xwedge~⋀~yacy~я~ycirc~ŷ~ycy~ы~yfr~𝔶~yicy~ї~yopf~𝕪~yscr~𝓎~yucy~ю~zacute~ź~zcaron~ž~zcy~з~zdot~ż~zeetrf~ℨ~zfr~𝔷~zhcy~ж~zigrarr~⇝~zopf~𝕫~zscr~𝓏~~AMP~&~COPY~©~GT~>~LT~<~QUOT~\"~REG~®", exports.namedReferences['html4']);
+//# sourceMappingURL=named-references.js.map
+
+/***/ }),
+
+/***/ 24690:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.numericUnicodeMap = void 0;
+exports.numericUnicodeMap = {
+    0: 65533,
+    128: 8364,
+    130: 8218,
+    131: 402,
+    132: 8222,
+    133: 8230,
+    134: 8224,
+    135: 8225,
+    136: 710,
+    137: 8240,
+    138: 352,
+    139: 8249,
+    140: 338,
+    142: 381,
+    145: 8216,
+    146: 8217,
+    147: 8220,
+    148: 8221,
+    149: 8226,
+    150: 8211,
+    151: 8212,
+    152: 732,
+    153: 8482,
+    154: 353,
+    155: 8250,
+    156: 339,
+    158: 382,
+    159: 376
+};
+//# sourceMappingURL=numeric-unicode-map.js.map
+
+/***/ }),
+
+/***/ 77955:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.highSurrogateTo = exports.highSurrogateFrom = exports.getCodePoint = exports.fromCodePoint = void 0;
+exports.fromCodePoint = String.fromCodePoint ||
+    function (astralCodePoint) {
+        return String.fromCharCode(Math.floor((astralCodePoint - 0x10000) / 0x400) + 0xd800, ((astralCodePoint - 0x10000) % 0x400) + 0xdc00);
+    };
+// @ts-expect-error - String.prototype.codePointAt might not exist in older node versions
+exports.getCodePoint = String.prototype.codePointAt
+    ? function (input, position) {
+        return input.codePointAt(position);
+    }
+    : function (input, position) {
+        return (input.charCodeAt(position) - 0xd800) * 0x400 + input.charCodeAt(position + 1) - 0xdc00 + 0x10000;
+    };
+exports.highSurrogateFrom = 0xd800;
+exports.highSurrogateTo = 0xdbff;
+//# sourceMappingURL=surrogate-pairs.js.map
+
+/***/ }),
+
+/***/ 63730:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.version = exports.validate = exports.v7 = exports.v6ToV1 = exports.v6 = exports.v5 = exports.v4 = exports.v3 = exports.v1ToV6 = exports.v1 = exports.stringify = exports.parse = exports.NIL = exports.MAX = void 0;
+var max_js_1 = __nccwpck_require__(44838);
+Object.defineProperty(exports, "MAX", ({ enumerable: true, get: function () { return max_js_1.default; } }));
+var nil_js_1 = __nccwpck_require__(34578);
+Object.defineProperty(exports, "NIL", ({ enumerable: true, get: function () { return nil_js_1.default; } }));
+var parse_js_1 = __nccwpck_require__(62526);
+Object.defineProperty(exports, "parse", ({ enumerable: true, get: function () { return parse_js_1.default; } }));
+var stringify_js_1 = __nccwpck_require__(22428);
+Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return stringify_js_1.default; } }));
+var v1_js_1 = __nccwpck_require__(56904);
+Object.defineProperty(exports, "v1", ({ enumerable: true, get: function () { return v1_js_1.default; } }));
+var v1ToV6_js_1 = __nccwpck_require__(90728);
+Object.defineProperty(exports, "v1ToV6", ({ enumerable: true, get: function () { return v1ToV6_js_1.default; } }));
+var v3_js_1 = __nccwpck_require__(6261);
+Object.defineProperty(exports, "v3", ({ enumerable: true, get: function () { return v3_js_1.default; } }));
+var v4_js_1 = __nccwpck_require__(59079);
+Object.defineProperty(exports, "v4", ({ enumerable: true, get: function () { return v4_js_1.default; } }));
+var v5_js_1 = __nccwpck_require__(19985);
+Object.defineProperty(exports, "v5", ({ enumerable: true, get: function () { return v5_js_1.default; } }));
+var v6_js_1 = __nccwpck_require__(21952);
+Object.defineProperty(exports, "v6", ({ enumerable: true, get: function () { return v6_js_1.default; } }));
+var v6ToV1_js_1 = __nccwpck_require__(97112);
+Object.defineProperty(exports, "v6ToV1", ({ enumerable: true, get: function () { return v6ToV1_js_1.default; } }));
+var v7_js_1 = __nccwpck_require__(3598);
+Object.defineProperty(exports, "v7", ({ enumerable: true, get: function () { return v7_js_1.default; } }));
+var validate_js_1 = __nccwpck_require__(83053);
+Object.defineProperty(exports, "validate", ({ enumerable: true, get: function () { return validate_js_1.default; } }));
+var version_js_1 = __nccwpck_require__(94384);
+Object.defineProperty(exports, "version", ({ enumerable: true, get: function () { return version_js_1.default; } }));
+
+
+/***/ }),
+
+/***/ 44838:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports["default"] = 'ffffffff-ffff-ffff-ffff-ffffffffffff';
+
+
+/***/ }),
+
+/***/ 13905:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const crypto_1 = __nccwpck_require__(6113);
+function md5(bytes) {
+    if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+    }
+    else if (typeof bytes === 'string') {
+        bytes = Buffer.from(bytes, 'utf8');
+    }
+    return (0, crypto_1.createHash)('md5').update(bytes).digest();
+}
+exports["default"] = md5;
+
+
+/***/ }),
+
+/***/ 76622:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const crypto_1 = __nccwpck_require__(6113);
+exports["default"] = { randomUUID: crypto_1.randomUUID };
+
+
+/***/ }),
+
+/***/ 34578:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports["default"] = '00000000-0000-0000-0000-000000000000';
+
+
+/***/ }),
+
+/***/ 62526:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const validate_js_1 = __nccwpck_require__(83053);
+function parse(uuid) {
+    if (!(0, validate_js_1.default)(uuid)) {
+        throw TypeError('Invalid UUID');
+    }
+    let v;
+    return Uint8Array.of((v = parseInt(uuid.slice(0, 8), 16)) >>> 24, (v >>> 16) & 0xff, (v >>> 8) & 0xff, v & 0xff, (v = parseInt(uuid.slice(9, 13), 16)) >>> 8, v & 0xff, (v = parseInt(uuid.slice(14, 18), 16)) >>> 8, v & 0xff, (v = parseInt(uuid.slice(19, 23), 16)) >>> 8, v & 0xff, ((v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000) & 0xff, (v / 0x100000000) & 0xff, (v >>> 24) & 0xff, (v >>> 16) & 0xff, (v >>> 8) & 0xff, v & 0xff);
+}
+exports["default"] = parse;
+
+
+/***/ }),
+
+/***/ 29556:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports["default"] = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/i;
+
+
+/***/ }),
+
+/***/ 18186:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const crypto_1 = __nccwpck_require__(6113);
+const rnds8Pool = new Uint8Array(256);
+let poolPtr = rnds8Pool.length;
+function rng() {
+    if (poolPtr > rnds8Pool.length - 16) {
+        (0, crypto_1.randomFillSync)(rnds8Pool);
+        poolPtr = 0;
+    }
+    return rnds8Pool.slice(poolPtr, (poolPtr += 16));
+}
+exports["default"] = rng;
+
+
+/***/ }),
+
+/***/ 98850:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const crypto_1 = __nccwpck_require__(6113);
+function sha1(bytes) {
+    if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+    }
+    else if (typeof bytes === 'string') {
+        bytes = Buffer.from(bytes, 'utf8');
+    }
+    return (0, crypto_1.createHash)('sha1').update(bytes).digest();
+}
+exports["default"] = sha1;
+
+
+/***/ }),
+
+/***/ 22428:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.unsafeStringify = void 0;
+const validate_js_1 = __nccwpck_require__(83053);
+const byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+    byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+    return (byteToHex[arr[offset + 0]] +
+        byteToHex[arr[offset + 1]] +
+        byteToHex[arr[offset + 2]] +
+        byteToHex[arr[offset + 3]] +
+        '-' +
+        byteToHex[arr[offset + 4]] +
+        byteToHex[arr[offset + 5]] +
+        '-' +
+        byteToHex[arr[offset + 6]] +
+        byteToHex[arr[offset + 7]] +
+        '-' +
+        byteToHex[arr[offset + 8]] +
+        byteToHex[arr[offset + 9]] +
+        '-' +
+        byteToHex[arr[offset + 10]] +
+        byteToHex[arr[offset + 11]] +
+        byteToHex[arr[offset + 12]] +
+        byteToHex[arr[offset + 13]] +
+        byteToHex[arr[offset + 14]] +
+        byteToHex[arr[offset + 15]]).toLowerCase();
+}
+exports.unsafeStringify = unsafeStringify;
+function stringify(arr, offset = 0) {
+    const uuid = unsafeStringify(arr, offset);
+    if (!(0, validate_js_1.default)(uuid)) {
+        throw TypeError('Stringified UUID is invalid');
+    }
+    return uuid;
+}
+exports["default"] = stringify;
+
+
+/***/ }),
+
+/***/ 56904:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.updateV1State = void 0;
+const rng_js_1 = __nccwpck_require__(18186);
+const stringify_js_1 = __nccwpck_require__(22428);
+const _state = {};
+function v1(options, buf, offset) {
+    let bytes;
+    const isV6 = options?._v6 ?? false;
+    if (options) {
+        const optionsKeys = Object.keys(options);
+        if (optionsKeys.length === 1 && optionsKeys[0] === '_v6') {
+            options = undefined;
+        }
+    }
+    if (options) {
+        bytes = v1Bytes(options.random ?? options.rng?.() ?? (0, rng_js_1.default)(), options.msecs, options.nsecs, options.clockseq, options.node, buf, offset);
+    }
+    else {
+        const now = Date.now();
+        const rnds = (0, rng_js_1.default)();
+        updateV1State(_state, now, rnds);
+        bytes = v1Bytes(rnds, _state.msecs, _state.nsecs, isV6 ? undefined : _state.clockseq, isV6 ? undefined : _state.node, buf, offset);
+    }
+    return buf ?? (0, stringify_js_1.unsafeStringify)(bytes);
+}
+function updateV1State(state, now, rnds) {
+    state.msecs ??= -Infinity;
+    state.nsecs ??= 0;
+    if (now === state.msecs) {
+        state.nsecs++;
+        if (state.nsecs >= 10000) {
+            state.node = undefined;
+            state.nsecs = 0;
+        }
+    }
+    else if (now > state.msecs) {
+        state.nsecs = 0;
+    }
+    else if (now < state.msecs) {
+        state.node = undefined;
+    }
+    if (!state.node) {
+        state.node = rnds.slice(10, 16);
+        state.node[0] |= 0x01;
+        state.clockseq = ((rnds[8] << 8) | rnds[9]) & 0x3fff;
+    }
+    state.msecs = now;
+    return state;
+}
+exports.updateV1State = updateV1State;
+function v1Bytes(rnds, msecs, nsecs, clockseq, node, buf, offset = 0) {
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
+    if (!buf) {
+        buf = new Uint8Array(16);
+        offset = 0;
+    }
+    else {
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
+    }
+    msecs ??= Date.now();
+    nsecs ??= 0;
+    clockseq ??= ((rnds[8] << 8) | rnds[9]) & 0x3fff;
+    node ??= rnds.slice(10, 16);
+    msecs += 12219292800000;
+    const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+    buf[offset++] = (tl >>> 24) & 0xff;
+    buf[offset++] = (tl >>> 16) & 0xff;
+    buf[offset++] = (tl >>> 8) & 0xff;
+    buf[offset++] = tl & 0xff;
+    const tmh = ((msecs / 0x100000000) * 10000) & 0xfffffff;
+    buf[offset++] = (tmh >>> 8) & 0xff;
+    buf[offset++] = tmh & 0xff;
+    buf[offset++] = ((tmh >>> 24) & 0xf) | 0x10;
+    buf[offset++] = (tmh >>> 16) & 0xff;
+    buf[offset++] = (clockseq >>> 8) | 0x80;
+    buf[offset++] = clockseq & 0xff;
+    for (let n = 0; n < 6; ++n) {
+        buf[offset++] = node[n];
+    }
+    return buf;
+}
+exports["default"] = v1;
+
+
+/***/ }),
+
+/***/ 90728:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const parse_js_1 = __nccwpck_require__(62526);
+const stringify_js_1 = __nccwpck_require__(22428);
+function v1ToV6(uuid) {
+    const v1Bytes = typeof uuid === 'string' ? (0, parse_js_1.default)(uuid) : uuid;
+    const v6Bytes = _v1ToV6(v1Bytes);
+    return typeof uuid === 'string' ? (0, stringify_js_1.unsafeStringify)(v6Bytes) : v6Bytes;
+}
+exports["default"] = v1ToV6;
+function _v1ToV6(v1Bytes) {
+    return Uint8Array.of(((v1Bytes[6] & 0x0f) << 4) | ((v1Bytes[7] >> 4) & 0x0f), ((v1Bytes[7] & 0x0f) << 4) | ((v1Bytes[4] & 0xf0) >> 4), ((v1Bytes[4] & 0x0f) << 4) | ((v1Bytes[5] & 0xf0) >> 4), ((v1Bytes[5] & 0x0f) << 4) | ((v1Bytes[0] & 0xf0) >> 4), ((v1Bytes[0] & 0x0f) << 4) | ((v1Bytes[1] & 0xf0) >> 4), ((v1Bytes[1] & 0x0f) << 4) | ((v1Bytes[2] & 0xf0) >> 4), 0x60 | (v1Bytes[2] & 0x0f), v1Bytes[3], v1Bytes[8], v1Bytes[9], v1Bytes[10], v1Bytes[11], v1Bytes[12], v1Bytes[13], v1Bytes[14], v1Bytes[15]);
+}
+
+
+/***/ }),
+
+/***/ 6261:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.URL = exports.DNS = void 0;
+const md5_js_1 = __nccwpck_require__(13905);
+const v35_js_1 = __nccwpck_require__(13042);
+var v35_js_2 = __nccwpck_require__(13042);
+Object.defineProperty(exports, "DNS", ({ enumerable: true, get: function () { return v35_js_2.DNS; } }));
+Object.defineProperty(exports, "URL", ({ enumerable: true, get: function () { return v35_js_2.URL; } }));
+function v3(value, namespace, buf, offset) {
+    return (0, v35_js_1.default)(0x30, md5_js_1.default, value, namespace, buf, offset);
+}
+v3.DNS = v35_js_1.DNS;
+v3.URL = v35_js_1.URL;
+exports["default"] = v3;
+
+
+/***/ }),
+
+/***/ 13042:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.URL = exports.DNS = exports.stringToBytes = void 0;
+const parse_js_1 = __nccwpck_require__(62526);
+const stringify_js_1 = __nccwpck_require__(22428);
+function stringToBytes(str) {
+    str = unescape(encodeURIComponent(str));
+    const bytes = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; ++i) {
+        bytes[i] = str.charCodeAt(i);
+    }
+    return bytes;
+}
+exports.stringToBytes = stringToBytes;
+exports.DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+exports.URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+function v35(version, hash, value, namespace, buf, offset) {
+    const valueBytes = typeof value === 'string' ? stringToBytes(value) : value;
+    const namespaceBytes = typeof namespace === 'string' ? (0, parse_js_1.default)(namespace) : namespace;
+    if (typeof namespace === 'string') {
+        namespace = (0, parse_js_1.default)(namespace);
+    }
+    if (namespace?.length !== 16) {
+        throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    }
+    let bytes = new Uint8Array(16 + valueBytes.length);
+    bytes.set(namespaceBytes);
+    bytes.set(valueBytes, namespaceBytes.length);
+    bytes = hash(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | version;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    if (buf) {
+        offset = offset || 0;
+        for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = bytes[i];
+        }
+        return buf;
+    }
+    return (0, stringify_js_1.unsafeStringify)(bytes);
+}
+exports["default"] = v35;
+
+
+/***/ }),
+
+/***/ 59079:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const native_js_1 = __nccwpck_require__(76622);
+const rng_js_1 = __nccwpck_require__(18186);
+const stringify_js_1 = __nccwpck_require__(22428);
+function v4(options, buf, offset) {
+    if (native_js_1.default.randomUUID && !buf && !options) {
+        return native_js_1.default.randomUUID();
+    }
+    options = options || {};
+    const rnds = options.random ?? options.rng?.() ?? (0, rng_js_1.default)();
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
+    rnds[6] = (rnds[6] & 0x0f) | 0x40;
+    rnds[8] = (rnds[8] & 0x3f) | 0x80;
+    if (buf) {
+        offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
+        for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = rnds[i];
+        }
+        return buf;
+    }
+    return (0, stringify_js_1.unsafeStringify)(rnds);
+}
+exports["default"] = v4;
+
+
+/***/ }),
+
+/***/ 19985:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.URL = exports.DNS = void 0;
+const sha1_js_1 = __nccwpck_require__(98850);
+const v35_js_1 = __nccwpck_require__(13042);
+var v35_js_2 = __nccwpck_require__(13042);
+Object.defineProperty(exports, "DNS", ({ enumerable: true, get: function () { return v35_js_2.DNS; } }));
+Object.defineProperty(exports, "URL", ({ enumerable: true, get: function () { return v35_js_2.URL; } }));
+function v5(value, namespace, buf, offset) {
+    return (0, v35_js_1.default)(0x50, sha1_js_1.default, value, namespace, buf, offset);
+}
+v5.DNS = v35_js_1.DNS;
+v5.URL = v35_js_1.URL;
+exports["default"] = v5;
+
+
+/***/ }),
+
+/***/ 21952:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const stringify_js_1 = __nccwpck_require__(22428);
+const v1_js_1 = __nccwpck_require__(56904);
+const v1ToV6_js_1 = __nccwpck_require__(90728);
+function v6(options, buf, offset) {
+    options ??= {};
+    offset ??= 0;
+    let bytes = (0, v1_js_1.default)({ ...options, _v6: true }, new Uint8Array(16));
+    bytes = (0, v1ToV6_js_1.default)(bytes);
+    if (buf) {
+        for (let i = 0; i < 16; i++) {
+            buf[offset + i] = bytes[i];
+        }
+        return buf;
+    }
+    return (0, stringify_js_1.unsafeStringify)(bytes);
+}
+exports["default"] = v6;
+
+
+/***/ }),
+
+/***/ 97112:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const parse_js_1 = __nccwpck_require__(62526);
+const stringify_js_1 = __nccwpck_require__(22428);
+function v6ToV1(uuid) {
+    const v6Bytes = typeof uuid === 'string' ? (0, parse_js_1.default)(uuid) : uuid;
+    const v1Bytes = _v6ToV1(v6Bytes);
+    return typeof uuid === 'string' ? (0, stringify_js_1.unsafeStringify)(v1Bytes) : v1Bytes;
+}
+exports["default"] = v6ToV1;
+function _v6ToV1(v6Bytes) {
+    return Uint8Array.of(((v6Bytes[3] & 0x0f) << 4) | ((v6Bytes[4] >> 4) & 0x0f), ((v6Bytes[4] & 0x0f) << 4) | ((v6Bytes[5] & 0xf0) >> 4), ((v6Bytes[5] & 0x0f) << 4) | (v6Bytes[6] & 0x0f), v6Bytes[7], ((v6Bytes[1] & 0x0f) << 4) | ((v6Bytes[2] & 0xf0) >> 4), ((v6Bytes[2] & 0x0f) << 4) | ((v6Bytes[3] & 0xf0) >> 4), 0x10 | ((v6Bytes[0] & 0xf0) >> 4), ((v6Bytes[0] & 0x0f) << 4) | ((v6Bytes[1] & 0xf0) >> 4), v6Bytes[8], v6Bytes[9], v6Bytes[10], v6Bytes[11], v6Bytes[12], v6Bytes[13], v6Bytes[14], v6Bytes[15]);
+}
+
+
+/***/ }),
+
+/***/ 3598:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.updateV7State = void 0;
+const rng_js_1 = __nccwpck_require__(18186);
+const stringify_js_1 = __nccwpck_require__(22428);
+const _state = {};
+function v7(options, buf, offset) {
+    let bytes;
+    if (options) {
+        bytes = v7Bytes(options.random ?? options.rng?.() ?? (0, rng_js_1.default)(), options.msecs, options.seq, buf, offset);
+    }
+    else {
+        const now = Date.now();
+        const rnds = (0, rng_js_1.default)();
+        updateV7State(_state, now, rnds);
+        bytes = v7Bytes(rnds, _state.msecs, _state.seq, buf, offset);
+    }
+    return buf ?? (0, stringify_js_1.unsafeStringify)(bytes);
+}
+function updateV7State(state, now, rnds) {
+    state.msecs ??= -Infinity;
+    state.seq ??= 0;
+    if (now > state.msecs) {
+        state.seq = (rnds[6] << 23) | (rnds[7] << 16) | (rnds[8] << 8) | rnds[9];
+        state.msecs = now;
+    }
+    else {
+        state.seq = (state.seq + 1) | 0;
+        if (state.seq === 0) {
+            state.msecs++;
+        }
+    }
+    return state;
+}
+exports.updateV7State = updateV7State;
+function v7Bytes(rnds, msecs, seq, buf, offset = 0) {
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
+    if (!buf) {
+        buf = new Uint8Array(16);
+        offset = 0;
+    }
+    else {
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
+    }
+    msecs ??= Date.now();
+    seq ??= ((rnds[6] * 0x7f) << 24) | (rnds[7] << 16) | (rnds[8] << 8) | rnds[9];
+    buf[offset++] = (msecs / 0x10000000000) & 0xff;
+    buf[offset++] = (msecs / 0x100000000) & 0xff;
+    buf[offset++] = (msecs / 0x1000000) & 0xff;
+    buf[offset++] = (msecs / 0x10000) & 0xff;
+    buf[offset++] = (msecs / 0x100) & 0xff;
+    buf[offset++] = msecs & 0xff;
+    buf[offset++] = 0x70 | ((seq >>> 28) & 0x0f);
+    buf[offset++] = (seq >>> 20) & 0xff;
+    buf[offset++] = 0x80 | ((seq >>> 14) & 0x3f);
+    buf[offset++] = (seq >>> 6) & 0xff;
+    buf[offset++] = ((seq << 2) & 0xff) | (rnds[10] & 0x03);
+    buf[offset++] = rnds[11];
+    buf[offset++] = rnds[12];
+    buf[offset++] = rnds[13];
+    buf[offset++] = rnds[14];
+    buf[offset++] = rnds[15];
+    return buf;
+}
+exports["default"] = v7;
+
+
+/***/ }),
+
+/***/ 83053:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const regex_js_1 = __nccwpck_require__(29556);
+function validate(uuid) {
+    return typeof uuid === 'string' && regex_js_1.default.test(uuid);
+}
+exports["default"] = validate;
+
+
+/***/ }),
+
+/***/ 94384:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const validate_js_1 = __nccwpck_require__(83053);
+function version(uuid) {
+    if (!(0, validate_js_1.default)(uuid)) {
+        throw TypeError('Invalid UUID');
+    }
+    return parseInt(uuid.slice(14, 15), 16);
+}
+exports["default"] = version;
 
 
 /***/ }),
@@ -120971,10 +123411,11 @@ exports.getPackageJSON = getPackageJSON;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-// Axios v1.7.2 Copyright (c) 2024 Matt Zabriskie and contributors
+/*! Axios v1.10.0 Copyright (c) 2025 Matt Zabriskie and contributors */
 
 
 const FormData$1 = __nccwpck_require__(91403);
+const crypto = __nccwpck_require__(6113);
 const url = __nccwpck_require__(57310);
 const proxyFromEnv = __nccwpck_require__(63329);
 const http = __nccwpck_require__(13685);
@@ -120988,7 +123429,9 @@ const events = __nccwpck_require__(82361);
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 const FormData__default = /*#__PURE__*/_interopDefaultLegacy(FormData$1);
+const crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
 const url__default = /*#__PURE__*/_interopDefaultLegacy(url);
+const proxyFromEnv__default = /*#__PURE__*/_interopDefaultLegacy(proxyFromEnv);
 const http__default = /*#__PURE__*/_interopDefaultLegacy(http);
 const https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 const util__default = /*#__PURE__*/_interopDefaultLegacy(util);
@@ -121006,6 +123449,7 @@ function bind(fn, thisArg) {
 
 const {toString} = Object.prototype;
 const {getPrototypeOf} = Object;
+const {iterator, toStringTag} = Symbol;
 
 const kindOf = (cache => thing => {
     const str = toString.call(thing);
@@ -121132,7 +123576,7 @@ const isPlainObject = (val) => {
   }
 
   const prototype = getPrototypeOf(val);
-  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in val) && !(Symbol.iterator in val);
+  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(toStringTag in val) && !(iterator in val);
 };
 
 /**
@@ -121483,13 +123927,13 @@ const isTypedArray = (TypedArray => {
  * @returns {void}
  */
 const forEachEntry = (obj, fn) => {
-  const generator = obj && obj[Symbol.iterator];
+  const generator = obj && obj[iterator];
 
-  const iterator = generator.call(obj);
+  const _iterator = generator.call(obj);
 
   let result;
 
-  while ((result = iterator.next()) && !result.done) {
+  while ((result = _iterator.next()) && !result.done) {
     const pair = result.value;
     fn.call(obj, pair[0], pair[1]);
   }
@@ -121602,26 +124046,6 @@ const toFiniteNumber = (value, defaultValue) => {
   return value != null && Number.isFinite(value = +value) ? value : defaultValue;
 };
 
-const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
-
-const DIGIT = '0123456789';
-
-const ALPHABET = {
-  DIGIT,
-  ALPHA,
-  ALPHA_DIGIT: ALPHA + ALPHA.toUpperCase() + DIGIT
-};
-
-const generateString = (size = 16, alphabet = ALPHABET.ALPHA_DIGIT) => {
-  let str = '';
-  const {length} = alphabet;
-  while (size--) {
-    str += alphabet[Math.random() * length|0];
-  }
-
-  return str;
-};
-
 /**
  * If the thing is a FormData object, return true, otherwise return false.
  *
@@ -121630,7 +124054,7 @@ const generateString = (size = 16, alphabet = ALPHABET.ALPHA_DIGIT) => {
  * @returns {boolean}
  */
 function isSpecCompliantForm(thing) {
-  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
+  return !!(thing && isFunction(thing.append) && thing[toStringTag] === 'FormData' && thing[iterator]);
 }
 
 const toJSONObject = (obj) => {
@@ -121668,6 +124092,40 @@ const isAsyncFn = kindOfTest('AsyncFunction');
 
 const isThenable = (thing) =>
   thing && (isObject(thing) || isFunction(thing)) && isFunction(thing.then) && isFunction(thing.catch);
+
+// original code
+// https://github.com/DigitalBrainJS/AxiosPromise/blob/16deab13710ec09779922131f3fa5954320f83ab/lib/utils.js#L11-L34
+
+const _setImmediate = ((setImmediateSupported, postMessageSupported) => {
+  if (setImmediateSupported) {
+    return setImmediate;
+  }
+
+  return postMessageSupported ? ((token, callbacks) => {
+    _global.addEventListener("message", ({source, data}) => {
+      if (source === _global && data === token) {
+        callbacks.length && callbacks.shift()();
+      }
+    }, false);
+
+    return (cb) => {
+      callbacks.push(cb);
+      _global.postMessage(token, "*");
+    }
+  })(`axios@${Math.random()}`, []) : (cb) => setTimeout(cb);
+})(
+  typeof setImmediate === 'function',
+  isFunction(_global.postMessage)
+);
+
+const asap = typeof queueMicrotask !== 'undefined' ?
+  queueMicrotask.bind(_global) : ( typeof process !== 'undefined' && process.nextTick || _setImmediate);
+
+// *********************
+
+
+const isIterable = (thing) => thing != null && isFunction(thing[iterator]);
+
 
 const utils$1 = {
   isArray,
@@ -121719,12 +124177,13 @@ const utils$1 = {
   findKey,
   global: _global,
   isContextDefined,
-  ALPHABET,
-  generateString,
   isSpecCompliantForm,
   toJSONObject,
   isAsyncFn,
-  isThenable
+  isThenable,
+  setImmediate: _setImmediate,
+  asap,
+  isIterable
 };
 
 /**
@@ -121752,7 +124211,10 @@ function AxiosError(message, code, config, request, response) {
   code && (this.code = code);
   config && (this.config = config);
   request && (this.request = request);
-  response && (this.response = response);
+  if (response) {
+    this.response = response;
+    this.status = response.status ? response.status : null;
+  }
 }
 
 utils$1.inherits(AxiosError, Error, {
@@ -121772,7 +124234,7 @@ utils$1.inherits(AxiosError, Error, {
       // Axios
       config: utils$1.toJSONObject(this.config),
       code: this.code,
-      status: this.response && this.response.status ? this.response.status : null
+      status: this.status
     };
   }
 });
@@ -121935,6 +124397,10 @@ function toFormData(obj, formData, options) {
 
     if (utils$1.isDate(value)) {
       return value.toISOString();
+    }
+
+    if (utils$1.isBoolean(value)) {
+      return value.toString();
     }
 
     if (!useBlob && utils$1.isBlob(value)) {
@@ -122109,7 +124575,7 @@ function encode(val) {
  *
  * @param {string} url The base of the url (e.g., http://www.google.com)
  * @param {object} [params] The params to be appended
- * @param {?object} options
+ * @param {?(object|Function)} options
  *
  * @returns {string} The formatted url
  */
@@ -122120,6 +124586,12 @@ function buildURL(url, params, options) {
   }
   
   const _encode = options && options.encode || encode;
+
+  if (utils$1.isFunction(options)) {
+    options = {
+      serialize: options
+    };
+  } 
 
   const serializeFn = options && options.serialize;
 
@@ -122221,6 +124693,29 @@ const transitionalDefaults = {
 
 const URLSearchParams = url__default["default"].URLSearchParams;
 
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+
+const DIGIT = '0123456789';
+
+const ALPHABET = {
+  DIGIT,
+  ALPHA,
+  ALPHA_DIGIT: ALPHA + ALPHA.toUpperCase() + DIGIT
+};
+
+const generateString = (size = 16, alphabet = ALPHABET.ALPHA_DIGIT) => {
+  let str = '';
+  const {length} = alphabet;
+  const randomValues = new Uint32Array(size);
+  crypto__default["default"].randomFillSync(randomValues);
+  for (let i = 0; i < size; i++) {
+    str += alphabet[randomValues[i] % length];
+  }
+
+  return str;
+};
+
+
 const platform$1 = {
   isNode: true,
   classes: {
@@ -122228,10 +124723,14 @@ const platform$1 = {
     FormData: FormData__default["default"],
     Blob: typeof Blob !== 'undefined' && Blob || null
   },
+  ALPHABET,
+  generateString,
   protocols: [ 'http', 'https', 'file', 'data' ]
 };
 
 const hasBrowserEnv = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+const _navigator = typeof navigator === 'object' && navigator || undefined;
 
 /**
  * Determine if we're running in a standard browser environment
@@ -122250,10 +124749,8 @@ const hasBrowserEnv = typeof window !== 'undefined' && typeof document !== 'unde
  *
  * @returns {boolean}
  */
-const hasStandardBrowserEnv = (
-  (product) => {
-    return hasBrowserEnv && ['ReactNative', 'NativeScript', 'NS'].indexOf(product) < 0
-  })(typeof navigator !== 'undefined' && navigator.product);
+const hasStandardBrowserEnv = hasBrowserEnv &&
+  (!_navigator || ['ReactNative', 'NativeScript', 'NS'].indexOf(_navigator.product) < 0);
 
 /**
  * Determine if we're running in a standard browser webWorker environment
@@ -122280,6 +124777,7 @@ const utils = /*#__PURE__*/Object.freeze({
   hasBrowserEnv: hasBrowserEnv,
   hasStandardBrowserWebWorkerEnv: hasStandardBrowserWebWorkerEnv,
   hasStandardBrowserEnv: hasStandardBrowserEnv,
+  navigator: _navigator,
   origin: origin
 });
 
@@ -122692,10 +125190,18 @@ class AxiosHeaders {
       setHeaders(header, valueOrRewrite);
     } else if(utils$1.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {
       setHeaders(parseHeaders(header), valueOrRewrite);
-    } else if (utils$1.isHeaders(header)) {
-      for (const [key, value] of header.entries()) {
-        setHeader(value, key, rewrite);
+    } else if (utils$1.isObject(header) && utils$1.isIterable(header)) {
+      let obj = {}, dest, key;
+      for (const entry of header) {
+        if (!utils$1.isArray(entry)) {
+          throw TypeError('Object iterator must return a key-value pair');
+        }
+
+        obj[key = entry[0]] = (dest = obj[key]) ?
+          (utils$1.isArray(dest) ? [...dest, entry[1]] : [dest, entry[1]]) : entry[1];
       }
+
+      setHeaders(obj, valueOrRewrite);
     } else {
       header != null && setHeader(valueOrRewrite, header, rewrite);
     }
@@ -122835,6 +125341,10 @@ class AxiosHeaders {
 
   toString() {
     return Object.entries(this.toJSON()).map(([header, value]) => header + ': ' + value).join('\n');
+  }
+
+  getSetCookie() {
+    return this.get("set-cookie") || [];
   }
 
   get [Symbol.toStringTag]() {
@@ -123001,14 +125511,15 @@ function combineURLs(baseURL, relativeURL) {
  *
  * @returns {string} The combined full path
  */
-function buildFullPath(baseURL, requestedURL) {
-  if (baseURL && !isAbsoluteURL(requestedURL)) {
+function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {
+  let isRelativeUrl = !isAbsoluteURL(requestedURL);
+  if (baseURL && (isRelativeUrl || allowAbsoluteUrls == false)) {
     return combineURLs(baseURL, requestedURL);
   }
   return requestedURL;
 }
 
-const VERSION = "1.7.2";
+const VERSION = "1.10.0";
 
 function parseProtocol(url) {
   const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
@@ -123063,90 +125574,6 @@ function fromDataURI(uri, asBlob, options) {
   throw new AxiosError('Unsupported protocol ' + protocol, AxiosError.ERR_NOT_SUPPORT);
 }
 
-/**
- * Throttle decorator
- * @param {Function} fn
- * @param {Number} freq
- * @return {Function}
- */
-function throttle(fn, freq) {
-  let timestamp = 0;
-  const threshold = 1000 / freq;
-  let timer = null;
-  return function throttled() {
-    const force = this === true;
-
-    const now = Date.now();
-    if (force || now - timestamp > threshold) {
-      if (timer) {
-        clearTimeout(timer);
-        timer = null;
-      }
-      timestamp = now;
-      return fn.apply(null, arguments);
-    }
-    if (!timer) {
-      timer = setTimeout(() => {
-        timer = null;
-        timestamp = Date.now();
-        return fn.apply(null, arguments);
-      }, threshold - (now - timestamp));
-    }
-  };
-}
-
-/**
- * Calculate data maxRate
- * @param {Number} [samplesCount= 10]
- * @param {Number} [min= 1000]
- * @returns {Function}
- */
-function speedometer(samplesCount, min) {
-  samplesCount = samplesCount || 10;
-  const bytes = new Array(samplesCount);
-  const timestamps = new Array(samplesCount);
-  let head = 0;
-  let tail = 0;
-  let firstSampleTS;
-
-  min = min !== undefined ? min : 1000;
-
-  return function push(chunkLength) {
-    const now = Date.now();
-
-    const startedAt = timestamps[tail];
-
-    if (!firstSampleTS) {
-      firstSampleTS = now;
-    }
-
-    bytes[head] = chunkLength;
-    timestamps[head] = now;
-
-    let i = tail;
-    let bytesCount = 0;
-
-    while (i !== head) {
-      bytesCount += bytes[i++];
-      i = i % samplesCount;
-    }
-
-    head = (head + 1) % samplesCount;
-
-    if (head === tail) {
-      tail = (tail + 1) % samplesCount;
-    }
-
-    if (now - firstSampleTS < min) {
-      return;
-    }
-
-    const passed = startedAt && now - startedAt;
-
-    return passed ? Math.round(bytesCount * 1000 / passed) : undefined;
-  };
-}
-
 const kInternals = Symbol('internals');
 
 class AxiosTransformStream extends stream__default["default"].Transform{
@@ -123166,12 +125593,8 @@ class AxiosTransformStream extends stream__default["default"].Transform{
       readableHighWaterMark: options.chunkSize
     });
 
-    const self = this;
-
     const internals = this[kInternals] = {
-      length: options.length,
       timeWindow: options.timeWindow,
-      ticksRate: options.ticksRate,
       chunkSize: options.chunkSize,
       maxRate: options.maxRate,
       minChunkSize: options.minChunkSize,
@@ -123183,8 +125606,6 @@ class AxiosTransformStream extends stream__default["default"].Transform{
       onReadCallback: null
     };
 
-    const _speedometer = speedometer(internals.ticksRate * options.samplesCount, internals.timeWindow);
-
     this.on('newListener', event => {
       if (event === 'progress') {
         if (!internals.isCaptured) {
@@ -123192,39 +125613,6 @@ class AxiosTransformStream extends stream__default["default"].Transform{
         }
       }
     });
-
-    let bytesNotified = 0;
-
-    internals.updateProgress = throttle(function throttledHandler() {
-      const totalBytes = internals.length;
-      const bytesTransferred = internals.bytesSeen;
-      const progressBytes = bytesTransferred - bytesNotified;
-      if (!progressBytes || self.destroyed) return;
-
-      const rate = _speedometer(progressBytes);
-
-      bytesNotified = bytesTransferred;
-
-      process.nextTick(() => {
-        self.emit('progress', {
-          loaded: bytesTransferred,
-          total: totalBytes,
-          progress: totalBytes ? (bytesTransferred / totalBytes) : undefined,
-          bytes: progressBytes,
-          rate: rate ? rate : undefined,
-          estimated: rate && totalBytes && bytesTransferred <= totalBytes ?
-            (totalBytes - bytesTransferred) / rate : undefined,
-          lengthComputable: totalBytes != null
-        });
-      });
-    }, internals.ticksRate);
-
-    const onFinish = () => {
-      internals.updateProgress.call(true);
-    };
-
-    this.once('end', onFinish);
-    this.once('error', onFinish);
   }
 
   _read(size) {
@@ -123238,7 +125626,6 @@ class AxiosTransformStream extends stream__default["default"].Transform{
   }
 
   _transform(chunk, encoding, callback) {
-    const self = this;
     const internals = this[kInternals];
     const maxRate = internals.maxRate;
 
@@ -123250,16 +125637,14 @@ class AxiosTransformStream extends stream__default["default"].Transform{
     const bytesThreshold = (maxRate / divider);
     const minChunkSize = internals.minChunkSize !== false ? Math.max(internals.minChunkSize, bytesThreshold * 0.01) : 0;
 
-    function pushChunk(_chunk, _callback) {
+    const pushChunk = (_chunk, _callback) => {
       const bytes = Buffer.byteLength(_chunk);
       internals.bytesSeen += bytes;
       internals.bytes += bytes;
 
-      if (internals.isCaptured) {
-        internals.updateProgress();
-      }
+      internals.isCaptured && this.emit('progress', internals.bytesSeen);
 
-      if (self.push(_chunk)) {
+      if (this.push(_chunk)) {
         process.nextTick(_callback);
       } else {
         internals.onReadCallback = () => {
@@ -123267,7 +125652,7 @@ class AxiosTransformStream extends stream__default["default"].Transform{
           process.nextTick(_callback);
         };
       }
-    }
+    };
 
     const transformChunk = (_chunk, _callback) => {
       const chunkSize = Buffer.byteLength(_chunk);
@@ -123324,11 +125709,6 @@ class AxiosTransformStream extends stream__default["default"].Transform{
       }
     });
   }
-
-  setLength(length) {
-    this[kInternals].length = +length;
-    return this;
-  }
 }
 
 const AxiosTransformStream$1 = AxiosTransformStream;
@@ -123349,9 +125729,9 @@ const readBlob = async function* (blob) {
 
 const readBlob$1 = readBlob;
 
-const BOUNDARY_ALPHABET = utils$1.ALPHABET.ALPHA_DIGIT + '-_';
+const BOUNDARY_ALPHABET = platform.ALPHABET.ALPHA_DIGIT + '-_';
 
-const textEncoder = new util.TextEncoder();
+const textEncoder = typeof TextEncoder === 'function' ? new TextEncoder() : new util__default["default"].TextEncoder();
 
 const CRLF = '\r\n';
 const CRLF_BYTES = textEncoder.encode(CRLF);
@@ -123409,7 +125789,7 @@ const formDataToStream = (form, headersHandler, options) => {
   const {
     tag = 'form-data-boundary',
     size = 25,
-    boundary = tag + '-' + utils$1.generateString(size, BOUNDARY_ALPHABET)
+    boundary = tag + '-' + platform.generateString(size, BOUNDARY_ALPHABET)
   } = options || {};
 
   if(!utils$1.isFormData(form)) {
@@ -123421,7 +125801,7 @@ const formDataToStream = (form, headersHandler, options) => {
   }
 
   const boundaryBytes = textEncoder.encode('--' + boundary + CRLF);
-  const footerBytes = textEncoder.encode('--' + boundary + '--' + CRLF + CRLF);
+  const footerBytes = textEncoder.encode('--' + boundary + '--' + CRLF);
   let contentLength = footerBytes.byteLength;
 
   const parts = Array.from(form.entries()).map(([name, value]) => {
@@ -123496,6 +125876,142 @@ const callbackify = (fn, reducer) => {
 
 const callbackify$1 = callbackify;
 
+/**
+ * Calculate data maxRate
+ * @param {Number} [samplesCount= 10]
+ * @param {Number} [min= 1000]
+ * @returns {Function}
+ */
+function speedometer(samplesCount, min) {
+  samplesCount = samplesCount || 10;
+  const bytes = new Array(samplesCount);
+  const timestamps = new Array(samplesCount);
+  let head = 0;
+  let tail = 0;
+  let firstSampleTS;
+
+  min = min !== undefined ? min : 1000;
+
+  return function push(chunkLength) {
+    const now = Date.now();
+
+    const startedAt = timestamps[tail];
+
+    if (!firstSampleTS) {
+      firstSampleTS = now;
+    }
+
+    bytes[head] = chunkLength;
+    timestamps[head] = now;
+
+    let i = tail;
+    let bytesCount = 0;
+
+    while (i !== head) {
+      bytesCount += bytes[i++];
+      i = i % samplesCount;
+    }
+
+    head = (head + 1) % samplesCount;
+
+    if (head === tail) {
+      tail = (tail + 1) % samplesCount;
+    }
+
+    if (now - firstSampleTS < min) {
+      return;
+    }
+
+    const passed = startedAt && now - startedAt;
+
+    return passed ? Math.round(bytesCount * 1000 / passed) : undefined;
+  };
+}
+
+/**
+ * Throttle decorator
+ * @param {Function} fn
+ * @param {Number} freq
+ * @return {Function}
+ */
+function throttle(fn, freq) {
+  let timestamp = 0;
+  let threshold = 1000 / freq;
+  let lastArgs;
+  let timer;
+
+  const invoke = (args, now = Date.now()) => {
+    timestamp = now;
+    lastArgs = null;
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    fn.apply(null, args);
+  };
+
+  const throttled = (...args) => {
+    const now = Date.now();
+    const passed = now - timestamp;
+    if ( passed >= threshold) {
+      invoke(args, now);
+    } else {
+      lastArgs = args;
+      if (!timer) {
+        timer = setTimeout(() => {
+          timer = null;
+          invoke(lastArgs);
+        }, threshold - passed);
+      }
+    }
+  };
+
+  const flush = () => lastArgs && invoke(lastArgs);
+
+  return [throttled, flush];
+}
+
+const progressEventReducer = (listener, isDownloadStream, freq = 3) => {
+  let bytesNotified = 0;
+  const _speedometer = speedometer(50, 250);
+
+  return throttle(e => {
+    const loaded = e.loaded;
+    const total = e.lengthComputable ? e.total : undefined;
+    const progressBytes = loaded - bytesNotified;
+    const rate = _speedometer(progressBytes);
+    const inRange = loaded <= total;
+
+    bytesNotified = loaded;
+
+    const data = {
+      loaded,
+      total,
+      progress: total ? (loaded / total) : undefined,
+      bytes: progressBytes,
+      rate: rate ? rate : undefined,
+      estimated: rate && total && inRange ? (total - loaded) / rate : undefined,
+      event: e,
+      lengthComputable: total != null,
+      [isDownloadStream ? 'download' : 'upload']: true
+    };
+
+    listener(data);
+  }, freq);
+};
+
+const progressEventDecorator = (total, throttled) => {
+  const lengthComputable = total != null;
+
+  return [(loaded) => throttled[0]({
+    lengthComputable,
+    total,
+    loaded
+  }), throttled[1]];
+};
+
+const asyncDecorator = (fn) => (...args) => utils$1.asap(() => fn(...args));
+
 const zlibOptions = {
   flush: zlib__default["default"].constants.Z_SYNC_FLUSH,
   finishFlush: zlib__default["default"].constants.Z_SYNC_FLUSH
@@ -123515,6 +126031,14 @@ const isHttps = /https:?/;
 const supportedProtocols = platform.protocols.map(protocol => {
   return protocol + ':';
 });
+
+const flushOnFinish = (stream, [throttled, flush]) => {
+  stream
+    .on('end', flush)
+    .on('error', flush);
+
+  return throttled;
+};
 
 /**
  * If the proxy or config beforeRedirects functions are defined, call them with the options
@@ -123545,7 +126069,7 @@ function dispatchBeforeRedirect(options, responseDetails) {
 function setProxy(options, configProxy, location) {
   let proxy = configProxy;
   if (!proxy && proxy !== false) {
-    const proxyUrl = proxyFromEnv.getProxyForUrl(location);
+    const proxyUrl = proxyFromEnv__default["default"].getProxyForUrl(location);
     if (proxyUrl) {
       proxy = new URL(proxyUrl);
     }
@@ -123690,8 +126214,8 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
     }
 
     // Parse url
-    const fullPath = buildFullPath(config.baseURL, config.url);
-    const parsed = new URL(fullPath, 'http://localhost');
+    const fullPath = buildFullPath(config.baseURL, config.url, config.allowAbsoluteUrls);
+    const parsed = new URL(fullPath, platform.hasBrowserEnv ? platform.origin : undefined);
     const protocol = parsed.protocol || supportedProtocols[0];
 
     if (protocol === 'data:') {
@@ -123749,8 +126273,7 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
     // Only set header if it hasn't been set in config
     headers.set('User-Agent', 'axios/' + VERSION, false);
 
-    const onDownloadProgress = config.onDownloadProgress;
-    const onUploadProgress = config.onUploadProgress;
+    const {onUploadProgress, onDownloadProgress} = config;
     const maxRate = config.maxRate;
     let maxUploadRate = undefined;
     let maxDownloadRate = undefined;
@@ -123777,7 +126300,7 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
         } catch (e) {
         }
       }
-    } else if (utils$1.isBlob(data)) {
+    } else if (utils$1.isBlob(data) || utils$1.isFile(data)) {
       data.size && headers.setContentType(data.type || 'application/octet-stream');
       headers.setContentLength(data.size || 0);
       data = stream__default["default"].Readable.from(readBlob$1(data));
@@ -123821,15 +126344,16 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
       }
 
       data = stream__default["default"].pipeline([data, new AxiosTransformStream$1({
-        length: contentLength,
         maxRate: utils$1.toFiniteNumber(maxUploadRate)
       })], utils$1.noop);
 
-      onUploadProgress && data.on('progress', progress => {
-        onUploadProgress(Object.assign(progress, {
-          upload: true
-        }));
-      });
+      onUploadProgress && data.on('progress', flushOnFinish(
+        data,
+        progressEventDecorator(
+          contentLength,
+          progressEventReducer(asyncDecorator(onUploadProgress), false, 3)
+        )
+      ));
     }
 
     // HTTP basic authentication
@@ -123887,7 +126411,7 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
     if (config.socketPath) {
       options.socketPath = config.socketPath;
     } else {
-      options.hostname = parsed.hostname;
+      options.hostname = parsed.hostname.startsWith("[") ? parsed.hostname.slice(1, -1) : parsed.hostname;
       options.port = parsed.port;
       setProxy(options, config.proxy, protocol + '//' + parsed.hostname + (parsed.port ? ':' + parsed.port : '') + options.path);
     }
@@ -123928,17 +126452,18 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
 
       const responseLength = +res.headers['content-length'];
 
-      if (onDownloadProgress) {
+      if (onDownloadProgress || maxDownloadRate) {
         const transformStream = new AxiosTransformStream$1({
-          length: utils$1.toFiniteNumber(responseLength),
           maxRate: utils$1.toFiniteNumber(maxDownloadRate)
         });
 
-        onDownloadProgress && transformStream.on('progress', progress => {
-          onDownloadProgress(Object.assign(progress, {
-            download: true
-          }));
-        });
+        onDownloadProgress && transformStream.on('progress', flushOnFinish(
+          transformStream,
+          progressEventDecorator(
+            responseLength,
+            progressEventReducer(asyncDecorator(onDownloadProgress), true, 3)
+          )
+        ));
 
         streams.push(transformStream);
       }
@@ -124028,7 +126553,7 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
           }
 
           const err = new AxiosError(
-            'maxContentLength size of ' + config.maxContentLength + ' exceeded',
+            'stream has been aborted',
             AxiosError.ERR_BAD_RESPONSE,
             config,
             lastRequest
@@ -124151,98 +126676,18 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
   });
 };
 
-const progressEventReducer = (listener, isDownloadStream, freq = 3) => {
-  let bytesNotified = 0;
-  const _speedometer = speedometer(50, 250);
+const isURLSameOrigin = platform.hasStandardBrowserEnv ? ((origin, isMSIE) => (url) => {
+  url = new URL(url, platform.origin);
 
-  return throttle(e => {
-    const loaded = e.loaded;
-    const total = e.lengthComputable ? e.total : undefined;
-    const progressBytes = loaded - bytesNotified;
-    const rate = _speedometer(progressBytes);
-    const inRange = loaded <= total;
-
-    bytesNotified = loaded;
-
-    const data = {
-      loaded,
-      total,
-      progress: total ? (loaded / total) : undefined,
-      bytes: progressBytes,
-      rate: rate ? rate : undefined,
-      estimated: rate && total && inRange ? (total - loaded) / rate : undefined,
-      event: e,
-      lengthComputable: total != null
-    };
-
-    data[isDownloadStream ? 'download' : 'upload'] = true;
-
-    listener(data);
-  }, freq);
-};
-
-const isURLSameOrigin = platform.hasStandardBrowserEnv ?
-
-// Standard browser envs have full support of the APIs needed to test
-// whether the request URL is of the same origin as current location.
-  (function standardBrowserEnv() {
-    const msie = /(msie|trident)/i.test(navigator.userAgent);
-    const urlParsingNode = document.createElement('a');
-    let originURL;
-
-    /**
-    * Parse a URL to discover its components
-    *
-    * @param {String} url The URL to be parsed
-    * @returns {Object}
-    */
-    function resolveURL(url) {
-      let href = url;
-
-      if (msie) {
-        // IE needs attribute set twice to normalize properties
-        urlParsingNode.setAttribute('href', href);
-        href = urlParsingNode.href;
-      }
-
-      urlParsingNode.setAttribute('href', href);
-
-      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
-      return {
-        href: urlParsingNode.href,
-        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
-        host: urlParsingNode.host,
-        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
-        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
-        hostname: urlParsingNode.hostname,
-        port: urlParsingNode.port,
-        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
-          urlParsingNode.pathname :
-          '/' + urlParsingNode.pathname
-      };
-    }
-
-    originURL = resolveURL(window.location.href);
-
-    /**
-    * Determine if a URL shares the same origin as the current location
-    *
-    * @param {String} requestURL The URL to test
-    * @returns {boolean} True if URL shares the same origin, otherwise false
-    */
-    return function isURLSameOrigin(requestURL) {
-      const parsed = (utils$1.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
-      return (parsed.protocol === originURL.protocol &&
-          parsed.host === originURL.host);
-    };
-  })() :
-
-  // Non standard browser envs (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return function isURLSameOrigin() {
-      return true;
-    };
-  })();
+  return (
+    origin.protocol === url.protocol &&
+    origin.host === url.host &&
+    (isMSIE || origin.port === url.port)
+  );
+})(
+  new URL(platform.origin),
+  platform.navigator && /(msie|trident)/i.test(platform.navigator.userAgent)
+) : () => true;
 
 const cookies = platform.hasStandardBrowserEnv ?
 
@@ -124299,7 +126744,7 @@ function mergeConfig(config1, config2) {
   config2 = config2 || {};
   const config = {};
 
-  function getMergedValue(target, source, caseless) {
+  function getMergedValue(target, source, prop, caseless) {
     if (utils$1.isPlainObject(target) && utils$1.isPlainObject(source)) {
       return utils$1.merge.call({caseless}, target, source);
     } else if (utils$1.isPlainObject(source)) {
@@ -124311,11 +126756,11 @@ function mergeConfig(config1, config2) {
   }
 
   // eslint-disable-next-line consistent-return
-  function mergeDeepProperties(a, b, caseless) {
+  function mergeDeepProperties(a, b, prop , caseless) {
     if (!utils$1.isUndefined(b)) {
-      return getMergedValue(a, b, caseless);
+      return getMergedValue(a, b, prop , caseless);
     } else if (!utils$1.isUndefined(a)) {
-      return getMergedValue(undefined, a, caseless);
+      return getMergedValue(undefined, a, prop , caseless);
     }
   }
 
@@ -124373,7 +126818,7 @@ function mergeConfig(config1, config2) {
     socketPath: defaultToConfig2,
     responseEncoding: defaultToConfig2,
     validateStatus: mergeDirectKeys,
-    headers: (a, b) => mergeDeepProperties(headersToObject(a), headersToObject(b), true)
+    headers: (a, b , prop) => mergeDeepProperties(headersToObject(a), headersToObject(b),prop, true)
   };
 
   utils$1.forEach(Object.keys(Object.assign({}, config1, config2)), function computeConfigValue(prop) {
@@ -124392,7 +126837,7 @@ const resolveConfig = (config) => {
 
   newConfig.headers = headers = AxiosHeaders$1.from(headers);
 
-  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url), config.params, config.paramsSerializer);
+  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls), config.params, config.paramsSerializer);
 
   // HTTP basic authentication
   if (auth) {
@@ -124440,16 +126885,18 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
     const _config = resolveConfig(config);
     let requestData = _config.data;
     const requestHeaders = AxiosHeaders$1.from(_config.headers).normalize();
-    let {responseType} = _config;
+    let {responseType, onUploadProgress, onDownloadProgress} = _config;
     let onCanceled;
-    function done() {
-      if (_config.cancelToken) {
-        _config.cancelToken.unsubscribe(onCanceled);
-      }
+    let uploadThrottled, downloadThrottled;
+    let flushUpload, flushDownload;
 
-      if (_config.signal) {
-        _config.signal.removeEventListener('abort', onCanceled);
-      }
+    function done() {
+      flushUpload && flushUpload(); // flush events
+      flushDownload && flushDownload(); // flush events
+
+      _config.cancelToken && _config.cancelToken.unsubscribe(onCanceled);
+
+      _config.signal && _config.signal.removeEventListener('abort', onCanceled);
     }
 
     let request = new XMLHttpRequest();
@@ -124519,7 +126966,7 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
         return;
       }
 
-      reject(new AxiosError('Request aborted', AxiosError.ECONNABORTED, _config, request));
+      reject(new AxiosError('Request aborted', AxiosError.ECONNABORTED, config, request));
 
       // Clean up request
       request = null;
@@ -124529,7 +126976,7 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
     request.onerror = function handleError() {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
-      reject(new AxiosError('Network Error', AxiosError.ERR_NETWORK, _config, request));
+      reject(new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request));
 
       // Clean up request
       request = null;
@@ -124545,7 +126992,7 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
       reject(new AxiosError(
         timeoutErrorMessage,
         transitional.clarifyTimeoutError ? AxiosError.ETIMEDOUT : AxiosError.ECONNABORTED,
-        _config,
+        config,
         request));
 
       // Clean up request
@@ -124573,13 +127020,18 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
     }
 
     // Handle progress if needed
-    if (typeof _config.onDownloadProgress === 'function') {
-      request.addEventListener('progress', progressEventReducer(_config.onDownloadProgress, true));
+    if (onDownloadProgress) {
+      ([downloadThrottled, flushDownload] = progressEventReducer(onDownloadProgress, true));
+      request.addEventListener('progress', downloadThrottled);
     }
 
     // Not all browsers support upload events
-    if (typeof _config.onUploadProgress === 'function' && request.upload) {
-      request.upload.addEventListener('progress', progressEventReducer(_config.onUploadProgress));
+    if (onUploadProgress && request.upload) {
+      ([uploadThrottled, flushUpload] = progressEventReducer(onUploadProgress));
+
+      request.upload.addEventListener('progress', uploadThrottled);
+
+      request.upload.addEventListener('loadend', flushUpload);
     }
 
     if (_config.cancelToken || _config.signal) {
@@ -124614,45 +127066,46 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
 };
 
 const composeSignals = (signals, timeout) => {
-  let controller = new AbortController();
+  const {length} = (signals = signals ? signals.filter(Boolean) : []);
 
-  let aborted;
+  if (timeout || length) {
+    let controller = new AbortController();
 
-  const onabort = function (cancel) {
-    if (!aborted) {
-      aborted = true;
-      unsubscribe();
-      const err = cancel instanceof Error ? cancel : this.reason;
-      controller.abort(err instanceof AxiosError ? err : new CanceledError(err instanceof Error ? err.message : err));
-    }
-  };
+    let aborted;
 
-  let timer = timeout && setTimeout(() => {
-    onabort(new AxiosError(`timeout ${timeout} of ms exceeded`, AxiosError.ETIMEDOUT));
-  }, timeout);
+    const onabort = function (reason) {
+      if (!aborted) {
+        aborted = true;
+        unsubscribe();
+        const err = reason instanceof Error ? reason : this.reason;
+        controller.abort(err instanceof AxiosError ? err : new CanceledError(err instanceof Error ? err.message : err));
+      }
+    };
 
-  const unsubscribe = () => {
-    if (signals) {
-      timer && clearTimeout(timer);
+    let timer = timeout && setTimeout(() => {
       timer = null;
-      signals.forEach(signal => {
-        signal &&
-        (signal.removeEventListener ? signal.removeEventListener('abort', onabort) : signal.unsubscribe(onabort));
-      });
-      signals = null;
-    }
-  };
+      onabort(new AxiosError(`timeout ${timeout} of ms exceeded`, AxiosError.ETIMEDOUT));
+    }, timeout);
 
-  signals.forEach((signal) => signal && signal.addEventListener && signal.addEventListener('abort', onabort));
+    const unsubscribe = () => {
+      if (signals) {
+        timer && clearTimeout(timer);
+        timer = null;
+        signals.forEach(signal => {
+          signal.unsubscribe ? signal.unsubscribe(onabort) : signal.removeEventListener('abort', onabort);
+        });
+        signals = null;
+      }
+    };
 
-  const {signal} = controller;
+    signals.forEach((signal) => signal.addEventListener('abort', onabort));
 
-  signal.unsubscribe = unsubscribe;
+    const {signal} = controller;
 
-  return [signal, () => {
-    timer && clearTimeout(timer);
-    timer = null;
-  }];
+    signal.unsubscribe = () => utils$1.asap(unsubscribe);
+
+    return signal;
+  }
 };
 
 const composeSignals$1 = composeSignals;
@@ -124675,49 +127128,73 @@ const streamChunk = function* (chunk, chunkSize) {
   }
 };
 
-const readBytes = async function* (iterable, chunkSize, encode) {
-  for await (const chunk of iterable) {
-    yield* streamChunk(ArrayBuffer.isView(chunk) ? chunk : (await encode(String(chunk))), chunkSize);
+const readBytes = async function* (iterable, chunkSize) {
+  for await (const chunk of readStream(iterable)) {
+    yield* streamChunk(chunk, chunkSize);
   }
 };
 
-const trackStream = (stream, chunkSize, onProgress, onFinish, encode) => {
-  const iterator = readBytes(stream, chunkSize, encode);
+const readStream = async function* (stream) {
+  if (stream[Symbol.asyncIterator]) {
+    yield* stream;
+    return;
+  }
+
+  const reader = stream.getReader();
+  try {
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) {
+        break;
+      }
+      yield value;
+    }
+  } finally {
+    await reader.cancel();
+  }
+};
+
+const trackStream = (stream, chunkSize, onProgress, onFinish) => {
+  const iterator = readBytes(stream, chunkSize);
 
   let bytes = 0;
+  let done;
+  let _onFinish = (e) => {
+    if (!done) {
+      done = true;
+      onFinish && onFinish(e);
+    }
+  };
 
   return new ReadableStream({
-    type: 'bytes',
-
     async pull(controller) {
-      const {done, value} = await iterator.next();
+      try {
+        const {done, value} = await iterator.next();
 
-      if (done) {
-        controller.close();
-        onFinish();
-        return;
+        if (done) {
+         _onFinish();
+          controller.close();
+          return;
+        }
+
+        let len = value.byteLength;
+        if (onProgress) {
+          let loadedBytes = bytes += len;
+          onProgress(loadedBytes);
+        }
+        controller.enqueue(new Uint8Array(value));
+      } catch (err) {
+        _onFinish(err);
+        throw err;
       }
-
-      let len = value.byteLength;
-      onProgress && onProgress(bytes += len);
-      controller.enqueue(new Uint8Array(value));
     },
     cancel(reason) {
-      onFinish(reason);
+      _onFinish(reason);
       return iterator.return();
     }
   }, {
     highWaterMark: 2
   })
-};
-
-const fetchProgressDecorator = (total, fn) => {
-  const lengthComputable = total != null;
-  return (loaded) => setTimeout(() => fn({
-    lengthComputable,
-    total,
-    loaded
-  }));
 };
 
 const isFetchSupported = typeof fetch === 'function' && typeof Request === 'function' && typeof Response === 'function';
@@ -124729,7 +127206,15 @@ const encodeText = isFetchSupported && (typeof TextEncoder === 'function' ?
     async (str) => new Uint8Array(await new Response(str).arrayBuffer())
 );
 
-const supportsRequestStream = isReadableStreamSupported && (() => {
+const test = (fn, ...args) => {
+  try {
+    return !!fn(...args);
+  } catch (e) {
+    return false
+  }
+};
+
+const supportsRequestStream = isReadableStreamSupported && test(() => {
   let duplexAccessed = false;
 
   const hasContentType = new Request(platform.origin, {
@@ -124742,17 +127227,13 @@ const supportsRequestStream = isReadableStreamSupported && (() => {
   }).headers.has('Content-Type');
 
   return duplexAccessed && !hasContentType;
-})();
+});
 
 const DEFAULT_CHUNK_SIZE = 64 * 1024;
 
-const supportsResponseStream = isReadableStreamSupported && !!(()=> {
-  try {
-    return utils$1.isReadableStream(new Response('').body);
-  } catch(err) {
-    // return undefined
-  }
-})();
+const supportsResponseStream = isReadableStreamSupported &&
+  test(() => utils$1.isReadableStream(new Response('').body));
+
 
 const resolvers = {
   stream: supportsResponseStream && ((res) => res.body)
@@ -124777,10 +127258,14 @@ const getBodyLength = async (body) => {
   }
 
   if(utils$1.isSpecCompliantForm(body)) {
-    return (await new Request(body).arrayBuffer()).byteLength;
+    const _request = new Request(platform.origin, {
+      method: 'POST',
+      body,
+    });
+    return (await _request.arrayBuffer()).byteLength;
   }
 
-  if(utils$1.isArrayBufferView(body)) {
+  if(utils$1.isArrayBufferView(body) || utils$1.isArrayBuffer(body)) {
     return body.byteLength;
   }
 
@@ -124817,18 +127302,13 @@ const fetchAdapter = isFetchSupported && (async (config) => {
 
   responseType = responseType ? (responseType + '').toLowerCase() : 'text';
 
-  let [composedSignal, stopTimeout] = (signal || cancelToken || timeout) ?
-    composeSignals$1([signal, cancelToken], timeout) : [];
+  let composedSignal = composeSignals$1([signal, cancelToken && cancelToken.toAbortSignal()], timeout);
 
-  let finished, request;
+  let request;
 
-  const onFinish = () => {
-    !finished && setTimeout(() => {
-      composedSignal && composedSignal.unsubscribe();
-    });
-
-    finished = true;
-  };
+  const unsubscribe = composedSignal && composedSignal.unsubscribe && (() => {
+      composedSignal.unsubscribe();
+  });
 
   let requestContentLength;
 
@@ -124850,17 +127330,22 @@ const fetchAdapter = isFetchSupported && (async (config) => {
       }
 
       if (_request.body) {
-        data = trackStream(_request.body, DEFAULT_CHUNK_SIZE, fetchProgressDecorator(
+        const [onProgress, flush] = progressEventDecorator(
           requestContentLength,
-          progressEventReducer(onUploadProgress)
-        ), null, encodeText);
+          progressEventReducer(asyncDecorator(onUploadProgress))
+        );
+
+        data = trackStream(_request.body, DEFAULT_CHUNK_SIZE, onProgress, flush);
       }
     }
 
     if (!utils$1.isString(withCredentials)) {
-      withCredentials = withCredentials ? 'cors' : 'omit';
+      withCredentials = withCredentials ? 'include' : 'omit';
     }
 
+    // Cloudflare Workers throws when credentials are defined
+    // see https://github.com/cloudflare/workerd/issues/902
+    const isCredentialsSupported = "credentials" in Request.prototype;
     request = new Request(url, {
       ...fetchOptions,
       signal: composedSignal,
@@ -124868,14 +127353,14 @@ const fetchAdapter = isFetchSupported && (async (config) => {
       headers: headers.normalize().toJSON(),
       body: data,
       duplex: "half",
-      withCredentials
+      credentials: isCredentialsSupported ? withCredentials : undefined
     });
 
-    let response = await fetch(request);
+    let response = await fetch(request, fetchOptions);
 
     const isStreamResponse = supportsResponseStream && (responseType === 'stream' || responseType === 'response');
 
-    if (supportsResponseStream && (onDownloadProgress || isStreamResponse)) {
+    if (supportsResponseStream && (onDownloadProgress || (isStreamResponse && unsubscribe))) {
       const options = {};
 
       ['status', 'statusText', 'headers'].forEach(prop => {
@@ -124884,11 +127369,16 @@ const fetchAdapter = isFetchSupported && (async (config) => {
 
       const responseContentLength = utils$1.toFiniteNumber(response.headers.get('content-length'));
 
+      const [onProgress, flush] = onDownloadProgress && progressEventDecorator(
+        responseContentLength,
+        progressEventReducer(asyncDecorator(onDownloadProgress), true)
+      ) || [];
+
       response = new Response(
-        trackStream(response.body, DEFAULT_CHUNK_SIZE, onDownloadProgress && fetchProgressDecorator(
-          responseContentLength,
-          progressEventReducer(onDownloadProgress, true)
-        ), isStreamResponse && onFinish, encodeText),
+        trackStream(response.body, DEFAULT_CHUNK_SIZE, onProgress, () => {
+          flush && flush();
+          unsubscribe && unsubscribe();
+        }),
         options
       );
     }
@@ -124897,9 +127387,7 @@ const fetchAdapter = isFetchSupported && (async (config) => {
 
     let responseData = await resolvers[utils$1.findKey(resolvers, responseType) || 'text'](response, config);
 
-    !isStreamResponse && onFinish();
-
-    stopTimeout && stopTimeout();
+    !isStreamResponse && unsubscribe && unsubscribe();
 
     return await new Promise((resolve, reject) => {
       settle(resolve, reject, {
@@ -124912,9 +127400,9 @@ const fetchAdapter = isFetchSupported && (async (config) => {
       });
     })
   } catch (err) {
-    onFinish();
+    unsubscribe && unsubscribe();
 
-    if (err && err.name === 'TypeError' && /fetch/i.test(err.message)) {
+    if (err && err.name === 'TypeError' && /Load failed|fetch/i.test(err.message)) {
       throw Object.assign(
         new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request),
         {
@@ -125123,6 +127611,14 @@ validators$1.transitional = function transitional(validator, version, message) {
   };
 };
 
+validators$1.spelling = function spelling(correctSpelling) {
+  return (value, opt) => {
+    // eslint-disable-next-line no-console
+    console.warn(`${opt} is likely a misspelling of ${correctSpelling}`);
+    return true;
+  }
+};
+
 /**
  * Assert object's properties type
  *
@@ -125172,7 +127668,7 @@ const validators = validator.validators;
  */
 class Axios {
   constructor(instanceConfig) {
-    this.defaults = instanceConfig;
+    this.defaults = instanceConfig || {};
     this.interceptors = {
       request: new InterceptorManager$1(),
       response: new InterceptorManager$1()
@@ -125192,9 +127688,9 @@ class Axios {
       return await this._request(configOrUrl, config);
     } catch (err) {
       if (err instanceof Error) {
-        let dummy;
+        let dummy = {};
 
-        Error.captureStackTrace ? Error.captureStackTrace(dummy = {}) : (dummy = new Error());
+        Error.captureStackTrace ? Error.captureStackTrace(dummy) : (dummy = new Error());
 
         // slice off the Error: ... line
         const stack = dummy.stack ? dummy.stack.replace(/^.+\n/, '') : '';
@@ -125248,6 +127744,18 @@ class Axios {
         }, true);
       }
     }
+
+    // Set config.allowAbsoluteUrls
+    if (config.allowAbsoluteUrls !== undefined) ; else if (this.defaults.allowAbsoluteUrls !== undefined) {
+      config.allowAbsoluteUrls = this.defaults.allowAbsoluteUrls;
+    } else {
+      config.allowAbsoluteUrls = true;
+    }
+
+    validator.assertOptions(config, {
+      baseUrl: validators.spelling('baseURL'),
+      withXsrfToken: validators.spelling('withXSRFToken')
+    }, true);
 
     // Set config.method
     config.method = (config.method || this.defaults.method || 'get').toLowerCase();
@@ -125339,7 +127847,7 @@ class Axios {
 
   getUri(config) {
     config = mergeConfig(this.defaults, config);
-    const fullPath = buildFullPath(config.baseURL, config.url);
+    const fullPath = buildFullPath(config.baseURL, config.url, config.allowAbsoluteUrls);
     return buildURL(fullPath, config.params, config.paramsSerializer);
   }
 }
@@ -125477,6 +127985,20 @@ class CancelToken {
     if (index !== -1) {
       this._listeners.splice(index, 1);
     }
+  }
+
+  toAbortSignal() {
+    const controller = new AbortController();
+
+    const abort = (err) => {
+      controller.abort(err);
+    };
+
+    this.subscribe(abort);
+
+    controller.signal.unsubscribe = () => this.unsubscribe(abort);
+
+    return controller.signal;
   }
 
   /**
@@ -125684,7 +128206,7 @@ module.exports = axios;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"@google-cloud/storage","description":"Cloud Storage Client Library for Node.js","version":"7.11.1","license":"Apache-2.0","author":"Google Inc.","engines":{"node":">=14"},"repository":"googleapis/nodejs-storage","main":"./build/cjs/src/index.js","types":"./build/cjs/src/index.d.ts","type":"module","exports":{".":{"import":{"types":"./build/esm/src/index.d.ts","default":"./build/esm/src/index.js"},"require":{"types":"./build/cjs/src/index.d.ts","default":"./build/cjs/src/index.js"}}},"files":["build/cjs/src","build/cjs/package.json","!build/cjs/src/**/*.map","build/esm/src","!build/esm/src/**/*.map"],"keywords":["google apis client","google api client","google apis","google api","google","google cloud platform","google cloud","cloud","google storage","storage"],"scripts":{"all-test":"npm test && npm run system-test && npm run samples-test","benchwrapper":"node bin/benchwrapper.js","check":"gts check","clean":"rm -rf build/","compile:cjs":"tsc -p ./tsconfig.cjs.json","compile:esm":"tsc -p .","compile":"npm run compile:cjs && npm run compile:esm","conformance-test":"mocha --parallel build/cjs/conformance-test/ --require build/cjs/conformance-test/globalHooks.js","docs-test":"linkinator docs","docs":"jsdoc -c .jsdoc.json","fix":"gts fix","lint":"gts check","postcompile":"cp ./src/package-json-helper.cjs ./build/cjs/src && cp ./src/package-json-helper.cjs ./build/esm/src","postcompile:cjs":"babel --plugins gapic-tools/build/src/replaceImportMetaUrl,gapic-tools/build/src/toggleESMFlagVariable build/cjs/src/util.js -o build/cjs/src/util.js && cp internal-tooling/helpers/package.cjs.json build/cjs/package.json","precompile":"rm -rf build/","preconformance-test":"npm run compile:cjs -- --sourceMap","predocs-test":"npm run docs","predocs":"npm run compile:cjs -- --sourceMap","prelint":"cd samples; npm link ../; npm install","prepare":"npm run compile","presystem-test:esm":"npm run compile:esm","presystem-test":"npm run compile -- --sourceMap","pretest":"npm run compile -- --sourceMap","samples-test":"npm link && cd samples/ && npm link ../ && npm test && cd ../","system-test:esm":"mocha build/esm/system-test --timeout 600000 --exit","system-test":"mocha build/cjs/system-test --timeout 600000 --exit","test":"c8 mocha build/cjs/test"},"dependencies":{"@google-cloud/paginator":"^5.0.0","@google-cloud/projectify":"^4.0.0","@google-cloud/promisify":"^4.0.0","abort-controller":"^3.0.0","async-retry":"^1.3.3","duplexify":"^4.1.3","fast-xml-parser":"^4.3.0","gaxios":"^6.0.2","google-auth-library":"^9.6.3","html-entities":"^2.5.2","mime":"^3.0.0","p-limit":"^3.0.1","retry-request":"^7.0.0","teeny-request":"^9.0.0","uuid":"^8.0.0"},"devDependencies":{"@babel/cli":"^7.22.10","@babel/core":"^7.22.11","@google-cloud/pubsub":"^4.0.0","@grpc/grpc-js":"^1.0.3","@grpc/proto-loader":"^0.7.0","@types/async-retry":"^1.4.3","@types/duplexify":"^3.6.4","@types/mime":"^3.0.0","@types/mocha":"^9.1.1","@types/mockery":"^1.4.29","@types/node":"^20.4.4","@types/node-fetch":"^2.1.3","@types/proxyquire":"^1.3.28","@types/request":"^2.48.4","@types/sinon":"^17.0.0","@types/tmp":"0.2.6","@types/uuid":"^8.0.0","@types/yargs":"^17.0.10","c8":"^9.0.0","form-data":"^4.0.0","gapic-tools":"^0.4.0","gts":"^5.0.0","jsdoc":"^4.0.0","jsdoc-fresh":"^3.0.0","jsdoc-region-tag":"^3.0.0","linkinator":"^4.0.0","mocha":"^9.2.2","mockery":"^2.1.0","nock":"~13.5.0","node-fetch":"^2.6.7","pack-n-play":"^2.0.0","proxyquire":"^2.1.3","sinon":"^17.0.0","tmp":"^0.2.0","typescript":"^5.1.6","yargs":"^17.3.1"}}');
+module.exports = JSON.parse('{"name":"@google-cloud/storage","description":"Cloud Storage Client Library for Node.js","version":"7.16.0","license":"Apache-2.0","author":"Google Inc.","engines":{"node":">=14"},"repository":"googleapis/nodejs-storage","main":"./build/cjs/src/index.js","types":"./build/cjs/src/index.d.ts","type":"module","exports":{".":{"import":{"types":"./build/esm/src/index.d.ts","default":"./build/esm/src/index.js"},"require":{"types":"./build/cjs/src/index.d.ts","default":"./build/cjs/src/index.js"}}},"files":["build/cjs/src","build/cjs/package.json","!build/cjs/src/**/*.map","build/esm/src","!build/esm/src/**/*.map"],"keywords":["google apis client","google api client","google apis","google api","google","google cloud platform","google cloud","cloud","google storage","storage"],"scripts":{"all-test":"npm test && npm run system-test && npm run samples-test","benchwrapper":"node bin/benchwrapper.js","check":"gts check","clean":"rm -rf build/","compile:cjs":"tsc -p ./tsconfig.cjs.json","compile:esm":"tsc -p .","compile":"npm run compile:cjs && npm run compile:esm","conformance-test":"mocha --parallel build/cjs/conformance-test/ --require build/cjs/conformance-test/globalHooks.js","docs-test":"linkinator docs","docs":"jsdoc -c .jsdoc.json","fix":"gts fix","lint":"gts check","postcompile":"cp ./src/package-json-helper.cjs ./build/cjs/src && cp ./src/package-json-helper.cjs ./build/esm/src","postcompile:cjs":"babel --plugins gapic-tools/build/src/replaceImportMetaUrl,gapic-tools/build/src/toggleESMFlagVariable build/cjs/src/util.js -o build/cjs/src/util.js && cp internal-tooling/helpers/package.cjs.json build/cjs/package.json","precompile":"rm -rf build/","preconformance-test":"npm run compile:cjs -- --sourceMap","predocs-test":"npm run docs","predocs":"npm run compile:cjs -- --sourceMap","prelint":"cd samples; npm link ../; npm install","prepare":"npm run compile","presystem-test:esm":"npm run compile:esm","presystem-test":"npm run compile -- --sourceMap","pretest":"npm run compile -- --sourceMap","samples-test":"npm link && cd samples/ && npm link ../ && npm test && cd ../","system-test:esm":"mocha build/esm/system-test --timeout 600000 --exit","system-test":"mocha build/cjs/system-test --timeout 600000 --exit","test":"c8 mocha build/cjs/test"},"dependencies":{"@google-cloud/paginator":"^5.0.0","@google-cloud/projectify":"^4.0.0","@google-cloud/promisify":"<4.1.0","abort-controller":"^3.0.0","async-retry":"^1.3.3","duplexify":"^4.1.3","fast-xml-parser":"^4.4.1","gaxios":"^6.0.2","google-auth-library":"^9.6.3","html-entities":"^2.5.2","mime":"^3.0.0","p-limit":"^3.0.1","retry-request":"^7.0.0","teeny-request":"^9.0.0","uuid":"^8.0.0"},"devDependencies":{"@babel/cli":"^7.22.10","@babel/core":"^7.22.11","@google-cloud/pubsub":"^4.0.0","@grpc/grpc-js":"^1.0.3","@grpc/proto-loader":"^0.7.0","@types/async-retry":"^1.4.3","@types/duplexify":"^3.6.4","@types/mime":"^3.0.0","@types/mocha":"^9.1.1","@types/mockery":"^1.4.29","@types/node":"^22.0.0","@types/node-fetch":"^2.1.3","@types/proxyquire":"^1.3.28","@types/request":"^2.48.4","@types/sinon":"^17.0.0","@types/tmp":"0.2.6","@types/uuid":"^8.0.0","@types/yargs":"^17.0.10","c8":"^9.0.0","form-data":"^4.0.0","gapic-tools":"^0.4.0","gts":"^5.0.0","jsdoc":"^4.0.0","jsdoc-fresh":"^3.0.0","jsdoc-region-tag":"^3.0.0","linkinator":"^3.0.0","mocha":"^9.2.2","mockery":"^2.1.0","nock":"~13.5.0","node-fetch":"^2.6.7","pack-n-play":"^2.0.0","proxyquire":"^2.1.3","sinon":"^18.0.0","nise":"6.0.0","path-to-regexp":"6.3.0","tmp":"^0.2.0","typescript":"^5.1.6","yargs":"^17.3.1"}}');
 
 /***/ }),
 
@@ -125692,7 +128214,7 @@ module.exports = JSON.parse('{"name":"@google-cloud/storage","description":"Clou
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"gaxios","version":"6.6.0","description":"A simple common HTTP client specifically for Google APIs and services.","main":"build/src/index.js","types":"build/src/index.d.ts","files":["build/src"],"scripts":{"lint":"gts check","test":"c8 mocha build/test","presystem-test":"npm run compile","system-test":"mocha build/system-test --timeout 80000","compile":"tsc -p .","fix":"gts fix","prepare":"npm run compile","pretest":"npm run compile","webpack":"webpack","prebrowser-test":"npm run compile","browser-test":"node build/browser-test/browser-test-runner.js","docs":"compodoc src/","docs-test":"linkinator docs","predocs-test":"npm run docs","samples-test":"cd samples/ && npm link ../ && npm test && cd ../","prelint":"cd samples; npm link ../; npm install","clean":"gts clean","precompile":"gts clean"},"repository":"googleapis/gaxios","keywords":["google"],"engines":{"node":">=14"},"author":"Google, LLC","license":"Apache-2.0","devDependencies":{"@babel/plugin-proposal-private-methods":"^7.18.6","@compodoc/compodoc":"1.1.21","@types/cors":"^2.8.6","@types/express":"^4.16.1","@types/extend":"^3.0.1","@types/mocha":"^9.0.0","@types/multiparty":"0.0.36","@types/mv":"^2.1.0","@types/ncp":"^2.0.1","@types/node":"^20.0.0","@types/node-fetch":"^2.5.7","@types/sinon":"^17.0.0","@types/tmp":"0.2.6","@types/uuid":"^9.0.0","abort-controller":"^3.0.0","assert":"^2.0.0","browserify":"^17.0.0","c8":"^8.0.0","cors":"^2.8.5","execa":"^5.0.0","express":"^4.16.4","form-data":"^4.0.0","gts":"^5.0.0","is-docker":"^2.0.0","karma":"^6.0.0","karma-chrome-launcher":"^3.0.0","karma-coverage":"^2.0.0","karma-firefox-launcher":"^2.0.0","karma-mocha":"^2.0.0","karma-remap-coverage":"^0.1.5","karma-sourcemap-loader":"^0.4.0","karma-webpack":"5.0.0","linkinator":"^4.0.0","mocha":"^8.0.0","multiparty":"^4.2.1","mv":"^2.1.1","ncp":"^2.0.0","nock":"^13.0.0","null-loader":"^4.0.0","puppeteer":"^21.0.0","sinon":"^17.0.0","stream-browserify":"^3.0.0","tmp":"0.2.3","ts-loader":"^8.0.0","typescript":"^5.1.6","webpack":"^5.35.0","webpack-cli":"^4.0.0"},"dependencies":{"extend":"^3.0.2","https-proxy-agent":"^7.0.1","is-stream":"^2.0.0","node-fetch":"^2.6.9","uuid":"^9.0.1"}}');
+module.exports = JSON.parse('{"name":"gaxios","version":"6.7.1","description":"A simple common HTTP client specifically for Google APIs and services.","main":"build/src/index.js","types":"build/src/index.d.ts","files":["build/src"],"scripts":{"lint":"gts check","test":"c8 mocha build/test","presystem-test":"npm run compile","system-test":"mocha build/system-test --timeout 80000","compile":"tsc -p .","fix":"gts fix","prepare":"npm run compile","pretest":"npm run compile","webpack":"webpack","prebrowser-test":"npm run compile","browser-test":"node build/browser-test/browser-test-runner.js","docs":"compodoc src/","docs-test":"linkinator docs","predocs-test":"npm run docs","samples-test":"cd samples/ && npm link ../ && npm test && cd ../","prelint":"cd samples; npm link ../; npm install","clean":"gts clean","precompile":"gts clean"},"repository":"googleapis/gaxios","keywords":["google"],"engines":{"node":">=14"},"author":"Google, LLC","license":"Apache-2.0","devDependencies":{"@babel/plugin-proposal-private-methods":"^7.18.6","@compodoc/compodoc":"1.1.19","@types/cors":"^2.8.6","@types/express":"^4.16.1","@types/extend":"^3.0.1","@types/mocha":"^9.0.0","@types/multiparty":"0.0.36","@types/mv":"^2.1.0","@types/ncp":"^2.0.1","@types/node":"^20.0.0","@types/node-fetch":"^2.5.7","@types/sinon":"^17.0.0","@types/tmp":"0.2.6","@types/uuid":"^10.0.0","abort-controller":"^3.0.0","assert":"^2.0.0","browserify":"^17.0.0","c8":"^8.0.0","cheerio":"1.0.0-rc.10","cors":"^2.8.5","execa":"^5.0.0","express":"^4.16.4","form-data":"^4.0.0","gts":"^5.0.0","is-docker":"^2.0.0","karma":"^6.0.0","karma-chrome-launcher":"^3.0.0","karma-coverage":"^2.0.0","karma-firefox-launcher":"^2.0.0","karma-mocha":"^2.0.0","karma-remap-coverage":"^0.1.5","karma-sourcemap-loader":"^0.4.0","karma-webpack":"5.0.0","linkinator":"^3.0.0","mocha":"^8.0.0","multiparty":"^4.2.1","mv":"^2.1.1","ncp":"^2.0.0","nock":"^13.0.0","null-loader":"^4.0.0","puppeteer":"^19.0.0","sinon":"^18.0.0","stream-browserify":"^3.0.0","tmp":"0.2.3","ts-loader":"^8.0.0","typescript":"^5.1.6","webpack":"^5.35.0","webpack-cli":"^4.0.0"},"dependencies":{"extend":"^3.0.2","https-proxy-agent":"^7.0.1","is-stream":"^2.0.0","node-fetch":"^2.6.9","uuid":"^9.0.1"}}');
 
 /***/ }),
 
@@ -125700,7 +128222,7 @@ module.exports = JSON.parse('{"name":"gaxios","version":"6.6.0","description":"A
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"google-auth-library","version":"9.10.0","author":"Google Inc.","description":"Google APIs Authentication Client Library for Node.js","engines":{"node":">=14"},"main":"./build/src/index.js","types":"./build/src/index.d.ts","repository":"googleapis/google-auth-library-nodejs.git","keywords":["google","api","google apis","client","client library"],"dependencies":{"base64-js":"^1.3.0","ecdsa-sig-formatter":"^1.0.11","gaxios":"^6.1.1","gcp-metadata":"^6.1.0","gtoken":"^7.0.0","jws":"^4.0.0"},"devDependencies":{"@compodoc/compodoc":"1.1.23","@types/base64-js":"^1.2.5","@types/chai":"^4.1.7","@types/jws":"^3.1.0","@types/mocha":"^9.0.0","@types/mv":"^2.1.0","@types/ncp":"^2.0.1","@types/node":"^20.4.2","@types/sinon":"^10.0.0","assert-rejects":"^1.0.0","c8":"^8.0.0","chai":"^4.2.0","codecov":"^3.0.2","execa":"^5.0.0","gts":"^5.0.0","is-docker":"^2.0.0","karma":"^6.0.0","karma-chrome-launcher":"^3.0.0","karma-coverage":"^2.0.0","karma-firefox-launcher":"^2.0.0","karma-mocha":"^2.0.0","karma-sourcemap-loader":"^0.4.0","karma-webpack":"5.0.0","keypair":"^1.0.4","linkinator":"^4.0.0","mocha":"^9.2.2","mv":"^2.1.1","ncp":"^2.0.0","nock":"^13.0.0","null-loader":"^4.0.0","puppeteer":"^21.0.0","sinon":"^15.0.0","ts-loader":"^8.0.0","typescript":"^5.1.6","webpack":"^5.21.2","webpack-cli":"^4.0.0"},"files":["build/src","!build/src/**/*.map"],"scripts":{"test":"c8 mocha build/test","clean":"gts clean","prepare":"npm run compile","lint":"gts check","compile":"tsc -p .","fix":"gts fix","pretest":"npm run compile -- --sourceMap","docs":"compodoc src/","samples-setup":"cd samples/ && npm link ../ && npm run setup && cd ../","samples-test":"cd samples/ && npm link ../ && npm test && cd ../","system-test":"mocha build/system-test --timeout 60000","presystem-test":"npm run compile -- --sourceMap","webpack":"webpack","browser-test":"karma start","docs-test":"linkinator docs","predocs-test":"npm run docs","prelint":"cd samples; npm link ../; npm install","precompile":"gts clean"},"license":"Apache-2.0"}');
+module.exports = JSON.parse('{"name":"google-auth-library","version":"9.15.1","author":"Google Inc.","description":"Google APIs Authentication Client Library for Node.js","engines":{"node":">=14"},"main":"./build/src/index.js","types":"./build/src/index.d.ts","repository":"googleapis/google-auth-library-nodejs.git","keywords":["google","api","google apis","client","client library"],"dependencies":{"base64-js":"^1.3.0","ecdsa-sig-formatter":"^1.0.11","gaxios":"^6.1.1","gcp-metadata":"^6.1.0","gtoken":"^7.0.0","jws":"^4.0.0"},"devDependencies":{"@types/base64-js":"^1.2.5","@types/chai":"^4.1.7","@types/jws":"^3.1.0","@types/mocha":"^9.0.0","@types/mv":"^2.1.0","@types/ncp":"^2.0.1","@types/node":"^20.4.2","@types/sinon":"^17.0.0","assert-rejects":"^1.0.0","c8":"^8.0.0","chai":"^4.2.0","cheerio":"1.0.0-rc.12","codecov":"^3.0.2","engine.io":"6.6.2","gts":"^5.0.0","is-docker":"^2.0.0","jsdoc":"^4.0.0","jsdoc-fresh":"^3.0.0","jsdoc-region-tag":"^3.0.0","karma":"^6.0.0","karma-chrome-launcher":"^3.0.0","karma-coverage":"^2.0.0","karma-firefox-launcher":"^2.0.0","karma-mocha":"^2.0.0","karma-sourcemap-loader":"^0.4.0","karma-webpack":"5.0.0","keypair":"^1.0.4","linkinator":"^4.0.0","mocha":"^9.2.2","mv":"^2.1.1","ncp":"^2.0.0","nock":"^13.0.0","null-loader":"^4.0.0","pdfmake":"0.2.12","puppeteer":"^21.0.0","sinon":"^18.0.0","ts-loader":"^8.0.0","typescript":"^5.1.6","webpack":"^5.21.2","webpack-cli":"^4.0.0"},"files":["build/src","!build/src/**/*.map"],"scripts":{"test":"c8 mocha build/test","clean":"gts clean","prepare":"npm run compile","lint":"gts check","compile":"tsc -p .","fix":"gts fix","pretest":"npm run compile -- --sourceMap","docs":"jsdoc -c .jsdoc.json","samples-setup":"cd samples/ && npm link ../ && npm run setup && cd ../","samples-test":"cd samples/ && npm link ../ && npm test && cd ../","system-test":"mocha build/system-test --timeout 60000","presystem-test":"npm run compile -- --sourceMap","webpack":"webpack","browser-test":"karma start","docs-test":"linkinator docs","predocs-test":"npm run docs","prelint":"cd samples; npm link ../; npm install","precompile":"gts clean"},"license":"Apache-2.0"}');
 
 /***/ }),
 
