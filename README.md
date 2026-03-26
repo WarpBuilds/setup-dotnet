@@ -15,6 +15,13 @@ documentation:
 [Software installed on github hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-software)
 for .NET SDK versions that are currently available.
 
+## Breaking changes in V5
+
+- Upgraded action from node20 to node24
+  > Make sure your runner is on version v2.327.1 or later to ensure compatibility with this release. see [Release Notes](https://github.com/actions/runner/releases/tag/v2.327.1)
+
+For more details, see the full release notes on the [release page](https://github.com/actions/setup-dotnet/releases/tag/v5.0.0)
+
 ## Usage
 
 See [action.yml](action.yml)
@@ -22,8 +29,8 @@ See [action.yml](action.yml)
 **Basic**:
 ```yaml
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
 - run: dotnet build <my project>
@@ -33,9 +40,9 @@ steps:
 **Multiple version installation**:
 ```yml
 steps:
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 - name: Setup dotnet
-  uses: actions/setup-dotnet@v4
+  uses: actions/setup-dotnet@v5
   with:
     dotnet-version: | 
       8.0.x
@@ -46,11 +53,28 @@ steps:
 
 The `dotnet-version` input supports following syntax:
 
-- **A.B.C** (e.g 6.0.400, 7.0.100-preview.7.22377.5) - installs exact version of .NET SDK
+- **A.B.C** (e.g 9.0.308, 10.0.100-preview.1.25120.13) - installs exact version of .NET SDK
 - **A.B** or **A.B.x** (e.g. 8.0, 8.0.x) - installs the latest patch version of .NET SDK on the channel `8.0`, including prerelease versions (preview, rc)
 - **A** or **A.x** (e.g. 8, 8.x) - installs the latest minor version of the specified major tag, including prerelease versions (preview, rc)
 - **A.B.Cxx** (e.g. 8.0.4xx) - available since `.NET 5.0` release. Installs the latest version of the specific SDK release, including prerelease versions (preview, rc). 
 
+
+## Using the `architecture` input
+Using the architecture input, it is possible to specify the required .NET SDK architecture. Possible values:  `x64`, `x86`, `arm64`, `amd64`, `arm`, `s390x`, `ppc64le`, `riscv64`. If the input is not specified, the architecture defaults to the host OS architecture (not all of the architectures are available on all platforms).
+
+**Example: Install multiple SDK versions for a specific architecture**
+```yml
+steps:
+- uses: actions/checkout@v6
+- name: Setup dotnet (x86)
+  uses: actions/setup-dotnet@v5
+  with:
+    dotnet-version: |
+      8.0.x
+      9.0.x
+    architecture: x86
+- run: dotnet build <my project>
+```
 
 ## Using the `dotnet-quality` input
 This input sets up the action to install the latest build of the specified quality in the channel. The possible values of `dotnet-quality` are: **daily**, **signed**, **validated**, **preview**, **ga**.
@@ -59,8 +83,8 @@ This input sets up the action to install the latest build of the specified quali
 
 ```yml
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
     dotnet-quality: 'preview'
@@ -74,8 +98,8 @@ steps:
 
 ```yml
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     global-json-file: csharp/global.json
 - run: dotnet build <my project>
@@ -91,8 +115,8 @@ The action searches for [NuGet Lock files](https://learn.microsoft.com/nuget/con
 
 ```yaml
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
     cache: true
@@ -116,8 +140,8 @@ steps:
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
     cache: true
@@ -130,8 +154,8 @@ steps:
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
     cache: true
@@ -147,12 +171,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '7.0.x', '8.0.x', '9.0.x' ]
+        dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ matrix.dotnet }}
       - name: Execute dotnet
@@ -167,12 +191,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '7.0.x', '8.0.x', '9.0.x' ]
+        dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
@@ -181,13 +205,14 @@ jobs:
       - name: Execute dotnet
         run: dotnet build <my project>
 ```
+>**Note**: When generating a temporary `global.json` within your workflow on Windows, ensure the command is executed using a shell such as PowerShell Core (`pwsh`) or `bash` (where supported) to avoid formatting inconsistencies that could cause .NET commands to fail.
 ## Setting up authentication for nuget feeds
 
 ### Github Package Registry (GPR)
 ```yml
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-dotnet@v4
+- uses: actions/checkout@v6
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
     source-url: https://nuget.pkg.github.com/<owner>/index.json
@@ -202,7 +227,7 @@ steps:
 
 ### Azure Artifacts
 ```yml
-- uses: actions/setup-dotnet@v4
+- uses: actions/setup-dotnet@v5
   with:
     source-url: https://pkgs.dev.azure.com/<your-organization>/_packaging/<your-feed-name>/nuget/v3/index.json
   env:
@@ -213,7 +238,7 @@ steps:
 
 ### nuget.org
 ```yml
-- uses: actions/setup-dotnet@v4
+- uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.0.x
 - name: Publish the package to nuget.org
@@ -222,6 +247,22 @@ steps:
     NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 ```
 > **Note**: It's the only way to push a package to nuget.org feed for macOS/Linux machines due to API key config store limitations.
+
+## Using the `workloads` input
+The `workloads` input allows you to install .NET workloads as part of the SDK setup. Workloads provide additional platform tools and dependencies for frameworks. This action automatically runs `dotnet workload update` before installing the specified workloads to ensure manifests are refreshed and existing workloads are updated to their latest compatible versions.
+
+```yaml
+steps:
+- uses: actions/checkout@v5
+- name: Setup .NET with workloads
+  uses: actions/setup-dotnet@v5
+  with:
+    dotnet-version: '9.0.x'
+    workloads: workload1, workload2  # Specify the workloads required for the project, such as wasm-tools, maui, etc.
+- run: dotnet build <my project>
+```
+
+> **Note**: Ensure workloads are compatible with your runner's OS, architecture, and .NET SDK version before enabling workload installation. Some workloads may require additional installation time due to large toolchain downloads.
 
 # Outputs and environment variables
 
@@ -236,11 +277,11 @@ Using the **dotnet-version** output it's possible to get the installed by the ac
 In case of a single version installation, the `dotnet-version` output contains the version that is installed by the action.
 
 ```yaml
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
       id: stepid
       with:
-        dotnet-version: 8.0.402
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.402
+        dotnet-version: 8.0.416
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
 ```
 
 **Multiple version installation**
@@ -248,27 +289,27 @@ In case of a single version installation, the `dotnet-version` output contains t
 In case of a multiple version installation, the `dotnet-version` output contains the latest version that is installed by the action.
 
 ```yaml
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
       id: stepid
       with:
         dotnet-version: | 
-          8.0.402
-          9.0.301
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 9.0.301
+          8.0.416
+          9.0.308
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 9.0.308
 ```
 **Installation from global.json**
 
 When the `dotnet-version` input is used along with the `global-json-file` input, the `dotnet-version` output contains the version resolved from the `global.json`.
 
 ```yaml
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
       id: stepid
       with:
         dotnet-version: | 
-          8.0.402
-          9.0.301
-        global-json-file: "./global.json" # contains version 7.0.410
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 7.0.410
+          9.0.308
+          10.0.101
+        global-json-file: "./global.json" # contains version 8.0.416
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
 ```
 
 ### `cache-hit`
@@ -301,12 +342,19 @@ build:
     DOTNET_INSTALL_DIR: "path/to/directory"
     NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
   steps:
-    - uses: actions/checkout@main
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '8.0.x'
         cache: true
 ```
+You can also set `DOTNET_INSTALL_DIR` to a value based on runtime variables, such as `$HOME/.dotnet` or `${{ runner.temp }}/.dotnet` before the `setup-dotnet` step:
+
+```yml
+    - name: Set DOTNET_INSTALL_DIR
+      run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
+```
+> **Note**: On some self-hosted or large Linux runners, installing .NET under the default `/usr/share/dotnet` location may fail due to insufficient permissions. To ensure successful installation, set `DOTNET_INSTALL_DIR` to a user-writable path.
 
 ## Recommended permissions
 
