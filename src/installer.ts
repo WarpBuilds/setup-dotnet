@@ -5,15 +5,26 @@ import * as io from '@actions/io';
 import * as hc from '@actions/http-client';
 import {chmodSync} from 'fs';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import os from 'os';
 import semver from 'semver';
-import {IS_WINDOWS, PLATFORM} from './utils';
-import {QualityOptions} from './setup-dotnet';
+import {IS_WINDOWS, PLATFORM} from './utils.js';
+import type {QualityOptions} from './setup-dotnet.js';
 
 export interface DotnetVersion {
   type: string;
   value: string;
   qualityFlag: boolean;
+}
+
+interface ReleaseIndexEntry {
+  'channel-version': string;
+  'support-phase': string;
+  'release-type': string;
+}
+
+interface ReleaseIndexResponse {
+  'releases-index': ReleaseIndexEntry[];
 }
 
 const QUALITY_INPUT_MINIMAL_MAJOR_TAG = 6;
@@ -22,15 +33,58 @@ export class DotnetVersionResolver {
   private inputVersion: string;
   private resolvedArgument: DotnetVersion;
 
-  constructor(version: string) {
+  constructor(
+    version: string,
+    private quality: QualityOptions = '',
+    private dotnetChannel?: string
+  ) {
     this.inputVersion = version.trim();
     this.resolvedArgument = {type: '', value: '', qualityFlag: false};
   }
 
+  private isVersionChannel(channel: string): boolean {
+    // A.B format (e.g., 3.1, 8.0)
+    if (/^\d+\.\d+$/.test(channel)) return true;
+    // A.B.Cxx format (e.g., 8.0.1xx) is supported only for .NET 5.0+
+    const latestPatchMatch = channel.match(/^(\d+)\.\d+\.\d{1}xx$/);
+    if (latestPatchMatch) {
+      const major = Number(latestPatchMatch[1]);
+      return (
+        !Number.isNaN(major) && major >= LATEST_PATCH_SYNTAX_MINIMAL_MAJOR_TAG
+      );
+    }
+    return false;
+  }
+
   private async resolveVersionInput(): Promise<void> {
+    if (this.inputVersion.toLowerCase() === 'latest') {
+      const channel = this.dotnetChannel || '';
+      if (this.isVersionChannel(channel)) {
+        // A.B or A.B.Cxx channels are passed directly to the install script
+        this.resolvedArgument.value = channel;
+      } else {
+        // LTS, STS, or empty — resolve via releases index API
+        this.resolvedArgument.value = await this.getLatestVersion(channel);
+      }
+      this.resolvedArgument.type = 'channel';
+      const latestChannelMajorTag = Number(
+        this.resolvedArgument.value.split('.')[0]
+      );
+      this.resolvedArgument.qualityFlag =
+        !Number.isNaN(latestChannelMajorTag) &&
+        latestChannelMajorTag >= QUALITY_INPUT_MINIMAL_MAJOR_TAG;
+      return;
+    }
+
+    if (this.dotnetChannel) {
+      core.warning(
+        `The 'dotnet-channel' input is only supported when 'dotnet-version' is set to 'latest'.`
+      );
+    }
+
     if (!semver.validRange(this.inputVersion) && !this.isLatestPatchSyntax()) {
       throw new Error(
-        `The 'dotnet-version' was supplied in invalid format: ${this.inputVersion}! Supported syntax: A.B.C, A.B, A.B.x, A, A.x, A.B.Cxx`
+        `The 'dotnet-version' was supplied in invalid format: ${this.inputVersion}! Supported syntax: A.B.C, A.B, A.B.x, A, A.x, A.B.Cxx, latest`
       );
     }
     if (semver.valid(this.inputVersion)) {
@@ -72,7 +126,22 @@ export class DotnetVersionResolver {
     } else if (this.isNumericTag(major) && this.isNumericTag(minor)) {
       this.resolvedArgument.value = `${major}.${minor}`;
     } else if (this.isNumericTag(major)) {
-      this.resolvedArgument.value = await this.getLatestByMajorTag(major);
+      // Starting with .NET 5, the minor version is always zero.
+      // Hardcode the earlier versions because they will not get new releases.
+      switch (major) {
+        case '1':
+          this.resolvedArgument.value = '1.1';
+          break;
+        case '2':
+          this.resolvedArgument.value = '2.2';
+          break;
+        case '3':
+          this.resolvedArgument.value = '3.1';
+          break;
+        default:
+          this.resolvedArgument.value = `${major}.0`;
+          break;
+      }
     } else {
       // If "dotnet-version" is specified as *, x or X resolve latest version of .NET explicitly from LTS channel. The version argument will default to "latest" by install-dotnet script.
       this.resolvedArgument.value = 'LTS';
@@ -96,31 +165,62 @@ export class DotnetVersionResolver {
     return this.resolvedArgument;
   }
 
-  private async getLatestByMajorTag(majorTag: string): Promise<string> {
+  private async getLatestVersion(channelFilter: string): Promise<string> {
     const httpClient = new hc.HttpClient('actions/setup-dotnet', [], {
       allowRetries: true,
       maxRetries: 3
     });
 
-    const response = await httpClient.getJson<any>(
+    const response = await httpClient.getJson<ReleaseIndexResponse>(
       DotnetVersionResolver.DotnetCoreIndexUrl
     );
 
-    const result = response.result || {};
-    const releasesInfo: any[] = result['releases-index'];
+    const result = response.result;
+    const rawReleasesInfo = result?.['releases-index'];
 
-    const releaseInfo = releasesInfo.find(info => {
-      const sdkParts: string[] = info['channel-version'].split('.');
-      return sdkParts[0] === majorTag;
-    });
+    if (!Array.isArray(rawReleasesInfo)) {
+      throw new Error('Unexpected response format from .NET releases index.');
+    }
 
-    if (!releaseInfo) {
-      throw new Error(
-        `Could not find info for version with major tag: "${majorTag}" at ${DotnetVersionResolver.DotnetCoreIndexUrl}`
+    let releasesInfo = rawReleasesInfo;
+
+    // Filter out EOL versions
+    releasesInfo = releasesInfo.filter(info => info['support-phase'] !== 'eol');
+
+    // Filter out preview versions if quality is not 'preview' or 'daily'
+    // If quality is not specified, we assume strict stability (GA only)
+    const normalizedQuality = (this.quality || '').toLowerCase();
+    if (!['preview', 'daily'].includes(normalizedQuality)) {
+      releasesInfo = releasesInfo.filter(
+        info => info['support-phase'] !== 'preview'
       );
     }
 
-    return releaseInfo['channel-version'];
+    // Apply channel filter (LTS/STS)
+    if (channelFilter) {
+      const type = channelFilter.toLowerCase();
+      releasesInfo = releasesInfo.filter(info => info['release-type'] === type);
+    }
+
+    releasesInfo.sort((a, b) => {
+      const partsA = a['channel-version'].split('.').map(Number);
+      const partsB = b['channel-version'].split('.').map(Number);
+      for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+        const diff = (partsB[i] || 0) - (partsA[i] || 0);
+        if (diff !== 0) return diff;
+      }
+      return 0;
+    });
+
+    if (releasesInfo.length === 0) {
+      throw new Error(
+        `Could not find any active releases matching channel '${
+          channelFilter || 'any'
+        }'`
+      );
+    }
+
+    return releasesInfo[0]['channel-version'];
   }
 
   static DotnetCoreIndexUrl =
@@ -134,7 +234,13 @@ export class DotnetInstallScript {
 
   constructor() {
     this.escapedScript = path
-      .join(__dirname, '..', '..', 'externals', this.scriptName)
+      .join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        '..',
+        '..',
+        'externals',
+        this.scriptName
+      )
       .replace(/'/g, "''");
 
     if (IS_WINDOWS) {
@@ -181,6 +287,16 @@ export class DotnetInstallScript {
 
   public useArguments(...args: string[]) {
     this.scriptArguments.push(...args);
+    return this;
+  }
+
+  // When architecture is empty/undefined, the installer auto-detects the current runner architecture.
+  public useArchitecture(architecture?: string) {
+    if (!architecture) return this;
+    this.useArguments(
+      IS_WINDOWS ? '-Architecture' : '--architecture',
+      architecture
+    );
     return this;
   }
 
@@ -250,6 +366,17 @@ export abstract class DotnetInstallDir {
   }
 }
 
+export function normalizeArch(arch: string): string {
+  switch (arch.toLowerCase()) {
+    case 'amd64':
+      return 'x64';
+    case 'ia32':
+      return 'x86';
+    default:
+      return arch.toLowerCase();
+  }
+}
+
 export class DotnetCoreInstaller {
   static {
     DotnetInstallDir.setEnvironmentVariable();
@@ -257,18 +384,35 @@ export class DotnetCoreInstaller {
 
   constructor(
     private version: string,
-    private quality: QualityOptions
+    private quality: QualityOptions,
+    private architecture?: string,
+    private dotnetChannel?: string
   ) {}
 
   public async installDotnet(): Promise<string | null> {
-    const versionResolver = new DotnetVersionResolver(this.version);
+    const versionResolver = new DotnetVersionResolver(
+      this.version,
+      this.quality,
+      this.dotnetChannel
+    );
     const dotnetVersion = await versionResolver.createDotnetVersion();
 
+    const architectureArguments =
+      this.architecture &&
+      normalizeArch(this.architecture) !== normalizeArch(os.arch())
+        ? [
+            IS_WINDOWS ? '-InstallDir' : '--install-dir',
+            IS_WINDOWS
+              ? `"${path.join(DotnetInstallDir.dirPath, this.architecture)}"`
+              : path.join(DotnetInstallDir.dirPath, this.architecture)
+          ]
+        : [];
     /**
-     * Install dotnet runitme first in order to get
+     * Install dotnet runtime first in order to get
      * the latest stable version of dotnet CLI
      */
     const runtimeInstallOutput = await new DotnetInstallScript()
+      .useArchitecture(this.architecture)
       // If dotnet CLI is already installed - avoid overwriting it
       .useArguments(
         IS_WINDOWS ? '-SkipNonVersionedFiles' : '--skip-non-versioned-files'
@@ -277,6 +421,7 @@ export class DotnetCoreInstaller {
       .useArguments(IS_WINDOWS ? '-Runtime' : '--runtime', 'dotnet')
       // Use latest stable version
       .useArguments(IS_WINDOWS ? '-Channel' : '--channel', 'LTS')
+      .useArguments(...architectureArguments)
       .execute();
 
     if (runtimeInstallOutput.exitCode) {
@@ -294,12 +439,14 @@ export class DotnetCoreInstaller {
      * dotnet CLI
      */
     const dotnetInstallOutput = await new DotnetInstallScript()
+      .useArchitecture(this.architecture)
       // Don't overwrite CLI because it should be already installed
       .useArguments(
         IS_WINDOWS ? '-SkipNonVersionedFiles' : '--skip-non-versioned-files'
       )
       // Use version provided by user
       .useVersion(dotnetVersion, this.quality)
+      .useArguments(...architectureArguments)
       .execute();
 
     if (dotnetInstallOutput.exitCode) {

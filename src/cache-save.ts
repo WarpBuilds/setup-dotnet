@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import fs from 'node:fs';
-import {getNuGetFolderPath} from './cache-utils';
-import {State} from './constants';
+import {getNuGetFolderPath} from './cache-utils.js';
+import {State} from './constants.js';
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
@@ -47,7 +47,11 @@ const cachePackages = async () => {
   }
 
   const cacheId = await cache.saveCache([cachePath], primaryKey);
-  if (cacheId == '') {
+  if (cacheId === -1) {
+    // saveCache returns -1 without throwing when the cache was not saved, e.g.
+    // a reserve collision or a read-only token (fork PR). @actions/cache has
+    // already logged the reason at the appropriate severity, so just trace it.
+    core.debug(`Cache was not saved for the key: ${primaryKey}`);
     return;
   }
 

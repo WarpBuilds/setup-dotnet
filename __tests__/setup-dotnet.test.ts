@@ -1,26 +1,71 @@
-import * as core from '@actions/core';
-import fs from 'fs';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+  test
+} from '@jest/globals';
 import semver from 'semver';
-import * as auth from '../src/authutil';
+import os from 'os';
 
-import * as setup from '../src/setup-dotnet';
-import {DotnetCoreInstaller, DotnetInstallDir} from '../src/installer';
-import * as cacheUtils from '../src/cache-utils';
-import * as cacheRestore from '../src/cache-restore';
+jest.unstable_mockModule('@actions/core', () => ({
+  getInput: jest.fn(),
+  getMultilineInput: jest.fn(),
+  getBooleanInput: jest.fn(),
+  setFailed: jest.fn(),
+  warning: jest.fn(),
+  debug: jest.fn(),
+  info: jest.fn(),
+  setOutput: jest.fn(),
+  addPath: jest.fn(),
+  exportVariable: jest.fn()
+}));
+jest.unstable_mockModule('fs', () => {
+  const actual = jest.requireActual('fs') as typeof import('fs');
+  const existsSync = jest.fn(actual.existsSync);
+  const readFileSync = jest.fn(actual.readFileSync);
+  return {
+    ...actual,
+    existsSync,
+    readFileSync,
+    default: {...actual, existsSync, readFileSync}
+  };
+});
+jest.unstable_mockModule('../src/authutil', () => ({
+  configAuthentication: jest.fn()
+}));
+jest.unstable_mockModule('../src/cache-utils', () => ({
+  isCacheFeatureAvailable: jest.fn(),
+  getNuGetFolderPath: jest.fn()
+}));
+jest.unstable_mockModule('../src/cache-restore', () => ({
+  restoreCache: jest.fn()
+}));
+
+const core = await import('@actions/core');
+const fs = await import('fs');
+const auth = await import('../src/authutil.js');
+const cacheUtils = await import('../src/cache-utils.js');
+const cacheRestore = await import('../src/cache-restore.js');
+const setup = await import('../src/setup-dotnet.js');
+const {DotnetCoreInstaller, DotnetInstallDir} =
+  await import('../src/installer.js');
 
 describe('setup-dotnet tests', () => {
   const inputs = {} as any;
 
-  const getInputSpy = jest.spyOn(core, 'getInput');
-  const getMultilineInputSpy = jest.spyOn(core, 'getMultilineInput');
-  const getBooleanInputSpy = jest.spyOn(core, 'getBooleanInput');
-  const setFailedSpy = jest.spyOn(core, 'setFailed');
-  const warningSpy = jest.spyOn(core, 'warning');
-  const debugSpy = jest.spyOn(core, 'debug');
-  const infoSpy = jest.spyOn(core, 'info');
-  const setOutputSpy = jest.spyOn(core, 'setOutput');
+  const getInputSpy = core.getInput as jest.Mock;
+  const getMultilineInputSpy = core.getMultilineInput as jest.Mock;
+  const getBooleanInputSpy = core.getBooleanInput as jest.Mock;
+  const setFailedSpy = core.setFailed as jest.Mock;
+  const warningSpy = core.warning as jest.Mock;
+  const debugSpy = core.debug as jest.Mock;
+  const infoSpy = core.info as jest.Mock;
+  const setOutputSpy = core.setOutput as jest.Mock;
 
-  const existsSyncSpy = jest.spyOn(fs, 'existsSync');
+  const existsSyncSpy = fs.existsSync as jest.Mock;
 
   const maxSatisfyingSpy = jest.spyOn(semver, 'maxSatisfying');
 
@@ -29,12 +74,10 @@ describe('setup-dotnet tests', () => {
     'installDotnet'
   );
 
-  const isCacheFeatureAvailableSpy = jest.spyOn(
-    cacheUtils,
-    'isCacheFeatureAvailable'
-  );
-  const restoreCacheSpy = jest.spyOn(cacheRestore, 'restoreCache');
-  const configAuthenticationSpy = jest.spyOn(auth, 'configAuthentication');
+  const isCacheFeatureAvailableSpy =
+    cacheUtils.isCacheFeatureAvailable as jest.Mock;
+  const restoreCacheSpy = cacheRestore.restoreCache as jest.Mock;
+  const configAuthenticationSpy = auth.configAuthentication as jest.Mock;
   const addToPathOriginal = DotnetInstallDir.addToPath;
 
   describe('run() tests', () => {
@@ -81,10 +124,10 @@ describe('setup-dotnet tests', () => {
 
     it('should fail the action if quality is supplied but its value is not supported', async () => {
       inputs['global-json-file'] = '';
-      inputs['dotnet-version'] = ['6.0'];
+      inputs['dotnet-version'] = ['10.0'];
       inputs['dotnet-quality'] = 'fictitiousQuality';
 
-      const expectedErrorMessage = `Value '${inputs['dotnet-quality']}' is not supported for the 'dotnet-quality' option. Supported values are: daily, signed, validated, preview, ga.`;
+      const expectedErrorMessage = `Value '${inputs['dotnet-quality']}' is not supported for the 'dotnet-quality' option. Supported values are: daily, preview, ga.`;
 
       await setup.run();
       expect(setFailedSpy).toHaveBeenCalledWith(expectedErrorMessage);
@@ -92,7 +135,7 @@ describe('setup-dotnet tests', () => {
 
     it('should call installDotnet() multiple times if dotnet-version multiline input is provided', async () => {
       inputs['global-json-file'] = '';
-      inputs['dotnet-version'] = ['6.0', '7.0'];
+      inputs['dotnet-version'] = ['9.0', '10.0'];
       inputs['dotnet-quality'] = '';
 
       installDotnetSpy.mockImplementation(() => Promise.resolve(''));
@@ -103,7 +146,7 @@ describe('setup-dotnet tests', () => {
 
     it('should call addToPath() after installation complete', async () => {
       inputs['global-json-file'] = '';
-      inputs['dotnet-version'] = ['6.0', '7.0'];
+      inputs['dotnet-version'] = ['9.0', '10.0'];
       inputs['dotnet-quality'] = '';
 
       installDotnetSpy.mockImplementation(() => Promise.resolve(''));
@@ -145,7 +188,7 @@ describe('setup-dotnet tests', () => {
     });
 
     it('should call setOutput() after installation complete successfully', async () => {
-      inputs['dotnet-version'] = ['6.0.300'];
+      inputs['dotnet-version'] = ['10.0.101'];
 
       installDotnetSpy.mockImplementation(() =>
         Promise.resolve(`${inputs['dotnet-version']}`)
@@ -156,7 +199,7 @@ describe('setup-dotnet tests', () => {
     });
 
     it(`shouldn't call setOutput() if parsing dotnet-installer logs failed`, async () => {
-      inputs['dotnet-version'] = ['6.0.300'];
+      inputs['dotnet-version'] = ['10.0.101'];
       const warningMessage = `Failed to output the installed version of .NET. The 'dotnet-version' output will not be set.`;
 
       installDotnetSpy.mockImplementation(() => Promise.resolve(null));
@@ -177,7 +220,7 @@ describe('setup-dotnet tests', () => {
     });
 
     it(`should get 'cache-dependency-path' and call restoreCache() if input cache is set to true and cache feature is available`, async () => {
-      inputs['dotnet-version'] = ['6.0.300'];
+      inputs['dotnet-version'] = ['10.0.101'];
       inputs['dotnet-quality'] = '';
       inputs['cache'] = true;
       inputs['cache-dependency-path'] = 'fictitious.package.lock.json';
@@ -195,7 +238,7 @@ describe('setup-dotnet tests', () => {
     });
 
     it(`shouldn't call restoreCache() if input cache isn't set to true`, async () => {
-      inputs['dotnet-version'] = ['6.0.300'];
+      inputs['dotnet-version'] = ['10.0.101'];
       inputs['dotnet-quality'] = '';
       inputs['cache'] = false;
 
@@ -209,7 +252,7 @@ describe('setup-dotnet tests', () => {
     });
 
     it(`shouldn't call restoreCache() if cache feature isn't available`, async () => {
-      inputs['dotnet-version'] = ['6.0.300'];
+      inputs['dotnet-version'] = ['10.0.101'];
       inputs['dotnet-quality'] = '';
       inputs['cache'] = true;
 
@@ -220,6 +263,131 @@ describe('setup-dotnet tests', () => {
 
       await setup.run();
       expect(restoreCacheSpy).not.toHaveBeenCalled();
+    });
+
+    it('should pass valid architecture input to DotnetCoreInstaller', async () => {
+      inputs['dotnet-version'] = ['10.0.101'];
+      inputs['dotnet-quality'] = '';
+      inputs['architecture'] = os.arch().toLowerCase();
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(installDotnetSpy).toHaveBeenCalledTimes(1);
+      expect(DotnetInstallDir.addToPath).toHaveBeenCalledTimes(1);
+    });
+
+    it('should work with empty architecture input for auto-detection', async () => {
+      inputs['dotnet-version'] = ['10.0.101'];
+      inputs['dotnet-quality'] = '';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(installDotnetSpy).toHaveBeenCalledTimes(1);
+      expect(DotnetInstallDir.addToPath).toHaveBeenCalledTimes(1);
+    });
+
+    it('should fail the action if unsupported architecture is provided', async () => {
+      inputs['dotnet-version'] = ['10.0.101'];
+      inputs['dotnet-quality'] = '';
+      inputs['architecture'] = 'x688';
+
+      const expectedErrorMessage = `Value 'x688' is not supported for the 'architecture' option. Supported values are: x64, x86, arm64, amd64, arm, s390x, ppc64le, riscv64.`;
+
+      await setup.run();
+      expect(setFailedSpy).toHaveBeenCalledWith(expectedErrorMessage);
+    });
+
+    it('should fail the action if unsupported dotnet-channel value is provided with latest', async () => {
+      inputs['dotnet-version'] = ['latest'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = 'invalid';
+      inputs['architecture'] = '';
+
+      const expectedErrorMessage = `Value 'invalid' is not supported for the 'dotnet-channel' option. Supported values are: LTS, STS, A.B (e.g. 8.0), A.B.Cxx (e.g. 8.0.1xx).`;
+
+      await setup.run();
+      expect(setFailedSpy).toHaveBeenCalledWith(expectedErrorMessage);
+    });
+
+    it('should warn but not fail if unsupported dotnet-channel value is provided with a specific version', async () => {
+      inputs['dotnet-version'] = ['8.0.x'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = 'invalid';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(setFailedSpy).not.toHaveBeenCalled();
+      expect(warningSpy).toHaveBeenCalledWith(
+        `Value 'invalid' is not supported for the 'dotnet-channel' option and will be ignored because 'dotnet-version' is not set to 'latest'. Supported values are: LTS, STS, A.B (e.g. 8.0), A.B.Cxx (e.g. 8.0.1xx).`
+      );
+    });
+
+    it('should pass valid dotnet-channel value through without error', async () => {
+      inputs['dotnet-version'] = ['latest'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = 'LTS';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(setFailedSpy).not.toHaveBeenCalled();
+    });
+
+    it('should pass A.B channel value through without error when used with latest', async () => {
+      inputs['dotnet-version'] = ['latest'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = '8.0';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(setFailedSpy).not.toHaveBeenCalled();
+    });
+
+    it('should pass A.B.Cxx channel value through without error when used with latest', async () => {
+      inputs['dotnet-version'] = ['latest'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = '8.0.1xx';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(setFailedSpy).not.toHaveBeenCalled();
+    });
+
+    it('should fail with A.B.Cxx channel if major version is below 5', async () => {
+      inputs['dotnet-version'] = ['latest'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = '3.1.1xx';
+      inputs['architecture'] = '';
+
+      const expectedErrorMessage = `Value '3.1.1xx' is not supported for the 'dotnet-channel' option. Supported values are: LTS, STS, A.B (e.g. 8.0), A.B.Cxx (e.g. 8.0.1xx).`;
+
+      await setup.run();
+      expect(setFailedSpy).toHaveBeenCalledWith(expectedErrorMessage);
+    });
+
+    it('should warn and not fail if valid dotnet-channel is provided with a non-latest version', async () => {
+      inputs['dotnet-version'] = ['8.0.x'];
+      inputs['dotnet-quality'] = '';
+      inputs['dotnet-channel'] = 'LTS';
+      inputs['architecture'] = '';
+
+      installDotnetSpy.mockImplementation(() => Promise.resolve(''));
+
+      await setup.run();
+      expect(setFailedSpy).not.toHaveBeenCalled();
+      expect(warningSpy).toHaveBeenCalledWith(
+        `The 'dotnet-channel' input is only supported when 'dotnet-version' is set to 'latest'.`
+      );
     });
   });
 });
