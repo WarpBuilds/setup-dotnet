@@ -1,14 +1,52 @@
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest
+} from '@jest/globals';
 import each from 'jest-each';
 import semver from 'semver';
-import fs from 'fs';
 import fspromises from 'fs/promises';
-import * as exec from '@actions/exec';
-import * as core from '@actions/core';
-import * as io from '@actions/io';
-import * as installer from '../src/installer';
+import os from 'os';
+import path from 'path';
 
-import {IS_WINDOWS} from '../src/utils';
-import {QualityOptions} from '../src/setup-dotnet';
+jest.unstable_mockModule('@actions/exec', () => ({
+  getExecOutput: jest.fn()
+}));
+jest.unstable_mockModule('@actions/core', () => ({
+  warning: jest.fn(),
+  info: jest.fn(),
+  debug: jest.fn(),
+  setOutput: jest.fn(),
+  exportVariable: jest.fn((name: string, val: string) => {
+    process.env[name] = val;
+  }),
+  addPath: jest.fn((p: string) => {
+    process.env['PATH'] = `${p}${path.delimiter}${process.env['PATH']}`;
+  })
+}));
+jest.unstable_mockModule('@actions/io', () => ({
+  which: jest.fn()
+}));
+jest.unstable_mockModule('fs', () => {
+  const actual = jest.requireActual('fs') as typeof import('fs');
+  const chmodSync = jest.fn();
+  return {
+    ...actual,
+    chmodSync,
+    default: {...actual, chmodSync}
+  };
+});
+
+const exec = await import('@actions/exec');
+const core = await import('@actions/core');
+const io = await import('@actions/io');
+const fs = await import('fs');
+const installer = await import('../src/installer.js');
+const {IS_WINDOWS} = await import('../src/utils.js');
 
 describe('installer tests', () => {
   const env = process.env;
@@ -16,14 +54,24 @@ describe('installer tests', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = {...env};
+    (core.exportVariable as jest.Mock).mockImplementation(
+      (...args: unknown[]) => {
+        const [name, val] = args as [string, string];
+        process.env[name] = val;
+      }
+    );
+    (core.addPath as jest.Mock).mockImplementation((...args: unknown[]) => {
+      const [p] = args as [string];
+      process.env['PATH'] = `${p}${path.delimiter}${process.env['PATH']}`;
+    });
   });
 
   describe('DotnetCoreInstaller tests', () => {
-    const getExecOutputSpy = jest.spyOn(exec, 'getExecOutput');
-    const warningSpy = jest.spyOn(core, 'warning');
-    const whichSpy = jest.spyOn(io, 'which');
+    const getExecOutputSpy = exec.getExecOutput as jest.Mock;
+    const warningSpy = core.warning as jest.Mock;
+    const whichSpy = io.which as jest.Mock;
     const maxSatisfyingSpy = jest.spyOn(semver, 'maxSatisfying');
-    const chmodSyncSpy = jest.spyOn(fs, 'chmodSync');
+    const chmodSyncSpy = fs.chmodSync as jest.Mock;
     const readdirSpy = jest.spyOn(fspromises, 'readdir');
 
     describe('installDotnet() tests', () => {
@@ -38,8 +86,8 @@ describe('installer tests', () => {
       });
 
       it('should throw the error in case of non-zero exit code of the installation script. The error message should contain logs.', async () => {
-        const inputVersion = '3.1.100';
-        const inputQuality = '' as QualityOptions;
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
         const errorMessage = 'fictitious error message!';
 
         getExecOutputSpy.mockImplementation(() => {
@@ -60,8 +108,8 @@ describe('installer tests', () => {
       });
 
       it('should return version of .NET SDK after installation complete', async () => {
-        const inputVersion = '3.1.100';
-        const inputQuality = '' as QualityOptions;
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
         const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
         getExecOutputSpy.mockImplementation(() => {
           return Promise.resolve({
@@ -82,8 +130,8 @@ describe('installer tests', () => {
       });
 
       it(`should supply 'version' argument to the installation script if supplied version is in A.B.C syntax`, async () => {
-        const inputVersion = '6.0.300';
-        const inputQuality = '' as QualityOptions;
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
         const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
 
         getExecOutputSpy.mockImplementation(() => {
@@ -120,8 +168,8 @@ describe('installer tests', () => {
       });
 
       it(`should warn if the 'quality' input is set and the supplied version is in A.B.C syntax`, async () => {
-        const inputVersion = '6.0.300';
-        const inputQuality = 'ga' as QualityOptions;
+        const inputVersion = '10.0.101';
+        const inputQuality = 'ga';
         const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
         getExecOutputSpy.mockImplementation(() => {
           return Promise.resolve({
@@ -146,8 +194,8 @@ describe('installer tests', () => {
 
       it(`should warn if the 'quality' input is set and version isn't in A.B.C syntax but major tag is lower then 6`, async () => {
         const inputVersion = '3.1';
-        const inputQuality = 'ga' as QualityOptions;
-        const stdout = `Fictitious dotnet version 3.1.100 is installed`;
+        const inputQuality = 'ga';
+        const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
 
         getExecOutputSpy.mockImplementation(() => {
           return Promise.resolve({
@@ -170,12 +218,12 @@ describe('installer tests', () => {
         );
       });
 
-      each(['6', '6.0', '6.0.x', '6.0.*', '6.0.X']).test(
+      each(['10', '10.0', '10.0.x', '10.0.*', '10.0.X']).test(
         `should supply 'quality' argument to the installation script if quality input is set and version (%s) is not in A.B.C syntax`,
         async inputVersion => {
-          const inputQuality = 'ga' as QualityOptions;
+          const inputQuality = 'ga';
           const exitCode = 0;
-          const stdout = `Fictitious dotnet version 6.0.0 is installed`;
+          const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
           getExecOutputSpy.mockImplementation(() => {
             return Promise.resolve({
               exitCode: exitCode,
@@ -210,12 +258,12 @@ describe('installer tests', () => {
         }
       );
 
-      each(['6', '6.0', '6.0.x', '6.0.*', '6.0.X']).test(
+      each(['10', '10.0', '10.0.x', '10.0.*', '10.0.X']).test(
         `should supply 'channel' argument to the installation script if version (%s) isn't in A.B.C syntax`,
         async inputVersion => {
-          const inputQuality = '' as QualityOptions;
+          const inputQuality = '';
           const exitCode = 0;
-          const stdout = `Fictitious dotnet version 6.0.0 is installed`;
+          const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
           getExecOutputSpy.mockImplementation(() => {
             return Promise.resolve({
               exitCode: exitCode,
@@ -243,8 +291,8 @@ describe('installer tests', () => {
             getExecOutputSpy.mock.calls[callIndex][1] as string[]
           ).join(' ');
           const expectedArgument = IS_WINDOWS
-            ? `-Channel 6.0`
-            : `--channel 6.0`;
+            ? `-Channel 10.0`
+            : `--channel 10.0`;
 
           expect(scriptArguments).toContain(expectedArgument);
         }
@@ -253,8 +301,8 @@ describe('installer tests', () => {
       if (IS_WINDOWS) {
         it(`should supply '-ProxyAddress' argument to the installation script if env.variable 'https_proxy' is set`, async () => {
           process.env['https_proxy'] = 'https://proxy.com';
-          const inputVersion = '6.0.100';
-          const inputQuality = '' as QualityOptions;
+          const inputVersion = '10.0.101';
+          const inputQuality = '';
           const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
 
           getExecOutputSpy.mockImplementation(() => {
@@ -291,9 +339,9 @@ describe('installer tests', () => {
 
         it(`should supply '-ProxyBypassList' argument to the installation script if env.variable 'no_proxy' is set`, async () => {
           process.env['no_proxy'] = 'first.url,second.url';
-          const inputVersion = '6.0.100';
-          const inputQuality = '' as QualityOptions;
-          const stdout = `Fictitious dotnet version 6.0.0 is installed`;
+          const inputVersion = '10.0.101';
+          const inputQuality = '';
+          const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
 
           getExecOutputSpy.mockImplementation(() => {
             return Promise.resolve({
@@ -327,6 +375,143 @@ describe('installer tests', () => {
           );
         });
       }
+
+      it(`should supply 'architecture' argument to the installation script when architecture is provided`, async () => {
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
+        const inputArchitecture = 'x64';
+        const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
+
+        getExecOutputSpy.mockImplementation(() => {
+          return Promise.resolve({
+            exitCode: 0,
+            stdout: `${stdout}`,
+            stderr: ''
+          });
+        });
+        maxSatisfyingSpy.mockImplementation(() => inputVersion);
+
+        const dotnetInstaller = new installer.DotnetCoreInstaller(
+          inputVersion,
+          inputQuality,
+          inputArchitecture
+        );
+
+        await dotnetInstaller.installDotnet();
+
+        const callIndex = 1;
+        const scriptArguments = (
+          getExecOutputSpy.mock.calls[callIndex][1] as string[]
+        ).join(' ');
+        const expectedArgument = IS_WINDOWS
+          ? `-Architecture ${inputArchitecture}`
+          : `--architecture ${inputArchitecture}`;
+
+        expect(scriptArguments).toContain(expectedArgument);
+      });
+
+      it(`should NOT supply 'architecture' argument when architecture is not provided`, async () => {
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
+        const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
+
+        getExecOutputSpy.mockImplementation(() => {
+          return Promise.resolve({
+            exitCode: 0,
+            stdout: `${stdout}`,
+            stderr: ''
+          });
+        });
+        maxSatisfyingSpy.mockImplementation(() => inputVersion);
+
+        const dotnetInstaller = new installer.DotnetCoreInstaller(
+          inputVersion,
+          inputQuality
+        );
+
+        await dotnetInstaller.installDotnet();
+
+        const callIndex = 1;
+        const scriptArguments = (
+          getExecOutputSpy.mock.calls[callIndex][1] as string[]
+        ).join(' ');
+
+        expect(scriptArguments).not.toContain('--architecture');
+        expect(scriptArguments).not.toContain('-Architecture');
+      });
+
+      it(`should supply 'install-dir' with arch subdirectory for cross-arch install`, async () => {
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
+        const inputArchitecture = 'x64';
+        const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
+
+        getExecOutputSpy.mockImplementation(() => {
+          return Promise.resolve({
+            exitCode: 0,
+            stdout: `${stdout}`,
+            stderr: ''
+          });
+        });
+        maxSatisfyingSpy.mockImplementation(() => inputVersion);
+
+        // Mock os.arch() to return a different arch to simulate cross-arch
+        const archSpy = jest.spyOn(os, 'arch').mockReturnValue('arm64');
+
+        const dotnetInstaller = new installer.DotnetCoreInstaller(
+          inputVersion,
+          inputQuality,
+          inputArchitecture
+        );
+
+        await dotnetInstaller.installDotnet();
+
+        const callIndex = 1;
+        const scriptArguments = (
+          getExecOutputSpy.mock.calls[callIndex][1] as string[]
+        ).join(' ');
+
+        const expectedInstallDirFlag = IS_WINDOWS
+          ? '-InstallDir'
+          : '--install-dir';
+
+        expect(scriptArguments).toContain(expectedInstallDirFlag);
+        expect(scriptArguments).toContain(inputArchitecture);
+
+        archSpy.mockRestore();
+      });
+
+      it(`should NOT supply 'install-dir' when architecture matches runner's native arch`, async () => {
+        const inputVersion = '10.0.101';
+        const inputQuality = '';
+        const nativeArch = os.arch().toLowerCase();
+        const stdout = `Fictitious dotnet version ${inputVersion} is installed`;
+
+        getExecOutputSpy.mockImplementation(() => {
+          return Promise.resolve({
+            exitCode: 0,
+            stdout: `${stdout}`,
+            stderr: ''
+          });
+        });
+        maxSatisfyingSpy.mockImplementation(() => inputVersion);
+
+        const dotnetInstaller = new installer.DotnetCoreInstaller(
+          inputVersion,
+          inputQuality,
+          nativeArch
+        );
+
+        await dotnetInstaller.installDotnet();
+
+        const callIndex = 1;
+        const scriptArguments = (
+          getExecOutputSpy.mock.calls[callIndex][1] as string[]
+        ).join(' ');
+
+        expect(scriptArguments).not.toContain('--install-dir');
+        expect(scriptArguments).not.toContain('-InstallDir');
+      });
     });
 
     describe('addToPath() tests', () => {
@@ -346,17 +531,43 @@ describe('installer tests', () => {
     });
   });
 
+  describe('normalizeArch() tests', () => {
+    it(`should normalize 'amd64' to 'x64'`, () => {
+      expect(installer.normalizeArch('amd64')).toBe('x64');
+    });
+
+    it(`should normalize 'AMD64' to 'x64' (case-insensitive)`, () => {
+      expect(installer.normalizeArch('AMD64')).toBe('x64');
+    });
+
+    it(`should pass through 'x64' unchanged`, () => {
+      expect(installer.normalizeArch('x64')).toBe('x64');
+    });
+
+    it(`should pass through 'arm64' unchanged`, () => {
+      expect(installer.normalizeArch('arm64')).toBe('arm64');
+    });
+
+    it(`should lowercase 'ARM64'`, () => {
+      expect(installer.normalizeArch('ARM64')).toBe('arm64');
+    });
+
+    it(`should pass through 'x86' unchanged`, () => {
+      expect(installer.normalizeArch('x86')).toBe('x86');
+    });
+  });
+
   describe('DotnetVersionResolver tests', () => {
     describe('createDotnetVersion() tests', () => {
       each([
-        '3.1',
-        '3.x',
-        '3.1.x',
-        '3.1.*',
-        '3.1.X',
-        '3.1.2',
-        '3.1.0-preview1',
-        '6.0.2xx'
+        '10.0',
+        '10.x',
+        '10.0.x',
+        '10.0.*',
+        '10.0.X',
+        '10.0.0',
+        '10.0.0-preview7',
+        '10.0.1xx'
       ]).test(
         'if valid version is supplied (%s), it should return version object with some value',
         async version => {
@@ -408,7 +619,7 @@ describe('installer tests', () => {
         }
       );
 
-      each(['3', '3.1', '3.1.x', '3.1.*', '3.1.X', '6.0.2xx']).test(
+      each(['10', '10.0', '10.0.x', '10.0.*', '10.0.X', '10.0.1xx']).test(
         "if version that can be resolved to 'channel' option is supplied (%s), it should set type to 'channel' in version object",
         async version => {
           const dotnetVersionResolver = new installer.DotnetVersionResolver(
@@ -423,7 +634,7 @@ describe('installer tests', () => {
         }
       );
 
-      each(['6.0', '6.0.x', '6.0.*', '6.0.X', '6.0.2xx']).test(
+      each(['10.0', '10.0.x', '10.0.*', '10.0.X', '10.0.1xx']).test(
         "if version that can be resolved to 'channel' option is supplied and its major tag is >= 6 (%s), it should set type to 'channel' and qualityFlag to 'true' in version object",
         async version => {
           const dotnetVersionResolver = new installer.DotnetVersionResolver(
@@ -439,7 +650,7 @@ describe('installer tests', () => {
         }
       );
 
-      each(['3.1.2', '3.1.0-preview1']).test(
+      each(['10.0.0', '10.0.0-preview7']).test(
         "if version that can be resolved to 'version' option is supplied (%s), it should set quality flag to 'false' and type to 'version' in version object",
         async version => {
           const dotnetVersionResolver = new installer.DotnetVersionResolver(
@@ -455,7 +666,7 @@ describe('installer tests', () => {
         }
       );
 
-      each(['3.1.2', '3.1']).test(
+      each(['10.0.0', '10.0']).test(
         'it should create proper line arguments for powershell/bash installation scripts',
         async version => {
           const dotnetVersionResolver = new installer.DotnetVersionResolver(
